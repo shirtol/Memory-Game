@@ -1,12 +1,11 @@
-const timerCount = document.querySelector(".timer .count");
-
-function timer(updatedElement) {
-  let seconds = 0;
-  let mins = 0;
+function timer() {
+  const timerCount = document.querySelector(".timer .count");
+  let seconds = 0,
+    mins = 0;
   setInterval(() => {
-    seconds++;
     let total = mins < 10 ? "0" + mins : mins;
-    updatedElement.innerText =
+    seconds++;
+    timerCount.innerText =
       seconds < 10 ? total + ":0" + seconds : total + ":" + seconds;
     if (seconds === 59) {
       seconds = -1;
@@ -18,4 +17,4 @@ function timer(updatedElement) {
     // }
   }, 1000);
 }
-timer(timerCount);
+timer();
