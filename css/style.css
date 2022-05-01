@@ -71,6 +71,46 @@ footer {
     margin-bottom: 2rem;
 }
 
+/* Related to the flip card functionality */
+
+.card {
+    cursor: pointer;
+    /* preserve-3d meaning that the children of the 
+    element positioned in the #D space */
+    transform-style: preserve-3d;
+    transform-origin: center right;
+    transition: transform 1s;
+    width: 100%;
+    height: 100%;
+}
+
+.card.flipCard {
+    transform: translateX(-100%) rotateY(-180deg);
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    backface-visibility: hidden;
+    width: 100%;
+    height: 100%;
+    border: 1px black solid;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    /*!remove background when finish working*/
+    background: yellow;
+}
+.card-front {
+    /*!remove background when finish working*/
+    background: pink;
+}
+
+.cards-container {
+    gap: 1rem;
+}
+
 @media (max-width: 768px) {
     .header {
         height: max-content;
