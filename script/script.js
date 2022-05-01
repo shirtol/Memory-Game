@@ -18,3 +18,24 @@ function timer() {
   }, 1000);
 }
 timer();
+
+//! need to pass cards number of pairs and the counter of successes.
+function gameOver(successCounter, cardsNum) {
+  if (successCounter === cardsNum) {
+    return true;
+  }
+  return false;
+}
+
+//! pass the guessesCount array from the game main obj
+function updateCounters({ guessesCount }) {
+  //! put flipCard func insted of true to see if second card flip is success or fail
+  if (true) {
+    document.querySelector(".correct-count").innerText = ++guessesCount[0];
+  } else {
+    document.querySelector(".incorrect-count").innerText = ++guessesCount[1];
+  }
+}
+
+//! exmaple of main game obj, add here matrix, array of divs and other properties
+const obj = { guessesCount: [0, 0] };
