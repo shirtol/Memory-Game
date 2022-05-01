@@ -1,3 +1,12 @@
+
+import { addFlipCardEvent, observeNumOfFlippedCards } from "./Cards.js";
+import { GameState } from "./GameState.js";
+
+const gameState = new GameState();
+
+observeNumOfFlippedCards(gameState);
+addFlipCardEvent(gameState);
+
 function timer() {
   const timerCount = document.querySelector(".timer .count");
   let seconds = 0,
@@ -39,3 +48,4 @@ function updateCounters({ guessesCount }) {
 
 //! exmaple of main game obj, add here matrix, array of divs and other properties
 const obj = { guessesCount: [0, 0] };
+
