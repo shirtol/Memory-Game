@@ -74,6 +74,7 @@ footer {
 @media (max-width: 768px) {
     .header {
         height: max-content;
+        font-size: 2rem;
     }
     .game-container {
         flex-direction: column;
@@ -83,11 +84,13 @@ footer {
         flex-direction: row;
         width: 30%;
         align-items: center;
+
         /* gap: 0; */
     }
 
     .left-sidebar > * {
         height: max-content;
+        font-size: 1.7rem;
     }
 
     .cards-container {
@@ -96,5 +99,9 @@ footer {
         grid-template-rows: repeat(var(--rows), 1fr);
         width: 70%;
         height: 80%;
+    }
+
+    .new-game-btn {
+        font-size: 1.5rem;
     }
 }
