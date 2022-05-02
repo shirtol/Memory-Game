@@ -16,7 +16,8 @@ export const Cards = function () {
      * @type {Node[]}
      */
     this.flippedCardsArr = new Observable([]);
-    this.resetFlipedCardsArr = () => this.flippedCardsArr = new Observable([]);
+    this.resetFlipedCardsArr = () =>
+        (this.flippedCardsArr = new Observable([]));
     /**
      * @description Check if we have 2 cards open
      * @type {()=> boolean}
@@ -81,7 +82,7 @@ export const stayOpenCardsIfNeeded = (cards) => {
  */
 //!TODO: Check which attribute we need to use in getAttribute func (this attributer holds the type of card: cat, dog etc.)
 export const closeCardsIfNeeded = (cards) => {
-    if (!isIdenticalCards(cards)) {
+    if (isDifferentCards(cards)) {
         cards.flippedCardsArr.get().forEach((card) => {
             setTimeout(() => card.classList.remove("flipCard"), 2000);
         });
@@ -100,12 +101,14 @@ export const isIdenticalCards = (cards) =>
     cards.flippedCardsArr.get()[0].getAttribute("data-type") ===
         cards.flippedCardsArr.get()[1].getAttribute("data-type");
 
-// /**
-//  * @description Check if the user flipped 2 different cards
-//  * @param {Object} Obj
-//  * @param {Cards} Obj.cards
-//  */
-// export const isDifferentCards = (cards) =>
-//     cards.hasTwoFlipped() &&
-//     cards.flippedCardsArr.get()[0].getAttribute("data-type") !==
-//         cards.flippedCardsArr.get()[1].getAttribute("data-type");
+/**
+ * @description Check if the user flipped 2 different cards
+ * @param {Object} Obj
+ * @param {Cards} Obj.cards
+ * ! I figured out that we must have this function because if we didn't use it and use the isIdenticalCards function with the "!" sign than we have stack overflow.
+ * ! According to De Morgan law - !(a && b) === !a || !b, which in our case, "a" is cards.hasTwoFlipped() and we want to keep it as it is.
+ */
+export const isDifferentCards = (cards) =>
+    cards.hasTwoFlipped() &&
+    cards.flippedCardsArr.get()[0].getAttribute("data-type") !==
+        cards.flippedCardsArr.get()[1].getAttribute("data-type");
