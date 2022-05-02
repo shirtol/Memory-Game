@@ -6,4 +6,5 @@
 export const Sidebar = function () {
     this.correctGuesses = document.querySelector(".correct-count");
     this.incorrectGuesses = document.querySelector(".incorrect-count");
+    this.intervalID = 0;
 };

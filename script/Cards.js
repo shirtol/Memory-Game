@@ -16,7 +16,7 @@ export const Cards = function () {
      * @type {Node[]}
      */
     this.flippedCardsArr = new Observable([]);
-
+    this.resetFlipedCardsArr = () => this.flippedCardsArr = new Observable([]);
     /**
      * @description Check if we have 2 cards open
      * @type {()=> boolean}
