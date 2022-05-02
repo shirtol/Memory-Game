@@ -6,38 +6,45 @@ import { Observable } from "./Observable.js";
  */
 export const Cards = function () {
     /**
-     * @type {Observable}
+     *
+     * @type {() => NodeList}
      */
-    this.numOfCardsFlipped = new Observable(0);
+    this.getAllCards = () => document.querySelectorAll(".card");
 
     /**
      *
-     * @type {NodeList}
+     * @type {Node[]}
      */
-    this.allCards = document.querySelectorAll(".card");
+    this.flippedCardsArr = new Observable([]);
 
     /**
      * @description Check if we have 2 cards open
      * @type {()=> boolean}
      */
-    this.hasTwoFlipped = () => this.numOfCardsFlipped.get() === 2;
+    this.hasTwoFlipped = () => this.flippedCardsArr.get().length === 2;
 };
 
 /**
  *
  * @param {*} cards
  */
-export const observeNumOfFlippedCards = ({ cards }) =>
-    cards.numOfCardsFlipped.addChangeListener((_) => disableClickCards(cards));
+export const observeNumOfFlippedCards = ({ cards }) => {
+    cards.flippedCardsArr.addChangeListener((_) => disableClickCards(cards));
+    cards.flippedCardsArr.addChangeListener((_) =>
+        stayOpenCardsIfNeeded(cards)
+    );
+    cards.flippedCardsArr.addChangeListener((_) => closeCardsIfNeeded(cards));
+};
 
 /**
  * @description Adding click event to all cards. When clicking on a card it will flip to the other side
- * @param {*} cards
+ * @param {Object} Obj
+ * @param {Cards} Obj.cards
  */
 export const addFlipCardEvent = ({ cards }) => {
-    cards.allCards.forEach((card) => {
+    cards.getAllCards().forEach((card) => {
         card.addEventListener("click", () => {
-            cards.numOfCardsFlipped.set(cards.numOfCardsFlipped.get() + 1);
+            cards.flippedCardsArr.set([...cards.flippedCardsArr.get(), card]);
             card.classList.add("flipCard");
         });
     });
@@ -45,11 +52,11 @@ export const addFlipCardEvent = ({ cards }) => {
 
 /**
  * @description After flipping 2 cards hold the game and don't let the user flip more cards.
- * @param {*} cards
+ * @param {Cards} cards
  */
 export const disableClickCards = (cards) => {
     if (cards.hasTwoFlipped()) {
-        cards.allCards.forEach((card) => {
+        cards.getAllCards().forEach((card) => {
             card.style.pointerEvents = "none";
             setTimeout(() => (card.style.pointerEvents = "auto"), 2000);
         });
@@ -58,8 +65,34 @@ export const disableClickCards = (cards) => {
 
 /**
  * @description If the 2 cards we flipped are in the same type then keep them open.
+ * @param {Cards} cards
  */
+export const stayOpenCardsIfNeeded = (cards) => {
+    if (
+        cards.hasTwoFlipped() &&
+        cards.flippedCardsArr.get()[0].getAttribute("data-type") ===
+            cards.flippedCardsArr.get()[1].getAttribute("data-type")
+    ) {
+        cards.flippedCardsArr.get().forEach((card) => {
+            card.style.pointerEvents = "none";
+        });
+        cards.flippedCardsArr.set([]);
+    }
+};
 
 /**
  * @description If the 2 cards we flipped aren't in the same type close them
  */
+//!TODO: Check which attribute we need to use in getAttribute func (this attributer holds the type of card: cat, dog etc.)
+export const closeCardsIfNeeded = (cards) => {
+    if (
+        cards.hasTwoFlipped() &&
+        cards.flippedCardsArr.get()[0].getAttribute("data-type") !==
+            cards.flippedCardsArr.get()[1].getAttribute("data-type")
+    ) {
+        cards.flippedCardsArr.get().forEach((card) => {
+            setTimeout(() => card.classList.remove("flipCard"), 2000);
+        });
+        cards.flippedCardsArr.set([]);
+    }
+};

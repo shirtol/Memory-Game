@@ -12,6 +12,14 @@ export const Observable = function (init) {
             listener(this.value);
         });
     };
+    /**
+     * @type {((newValue :any)=> void)[]}
+     */
     this.listeners = [];
+    /**
+     *
+     * @param {(newValue :any)=> void} listener
+     * @returns
+     */
     this.addChangeListener = (listener) => this.listeners.push(listener);
 };
