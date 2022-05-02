@@ -7,16 +7,51 @@ import { GameState } from "./GameState.js";
 
 const gameState = new GameState();
 
+const animals = [
+    "dog",
+    "cat",
+    "duck",
+    "horse",
+    "cat",
+    "dog",
+    "horse",
+    "duck",
+    "mouse",
+    "mouse",
+    "donkey",
+    "donkey",
+];
+
+gameBoardloop(createGameBoard(shuffle2(animals), 3, 4));
 observeNumOfFlippedCards(gameState);
 addFlipCardEvent(gameState);
 
-function timer() {
+//! ill explain, hope i didnt screw everything xDDDD
+resetGame(gameState);
+
+function resetGame({cards, sidebar}){
+    document.querySelector(".new-game-btn").addEventListener("click",() =>{
+        document.querySelector(".cards-container").innerHTML = "";
+        sidebar.correctGuesses.innerText = "0";
+        sidebar.incorrectGuesses.innerText = "0";
+        clearInterval(sidebar.intervalID);
+        timer(gameState);
+        setTimeout(()=>{
+            gameBoardloop(createGameBoard(shuffle2(animals), 3, 4));
+            cards.resetFlipedCardsArr();
+            observeNumOfFlippedCards(gameState);
+            addFlipCardEvent(gameState);
+        }, 1000);
+    });
+}
+
+function timer({sidebar}) {
     const timerCount = document.querySelector(".timer .count");
-    let p1seconds = 0,
+    let p1seconds = -1,
         p2seconds = 0,
         p1mins = 0,
         p2mins = 0;
-    setInterval(() => {
+    sidebar.intervalID =  setInterval(() => {
         if (true) {
             let total = p1mins < 10 ? "0" + p1mins : p1mins;
             p1seconds++;
@@ -46,7 +81,7 @@ function timer() {
         // }
     }, 1000);
 }
-timer();
+timer(gameState);
 
 //! need to pass cards number of pairs and the counter of successes.
 function gameOver(successCounter, cardsNum) {
@@ -58,7 +93,6 @@ function gameOver(successCounter, cardsNum) {
 
 //! pass the guessesCount array from the game main obj
 function updateCounters({ sidebar, cards }) {
-    //! put flipCard func insted of true to see if second card flip is success or fail
     if (isIdenticalCards(cards)) {
         sidebar.correctGuesses.innerText =
             parseInt(sidebar.correctGuesses.innerText) + 1;
@@ -68,20 +102,7 @@ function updateCounters({ sidebar, cards }) {
     }
 }
 
-const animals = [
-    "dog",
-    "cat",
-    "duck",
-    "horse",
-    "cat",
-    "dog",
-    "horse",
-    "duck",
-    "mouse",
-    "mouse",
-    "donkey",
-    "donkey",
-];
+
 
 // function createGameBoard(array, rows, cols) {
 //     //checked
@@ -128,7 +149,7 @@ function gameBoardloop(gameBoard) {
         }
     }
 }
-gameBoardloop(createGameBoard(animals, 3, 4));
+
 //////////////////////////////////////////////////////////////////////////
 
 function createGridElements(item) {

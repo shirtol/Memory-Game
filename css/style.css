@@ -69,6 +69,7 @@ footer {
     border: 1px black solid;
     padding: 1rem;
     margin-bottom: 2rem;
+    cursor: pointer;
 }
 
 /* Related to the flip card functionality */
