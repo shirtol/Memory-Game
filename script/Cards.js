@@ -68,11 +68,7 @@ export const disableClickCards = (cards) => {
  * @param {Cards} cards
  */
 export const stayOpenCardsIfNeeded = (cards) => {
-    if (
-        cards.hasTwoFlipped() &&
-        cards.flippedCardsArr.get()[0].getAttribute("data-type") ===
-            cards.flippedCardsArr.get()[1].getAttribute("data-type")
-    ) {
+    if (isIdenticalCards(cards)) {
         cards.flippedCardsArr.get().forEach((card) => {
             card.style.pointerEvents = "none";
         });
@@ -85,14 +81,31 @@ export const stayOpenCardsIfNeeded = (cards) => {
  */
 //!TODO: Check which attribute we need to use in getAttribute func (this attributer holds the type of card: cat, dog etc.)
 export const closeCardsIfNeeded = (cards) => {
-    if (
-        cards.hasTwoFlipped() &&
-        cards.flippedCardsArr.get()[0].getAttribute("data-type") !==
-            cards.flippedCardsArr.get()[1].getAttribute("data-type")
-    ) {
+    if (!isIdenticalCards(cards)) {
         cards.flippedCardsArr.get().forEach((card) => {
             setTimeout(() => card.classList.remove("flipCard"), 2000);
         });
         cards.flippedCardsArr.set([]);
     }
 };
+
+/**
+ * @description Check if the user flipped 2 identical cards
+ * @param {Object} Obj
+ * @param {Cards} Obj.cards
+ */
+
+export const isIdenticalCards = (cards) =>
+    cards.hasTwoFlipped() &&
+    cards.flippedCardsArr.get()[0].getAttribute("data-type") ===
+        cards.flippedCardsArr.get()[1].getAttribute("data-type");
+
+// /**
+//  * @description Check if the user flipped 2 different cards
+//  * @param {Object} Obj
+//  * @param {Cards} Obj.cards
+//  */
+// export const isDifferentCards = (cards) =>
+//     cards.hasTwoFlipped() &&
+//     cards.flippedCardsArr.get()[0].getAttribute("data-type") !==
+//         cards.flippedCardsArr.get()[1].getAttribute("data-type");

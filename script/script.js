@@ -1,4 +1,8 @@
-import { addFlipCardEvent, observeNumOfFlippedCards } from "./Cards.js";
+import {
+    addFlipCardEvent,
+    observeNumOfFlippedCards,
+    isIdenticalCards,
+} from "./Cards.js";
 import { GameState } from "./GameState.js";
 
 const gameState = new GameState();
@@ -8,16 +12,33 @@ addFlipCardEvent(gameState);
 
 function timer() {
     const timerCount = document.querySelector(".timer .count");
-    let seconds = 0,
-        mins = 0;
+    let p1seconds = 0,
+        p2seconds = 0,
+        p1mins = 0,
+        p2mins = 0;
     setInterval(() => {
-        let total = mins < 10 ? "0" + mins : mins;
-        seconds++;
-        timerCount.innerText =
-            seconds < 10 ? total + ":0" + seconds : total + ":" + seconds;
-        if (seconds === 59) {
-            seconds = -1;
-            mins++;
+        if (true) {
+            let total = p1mins < 10 ? "0" + p1mins : p1mins;
+            p1seconds++;
+            timerCount.innerText =
+                p1seconds < 10
+                    ? total + ":0" + p1seconds
+                    : total + ":" + p1seconds;
+            if (p1seconds === 59) {
+                p1seconds = -1;
+                p1mins++;
+            }
+        } else {
+            let total = p2mins < 10 ? "0" + p2mins : p2mins;
+            p2seconds++;
+            timerCount.innerText =
+                p2seconds < 10
+                    ? total + ":0" + p2seconds
+                    : total + ":" + p2seconds;
+            if (p2seconds === 59) {
+                p2seconds = -1;
+                p2mins++;
+            }
         }
         //! settimeout limit if needed to end game here.
         // if(mins === 60){
@@ -36,15 +57,13 @@ function gameOver(successCounter, cardsNum) {
 }
 
 //! pass the guessesCount array from the game main obj
-function updateCounters({ guessesCount }) {
+function updateCounters({ sidebar, cards }) {
     //! put flipCard func insted of true to see if second card flip is success or fail
-    if (true) {
-        document.querySelector(".correct-count").innerText = ++guessesCount[0];
+    if (isIdenticalCards(cards)) {
+        sidebar.correctGuesses.innerText =
+            parseInt(sidebar.correctGuesses.innerText) + 1;
     } else {
-        document.querySelector(".incorrect-count").innerText =
-            ++guessesCount[1];
+        sidebar.incorrectGuesses.innerText =
+            parseInt(sidebar.incorrectGuesses.innerText) + 1;
     }
 }
-
-//! exmaple of main game obj, add here matrix, array of divs and other properties
-const obj = { guessesCount: [0, 0] };

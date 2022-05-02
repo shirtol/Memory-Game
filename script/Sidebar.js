@@ -4,6 +4,6 @@
  */
 
 export const Sidebar = function () {
-    this.numOfCorrectGuesses = document.querySelector(".correct-count");
-    this.numOfIncorrectGuesses = document.querySelector(".incorrect-count");
+    this.correctGuesses = document.querySelector(".correct-count");
+    this.incorrectGuesses = document.querySelector(".incorrect-count");
 };
