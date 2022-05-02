@@ -12,17 +12,55 @@ const animals = [
     "cat",
     "duck",
     "horse",
-    "cat",
-    "dog",
-    "horse",
-    "duck",
-    "mouse",
+    "eagle",
+    "rabbit",
+    "wolf",
+    "lion",
+    "turtle",
     "mouse",
     "donkey",
-    "donkey",
+    "zebra",
+    "elephant",
+    "giraffe",
+    "bear",
+    "tiger",
+    "monkey",
+    "ostrich",
+    "kangaroo",
+    "hippo",
+    "rhino",
+    "deer",
+    "cow",
+    "sheep",
+    "shark",
+    "fox",
+    "camel",
+    "goat",
+    "penguin",
+    "frog",
+    "hamster",
+    "pig",
+    "squirrel",
+    "chicken",
+    "cheetah",
+    "panda",
+    "hyena",
+    "alligator",
+    "ant",
+    "crab",
+    "rat",
+    "buffalo",
+    "leopard",
+    "bee",
+    "flamingo",
+    "turkey",
+    "iguana",
+    "sloth",
+    "hedgehog",
+    "whale",
 ];
 
-gameBoardloop(createGameBoard(shuffle2(animals), 3, 4));
+gameBoardloop(shuffle(createGameBoard(animals, 18)));
 observeNumOfFlippedCards(gameState);
 addFlipCardEvent(gameState);
 
@@ -36,8 +74,8 @@ function resetGame({ cards, sidebar }) {
         sidebar.incorrectGuesses.innerText = "0";
         clearInterval(sidebar.intervalID);
         timer(gameState);
-        setTimeout(() => {
-            gameBoardloop(createGameBoard(shuffle2(animals), 3, 4));
+        setTimeout(()=>{
+            gameBoardloop(shuffle(createGameBoard(animals, 18)));
             cards.resetFlipedCardsArr();
             observeNumOfFlippedCards(gameState);
             addFlipCardEvent(gameState);
@@ -123,15 +161,14 @@ function updateCounters({ sidebar, cards }) {
 //     }
 // }
 
-function createGameBoard(array, rows, cols) {
-    if (array.length !== rows * cols) {
+function createGameBoard(array, cardCouples) {
+    if (array.length < cardCouples){
         return "Error occured. Please check array's size";
     }
     const gameBoard = [];
-    let c = 0;
-    for (let i = 0; i < rows; i++) {
-        const newAnimals = array.slice(c, (c = c + cols));
-        gameBoard.push(newAnimals);
+    for (let i = 0; i < cardCouples; i++) {
+        gameBoard.push(array[i]);
+        gameBoard.push(array[i]);
     }
     return gameBoard;
 }
@@ -142,9 +179,7 @@ function createGameBoard(array, rows, cols) {
 
 function gameBoardloop(gameBoard) {
     for (let i = 0; i < gameBoard.length; i++) {
-        for (let j = 0; j < gameBoard[i].length; j++) {
-            createGridElements(gameBoard[i][j]);
-        }
+        createGridElements(gameBoard[i]);
     }
 }
 
@@ -167,25 +202,8 @@ function createGridElements(item) {
     }
 }
 
-// function createGridElements(item) {
-//     const grid = document.querySelector(".cards-container");
-//     ////checked
-//     const cardScene = document.createElement("div");
-//     const cardWrap = document.createElement("div");
-//     const front = document.createElement("div");
-//     const back = document.createElement("div");
-//     cardScene.classList.add("card-scene");
-//     cardWrap.classList.add("card");
-//     cardWrap.setAttribute("data-type", item);
-//     front.classList.add("card-front");
-//     back.classList.add("card-back");
-//     cardWrap.appendChild(front);
-//     cardWrap.appendChild(back);
-//     cardScene.appendChild(cardWrap);
-//     grid.appendChild(cardScene);
-// }
+//? shufle ------------------
 
-//?  ---------------------- pick one shuffle ---------------------------
 function shuffle(array) {
     let random;
     const newShuffledArray = new Array();
@@ -195,10 +213,9 @@ function shuffle(array) {
         while (newShuffledArray[random] !== undefined) {
             random = getRandomIntInclusive(0, array.length - 1);
         }
-        console.log(random);
         newShuffledArray[random] = array[i];
     }
-    console.log(newShuffledArray);
+    return newShuffledArray;
 }
 
 function getRandomIntInclusive(min, max) {
@@ -208,6 +225,7 @@ function getRandomIntInclusive(min, max) {
 }
 
 // console.log(shuffle(animals));
+
 
 //? -------------------------------------------
 function shuffle2(array) {
@@ -241,4 +259,4 @@ const addBackgroundImageToAllCards = ({ cards }) => {
 
 addBackgroundImageToAllCards(gameState);
 
-addBackgroundImageToAllCards(gameState);
+
