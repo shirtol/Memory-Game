@@ -1,3 +1,5 @@
+import { Observable } from "./Observable.js";
+
 /**
  * @description This constructor holds all the elements and methods related to the sidebar element
  * @class
