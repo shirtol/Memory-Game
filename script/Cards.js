@@ -86,8 +86,11 @@ export const stayOpenCardsIfNeeded = (cards) => {
             card.style.pointerEvents = "none";
             // card.replaceWith(card.cloneNode(true));
             card.removeEventListener("click", addFlipCardsToClass);
+            card.style.cursor = "auto";
         });
         cards.flippedCardsArr.set([]);
+        document.querySelector(".correct-count").innerText =
+            parseInt(document.querySelector(".correct-count").innerText) + 1;
     }
 };
 
@@ -97,10 +100,15 @@ export const stayOpenCardsIfNeeded = (cards) => {
 //!TODO: Check which attribute we need to use in getAttribute func (this attributer holds the type of card: cat, dog etc.)
 export const closeCardsIfNeeded = (cards) => {
     if (isDifferentCards(cards)) {
-        cards.flippedCardsArr.get().forEach((card) => {
-            setTimeout(() => card.classList.remove("flipCard"), FLIP_HOLD);
-        });
-        cards.flippedCardsArr.set([]);
+        setTimeout(() => {
+            cards.flippedCardsArr.get().forEach((card) => {
+                card.classList.remove("flipCard");
+            });
+            cards.flippedCardsArr.set([]);
+            document.querySelector(".incorrect-count").innerText =
+                parseInt(document.querySelector(".incorrect-count").innerText) +
+                1;
+        }, 1300);
     }
 };
 

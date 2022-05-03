@@ -12,52 +12,52 @@ const animals = [
     "cat",
     "duck",
     "horse",
-    "eagle",
-    "rabbit",
-    "wolf",
-    "lion",
-    "turtle",
+    // "eagle",
+    // "rabbit",
+    // "wolf",
+    // "lion",
+    // "turtle",
     "mouse",
     "donkey",
-    "zebra",
-    "elephant",
-    "giraffe",
-    "bear",
-    "tiger",
-    "monkey",
-    "ostrich",
-    "kangaroo",
-    "hippo",
-    "rhino",
-    "deer",
-    "cow",
-    "sheep",
-    "shark",
-    "fox",
-    "camel",
-    "goat",
-    "penguin",
-    "frog",
-    "hamster",
-    "pig",
-    "squirrel",
-    "chicken",
-    "cheetah",
-    "panda",
-    "hyena",
-    "alligator",
-    "ant",
-    "crab",
-    "rat",
-    "buffalo",
-    "leopard",
-    "bee",
-    "flamingo",
-    "turkey",
-    "iguana",
-    "sloth",
-    "hedgehog",
-    "whale",
+    // "zebra",
+    // "elephant",
+    // "giraffe",
+    // "bear",
+    // "tiger",
+    // "monkey",
+    // "ostrich",
+    // "kangaroo",
+    // "hippo",
+    // "rhino",
+    // "deer",
+    // "cow",
+    // "sheep",
+    // "shark",
+    // "fox",
+    // "camel",
+    // "goat",
+    // "penguin",
+    // "frog",
+    // "hamster",
+    // "pig",
+    // "squirrel",
+    // "chicken",
+    // "cheetah",
+    // "panda",
+    // "hyena",
+    // "alligator",
+    // "ant",
+    // "crab",
+    // "rat",
+    // "buffalo",
+    // "leopard",
+    // "bee",
+    // "flamingo",
+    // "turkey",
+    // "iguana",
+    // "sloth",
+    // "hedgehog",
+    // "whale",
 ];
 
 gameBoardloop(shuffle(createGameBoard(animals, 6)));
@@ -67,19 +67,37 @@ addFlipCardEvent(gameState);
 //! ill explain, hope i didnt screw everything xDDDD
 resetGame(gameState);
 
-function resetGame({ cards, sidebar }) {
+const addDifficultyToContainer = ({ difficult }) => {
+    for (const difficulty of difficult.difficulties) {
+        const difficultyEl = document.createElement("div");
+        difficultyEl.setAttribute("data-difficulty", difficulty);
+        difficultyEl.textContent = `${difficulty}`;
+        difficultyEl.classList.add("center-img");
+        difficult.difficultyContainer.appendChild(difficultyEl);
+    }
+};
+
+addDifficultyToContainer(gameState);
+
+function resetGame({ cards, sidebar, difficult }) {
     document.querySelector(".new-game-btn").addEventListener("click", () => {
-        document.querySelector(".cards-container").innerHTML = "";
-        sidebar.correctGuesses.innerText = "0";
-        sidebar.incorrectGuesses.innerText = "0";
-        clearInterval(sidebar.intervalID);
-        timer(gameState);
-        setTimeout(() => {
-            gameBoardloop(shuffle(createGameBoard(animals, 18)));
-            cards.resetFlipedCardsArr();
-            observeNumOfFlippedCards(gameState);
-            addFlipCardEvent(gameState);
-        }, 1000);
+        difficult.difficultyContainer.style.display =
+            difficult.difficultyContainer.style.display === "flex"
+                ? "none"
+                : "flex";
+
+        // document.querySelector(".cards-container").innerHTML = "";
+        // sidebar.correctGuesses.innerText = "0";
+        // sidebar.incorrectGuesses.innerText = "0";
+        // clearInterval(sidebar.intervalID);
+        // timer(gameState);
+        // setTimeout(() => {
+        //     gameBoardloop(shuffle(createGameBoard(animals, 6))); //!Change the second parameter in createGameBoard function to 6 instead of 18 duw to UI problem
+        //     addBackgroundImageToAllCards(gameState);
+        //     cards.resetFlipedCardsArr();
+        //     observeNumOfFlippedCards(gameState);
+        //     addFlipCardEvent(gameState);
+        // }, 1000);
     });
 }
 
@@ -249,10 +267,15 @@ function shuffle2(array) {
 
 const addBackgroundImageToAllCards = ({ cards }) => {
     cards.getAllCards().forEach((card) => {
+        card.classList.add("box-shadow");
         const cardType = card.getAttribute("data-type");
         const backCard = card.lastChild;
+        const frontCard = card.firstChild;
         backCard.style.backgroundImage = `url(../assets/img/${cardType}.webp)`;
+        // backCard.style.backgroundImage = `url(../assets/img/back-mobile/dog-mobile.png)`; //!Will remove when I end working on cutting the images of cards to the correct width and height
         backCard.classList.add("center-img");
+        frontCard.style.backgroundImage = `url(../assets/img/front/paw1.png)`;
+        frontCard.classList.add("center-img");
     });
 };
 

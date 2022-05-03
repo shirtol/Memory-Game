@@ -33,9 +33,9 @@ html {
 
 .header {
     font-size: 2rem;
-
     text-align: center;
     height: max-content;
+    color: #cfa467;
 }
 
 .game-container {
@@ -45,7 +45,6 @@ html {
     width: 100%;
     height: 60%;
     margin-right: 10rem;
-
 }
 
 .left-sidebar {
@@ -55,15 +54,32 @@ html {
     align-items: center;
     justify-content: center;
     gap: 3rem;
+    background: #d3a86c;
+    margin-left: 8rem;
+    height: 80%;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+        rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    opacity: 0.8;
+    /* animation: fade 1s linear; */
+}
+
+.box-shadow {
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+        rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 
 .cards-container {
     display: grid;
     grid-template-columns: repeat(var(--columns), 1fr);
     grid-template-rows: repeat(var(--rows), 1fr);
-    width: 80%;
-    height: 80%;
+    width: 60%;
+    height: 100%;
     padding: 0 3rem;
+}
+
+.card-scene {
+    min-width: 80%;
 }
 
 .correct-container,
@@ -72,6 +88,7 @@ html {
     height: 10rem;
     text-align: center;
     font-size: 1.5vw;
+    color: #f8f1eb;
 }
 
 footer {
@@ -83,7 +100,15 @@ footer {
     border: 1px black solid;
     padding: 1rem;
     margin-bottom: 2rem;
+    margin-top: 3rem;
     cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+        rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    background: #d3a86c;
+    opacity: 0.6;
+    font-weight: 700;
+    border-radius: 8px;
+    color: #f8f1eb;
 }
 
 /* Related to the flip card functionality */
@@ -110,6 +135,7 @@ footer {
     width: 100%;
     height: 100%;
     border: 1px black solid;
+    border-radius: 4px;
 }
 
 .card-back {
@@ -133,6 +159,48 @@ footer {
     background-position: center;
 }
 
+/* Related to the difficulty pop-up */
+.difficulty-container {
+    width: 40%;
+    height: 20%;
+    font-size: 2rem;
+    text-align: center;
+    line-height: 2.5rem;
+    z-index: 20;
+    display: none;
+    position: absolute;
+    background: #f9ea81;
+    padding: 4rem;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0.9;
+    animation: fade 1s linear;
+}
+
+.difficulty-container > * {
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+        rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    transition: 200ms ease-in-out;
+    cursor: pointer;
+    background: #f8f1eb;
+    width: 8rem;
+    height: 8rem;
+    text-align: center;
+}
+
+.difficulty-container > *:hover {
+    transform: scale(1.05);
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
 @media (max-width: 768px) {
     .game-container {
         flex-direction: column;
@@ -141,16 +209,24 @@ footer {
 
     .left-sidebar {
         flex-direction: row;
-        width: 30%;
+        width: 80%;
         align-items: center;
+        justify-content: center;
         margin-bottom: 2rem;
+        height: max-content;
+        background: none;
+        margin-left: 0;
+        background: #d3a86c;
+        padding: 0.8rem;
 
         /* gap: 0; */
     }
 
     .left-sidebar > * {
-        height: max-content;
-        font-size: 1.7rem;
+        width: 100%;
+        margin-left: 0;
+        height: 80%;
+        font-size: 1.5rem;
     }
 
     .cards-container {
@@ -161,7 +237,23 @@ footer {
         height: 80%;
     }
 
+    .cards-container {
+        width: 100%;
+        height: 100%;
+    }
+
+    .card-scene {
+        min-width: 100%;
+    }
+
     .new-game-btn {
         font-size: 1.5rem;
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 400px) {
+    .left-sidebar > * {
+        font-size: 1.1rem;
     }
 }
