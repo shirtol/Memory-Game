@@ -7,67 +7,25 @@ import { GameState } from "./GameState.js";
 
 const gameState = new GameState();
 
-const animals = [
-    "dog",
-    "cat",
-    "duck",
-    "horse",
-    // "eagle",
-    // "rabbit",
-    // "wolf",
-    // "lion",
-    // "turtle",
-    "mouse",
-    "donkey",
-    // "zebra",
-    // "elephant",
-    // "giraffe",
-    // "bear",
-    // "tiger",
-    // "monkey",
-    // "ostrich",
-    // "kangaroo",
-    // "hippo",
-    // "rhino",
-    // "deer",
-    // "cow",
-    // "sheep",
-    // "shark",
-    // "fox",
-    // "camel",
-    // "goat",
-    // "penguin",
-    // "frog",
-    // "hamster",
-    // "pig",
-    // "squirrel",
-    // "chicken",
-    // "cheetah",
-    // "panda",
-    // "hyena",
-    // "alligator",
-    // "ant",
-    // "crab",
-    // "rat",
-    // "buffalo",
-    // "leopard",
-    // "bee",
-    // "flamingo",
-    // "turkey",
-    // "iguana",
-    // "sloth",
-    // "hedgehog",
-    // "whale",
-];
+startGame();
 
-gameBoardloop(shuffle(createGameBoard(animals, 6)));
-observeNumOfFlippedCards(gameState);
-addFlipCardEvent(gameState);
+function startGame(){
+    difficultyMenu(gameState);
+    addDifficultyToContainer(gameState);
+    pickDifficulty();
+    gameState.difficult.difficultyContainer.style.display= "flex";
+}
 
-//! ill explain, hope i didnt screw everything xDDDD
-resetGame(gameState);
+function difficultyMenu({ difficult }) {
+    document.querySelector(".new-game-btn").addEventListener("click", () => {
+        difficult.difficultyContainer.style.display =
+            difficult.difficultyContainer.style.display === "flex"
+                ? "none"
+                : "flex";
+    });
+}
 
-const addDifficultyToContainer = ({ difficult }) => {
+function addDifficultyToContainer ({ difficult }) {
     for (const difficulty of difficult.difficulties) {
         const difficultyEl = document.createElement("div");
         difficultyEl.setAttribute("data-difficulty", difficulty);
@@ -77,41 +35,52 @@ const addDifficultyToContainer = ({ difficult }) => {
     }
 };
 
-addDifficultyToContainer(gameState);
-
-function resetGame({ cards, sidebar, difficult }) {
-    document.querySelector(".new-game-btn").addEventListener("click", () => {
-        difficult.difficultyContainer.style.display =
-            difficult.difficultyContainer.style.display === "grid"
-                ? "none"
-                : "grid";
-        const screenWidth = window.screen.width;
-        // if (
-        //     difficult.difficultyContainer.style.display === "flex" ||
-        //     difficult.difficultyContainer.style.display === "grid"
-        // ) {
-        //     difficult.difficultyContainer.style.display = "none";
-        // } else {
-        //     if (screenWidth > 530) {
-        //         difficult.difficultyContainer.style.display = "flex";
-        //     } else if (screenWidth <= 530) {
-        //         difficult.difficultyContainer.style.display = "grid";
-        //     }
-        // }
-
-        // document.querySelector(".cards-container").innerHTML = "";
-        // sidebar.correctGuesses.innerText = "0";
-        // sidebar.incorrectGuesses.innerText = "0";
-        // clearInterval(sidebar.intervalID);
-        // timer(gameState);
-        // setTimeout(() => {
-        //     gameBoardloop(shuffle(createGameBoard(animals, 6))); //!Change the second parameter in createGameBoard function to 6 instead of 18 duw to UI problem
-        //     addBackgroundImageToAllCards(gameState);
-        //     cards.resetFlipedCardsArr();
-        //     observeNumOfFlippedCards(gameState);
-        //     addFlipCardEvent(gameState);
-        // }, 1000);
+function pickDifficulty(){
+    const options = document.querySelector(".difficulty-container");
+    let index = 0;
+    options.addEventListener("click", (ev)=>{
+        switch(ev.target.getAttribute("data-difficulty")){
+            case "easy":
+                index = 0;
+                break;
+            case "medium":
+                index = 1;
+                break;
+            case "hard":
+                index = 2;
+                break;
+            case "ninja":
+                index = 3;
+                break;
+            default:
+                break;
+        }
+        resetPickedDifficulty(gameState, index);
     });
+}
+
+function resetPickedDifficulty({cards, sidebar, difficult, animals}, idx){
+    document.querySelector(".cards-container").innerHTML = "";
+    sidebar.correctGuesses.innerText = "0";
+    sidebar.incorrectGuesses.innerText = "0";
+    clearInterval(sidebar.intervalID);
+    timer(gameState);
+    document.querySelector(".difficulty-container").style.display = "none";
+    setGridSize(difficult.diffCardsNum[idx] / (idx + 2));
+    setTimeout(() => {
+        gameBoardloop(shuffle(createGameBoard(gameState, difficult.diffCardsNum[idx]))); //!Change the second parameter in createGameBoard function to 6 instead of 18 duw to UI problem
+        addBackgroundImageToAllCards(gameState);
+        cards.resetFlipedCardsArr();
+        observeNumOfFlippedCards(gameState);
+        addFlipCardEvent(gameState);
+    }, 1000);
+}
+
+function setGridSize(size){
+    const container = document.querySelector(".cards-container");
+    console.log(size);
+    container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+    container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
 }
 
 function timer({ sidebar }) {
@@ -150,7 +119,6 @@ function timer({ sidebar }) {
         // }
     }, 1000);
 }
-timer(gameState);
 
 //! need to pass cards number of pairs and the counter of successes.
 function gameOver(successCounter, cardsNum) {
@@ -160,51 +128,17 @@ function gameOver(successCounter, cardsNum) {
     return false;
 }
 
-//! pass the guessesCount array from the game main obj
-function updateCounters({ sidebar, cards }) {
-    if (isIdenticalCards(cards)) {
-        sidebar.correctGuesses.innerText =
-            parseInt(sidebar.correctGuesses.innerText) + 1;
-    } else {
-        sidebar.incorrectGuesses.innerText =
-            parseInt(sidebar.incorrectGuesses.innerText) + 1;
-    }
-}
-
-// function createGameBoard(array, rows, cols) {
-//     //checked
-//     if (array.length !== rows * cols)
-//         return "Error occured. Please check array's size";
-//     else {
-//         const gameBoard = Array.from(Array(rows), () => new Array());
-//         // console.log(gameBoard);
-//         let c = 0;
-//         let newAnimals = new Array();
-//         for (let i = 0; i < gameBoard.length; i++) {
-//             newAnimals = array.slice(c, (c = c + cols));
-//             // console.log(newAnimals);
-
-//             for (let b = 0, j = 0; b < newAnimals.length, j < cols; b++, j++) {
-//                 gameBoard[i].push(newAnimals[b]);
-//             }
-//         }
-//         console.log(gameBoard);
-//     }
-// }
-
-function createGameBoard(array, cardCouples) {
-    if (array.length < cardCouples) {
+function createGameBoard({animals}, cardCouples) {
+    if (animals.length < cardCouples) {
         return "Error occured. Please check array's size";
     }
     const gameBoard = [];
     for (let i = 0; i < cardCouples; i++) {
-        gameBoard.push(array[i]);
-        gameBoard.push(array[i]);
+        gameBoard.push(animals[i]);
+        gameBoard.push(animals[i]);
     }
     return gameBoard;
 }
-
-// console.log(createGameBoard(animals, 3, 4));
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -255,25 +189,6 @@ function getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-// console.log(shuffle(animals));
-
-//? -------------------------------------------
-function shuffle2(array) {
-    let currentIndex = array.length,
-        randomIndex;
-    while (currentIndex != 0) {
-        randomIndex = (Math.random() * currentIndex) | 0;
-        currentIndex--;
-        [array[currentIndex], array[randomIndex]] = [
-            array[randomIndex],
-            array[currentIndex],
-        ];
-    }
-    return array;
-}
-
-//   console.log(shuffle2(animals));
-
 /**
  * @description Add the background image to all cards
  */
@@ -292,4 +207,3 @@ const addBackgroundImageToAllCards = ({ cards }) => {
     });
 };
 
-addBackgroundImageToAllCards(gameState);
