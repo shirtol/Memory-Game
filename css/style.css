@@ -6,12 +6,22 @@
 
 html {
     font-size: 62.5%;
+    --columns: 4;
+    --rows: 3;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+.background-container {
+    background-image: url("../assets/img/farm-background.png");
+    opacity: 0.8;
+    z-index: -1;
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+
     --columns: 6;
     --rows: 6;
 }
-
 .container {
-    background: green;
     width: 100%;
     height: 100vh;
     display: flex;
@@ -22,7 +32,8 @@ html {
 }
 
 .header {
-    font-size: 1.5vw;
+    font-size: 2rem;
+
     text-align: center;
     height: max-content;
 }
@@ -32,8 +43,9 @@ html {
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 70%;
-    gap: 2rem;
+    height: 60%;
+    margin-right: 10rem;
+
 }
 
 .left-sidebar {
@@ -114,15 +126,24 @@ footer {
     gap: 1rem;
 }
 
+/* Related to the cards styling */
+.center-img {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 @media (max-width: 768px) {
     .game-container {
         flex-direction: column;
+        margin-right: 0;
     }
 
     .left-sidebar {
         flex-direction: row;
         width: 30%;
         align-items: center;
+        margin-bottom: 2rem;
 
         /* gap: 0; */
     }

@@ -1,5 +1,6 @@
 import { Observable } from "./Observable.js";
 
+const FLIP_HOLD = 1000;
 /**
  * @description cards constructor holds all the cards methods and elements
  * @class
@@ -38,16 +39,27 @@ export const observeNumOfFlippedCards = ({ cards }) => {
 };
 
 /**
+ *
+ * @param {*} param0
+ */
+function addFlipCardsToClass(e) {
+    console.log(e.currentTarget);
+    e.currentTarget.cards.flippedCardsArr.set([
+        ...e.currentTarget.cards.flippedCardsArr.get(),
+        e.currentTarget,
+    ]);
+    e.currentTarget.classList.add("flipCard");
+}
+
+/**
  * @description Adding click event to all cards. When clicking on a card it will flip to the other side
  * @param {Object} Obj
  * @param {Cards} Obj.cards
  */
 export const addFlipCardEvent = ({ cards }) => {
     cards.getAllCards().forEach((card) => {
-        card.addEventListener("click", () => {
-            cards.flippedCardsArr.set([...cards.flippedCardsArr.get(), card]);
-            card.classList.add("flipCard");
-        });
+        card.cards = cards;
+        card.addEventListener("click", addFlipCardsToClass);
     });
 };
 
@@ -59,7 +71,7 @@ export const disableClickCards = (cards) => {
     if (cards.hasTwoFlipped()) {
         cards.getAllCards().forEach((card) => {
             card.style.pointerEvents = "none";
-            setTimeout(() => (card.style.pointerEvents = "auto"), 2000);
+            setTimeout(() => (card.style.pointerEvents = "auto"), FLIP_HOLD);
         });
     }
 };
@@ -72,6 +84,8 @@ export const stayOpenCardsIfNeeded = (cards) => {
     if (isIdenticalCards(cards)) {
         cards.flippedCardsArr.get().forEach((card) => {
             card.style.pointerEvents = "none";
+            // card.replaceWith(card.cloneNode(true));
+            card.removeEventListener("click", addFlipCardsToClass);
         });
         cards.flippedCardsArr.set([]);
     }
@@ -84,7 +98,7 @@ export const stayOpenCardsIfNeeded = (cards) => {
 export const closeCardsIfNeeded = (cards) => {
     if (isDifferentCards(cards)) {
         cards.flippedCardsArr.get().forEach((card) => {
-            setTimeout(() => card.classList.remove("flipCard"), 2000);
+            setTimeout(() => card.classList.remove("flipCard"), FLIP_HOLD);
         });
         cards.flippedCardsArr.set([]);
     }
