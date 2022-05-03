@@ -199,8 +199,8 @@ const addBackgroundImageToAllCards = ({ cards }) => {
         const cardType = card.getAttribute("data-type");
         const backCard = card.lastChild;
         const frontCard = card.firstChild;
-        backCard.style.backgroundImage = `url(../assets/img/${cardType}.webp)`;
-        // backCard.style.backgroundImage = `url(../assets/img/back-mobile/dog-mobile.png)`; //!Will remove when I end working on cutting the images of cards to the correct width and height
+        // backCard.style.backgroundImage = `url(../assets/img/${cardType}.webp)`;
+        backCard.style.backgroundImage = `url(../assets/img/back-mobile/dog-mobile.png)`; //!Will remove when I end working on cutting the images of cards to the correct width and height
         backCard.classList.add("center-img");
         frontCard.style.backgroundImage = `url(../assets/img/front/paw1.png)`;
         frontCard.classList.add("center-img");
