@@ -60,7 +60,7 @@ const animals = [
     "whale",
 ];
 
-gameBoardloop(shuffle(createGameBoard(animals, 18)));
+gameBoardloop(shuffle(createGameBoard(animals, 6)));
 observeNumOfFlippedCards(gameState);
 addFlipCardEvent(gameState);
 
@@ -74,7 +74,7 @@ function resetGame({ cards, sidebar }) {
         sidebar.incorrectGuesses.innerText = "0";
         clearInterval(sidebar.intervalID);
         timer(gameState);
-        setTimeout(()=>{
+        setTimeout(() => {
             gameBoardloop(shuffle(createGameBoard(animals, 18)));
             cards.resetFlipedCardsArr();
             observeNumOfFlippedCards(gameState);
@@ -162,7 +162,7 @@ function updateCounters({ sidebar, cards }) {
 // }
 
 function createGameBoard(array, cardCouples) {
-    if (array.length < cardCouples){
+    if (array.length < cardCouples) {
         return "Error occured. Please check array's size";
     }
     const gameBoard = [];
@@ -226,7 +226,6 @@ function getRandomIntInclusive(min, max) {
 
 // console.log(shuffle(animals));
 
-
 //? -------------------------------------------
 function shuffle2(array) {
     let currentIndex = array.length,
@@ -258,5 +257,3 @@ const addBackgroundImageToAllCards = ({ cards }) => {
 };
 
 addBackgroundImageToAllCards(gameState);
-
-
