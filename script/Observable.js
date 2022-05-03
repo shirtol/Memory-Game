@@ -1,9 +1,12 @@
 /**
  * @description
- * @class
  * @param {any} init
+ * @class
  */
 export const Observable = function (init) {
+    /**
+     * @private
+     */
     this.value = init;
     this.get = () => this.value;
     this.set = (newValue) => {

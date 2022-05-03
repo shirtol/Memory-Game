@@ -1,11 +1,11 @@
 import { Observable } from "./Observable.js";
-import {
-    checkGameOver,
-} from "./script.js";
+import { checkGameOver } from "./script.js";
 
 const FLIP_HOLD = 1000;
+
 /**
- * @description cards constructor holds all the cards methods and elements
+ *  @description cards constructor holds all the cards methods and elements
+ * @type {Cards}
  * @class
  */
 export const Cards = function () {
@@ -17,7 +17,7 @@ export const Cards = function () {
 
     /**
      *
-     * @type {Node[]}
+     * @type {Observable}
      */
     this.flippedCardsArr = new Observable([]);
     this.resetFlipedCardsArr = () =>
@@ -31,7 +31,7 @@ export const Cards = function () {
 
 /**
  *
- * @param {*} cards
+ * @param {{cards: Cards}} cards
  */
 export const observeNumOfFlippedCards = ({ cards }) => {
     cards.flippedCardsArr.addChangeListener((_) => disableClickCards(cards));
@@ -63,6 +63,17 @@ export const addFlipCardEvent = ({ cards }) => {
     cards.getAllCards().forEach((card) => {
         card.cards = cards;
         card.addEventListener("click", addFlipCardsToClass);
+    });
+};
+
+/**
+ *
+ * @param {cards: Cards} cards
+ */
+export const removeFlipCardEvent = ({ cards }) => {
+    cards.getAllCards().forEach((card) => {
+        card.style.cursor = "auto";
+        card.removeEventListener("click", addFlipCardsToClass);
     });
 };
 

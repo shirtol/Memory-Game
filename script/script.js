@@ -2,6 +2,8 @@ import {
     addFlipCardEvent,
     observeNumOfFlippedCards,
     isIdenticalCards,
+    Cards,
+    removeFlipCardEvent,
 } from "./Cards.js";
 import { GameState } from "./GameState.js";
 
@@ -18,6 +20,7 @@ function startGame() {
 
 function difficultyMenu({ difficult }) {
     document.querySelector(".new-game-btn").addEventListener("click", () => {
+        removeFlipCardEvent(gameState);
         difficult.difficultyContainer.style.display =
             difficult.difficultyContainer.style.display === "grid"
                 ? "none"
@@ -60,8 +63,13 @@ function pickDifficulty() {
     });
 }
 
+/**
+ *
+ * @param {{cards: Cards, sidebar: Sidebar, difficult: Difficulty, animals: string[]}} Obj
+ * @param {number} idx
+ */
 function resetPickedDifficulty({ cards, sidebar, difficult, animals }, idx) {
-    document.querySelector(".cards-container").innerHTML = "";
+    document.querySelector(".cards-container").innerHTML = ""; //!Why not use textContent?
     sidebar.correctGuesses.innerText = "0";
     sidebar.incorrectGuesses.innerText = "0";
     clearInterval(sidebar.intervalID);
@@ -71,7 +79,7 @@ function resetPickedDifficulty({ cards, sidebar, difficult, animals }, idx) {
     setTimeout(() => {
         gameBoardloop(
             shuffle(createGameBoard(animals, difficult.diffCardsNum[idx]))
-        ); //!Change the second parameter in createGameBoard function to 6 instead of 18 duw to UI problem
+        );
         addBackgroundImageToAllCards(gameState);
         cards.resetFlipedCardsArr();
         observeNumOfFlippedCards(gameState);
