@@ -55,6 +55,7 @@ function pickDifficulty(){
             default:
                 break;
         }
+        gameState.difficult.coupleNum = gameState.difficult.diffCardsNum[index];
         resetPickedDifficulty(gameState, index);
     });
 }
@@ -68,7 +69,7 @@ function resetPickedDifficulty({cards, sidebar, difficult, animals}, idx){
     document.querySelector(".difficulty-container").style.display = "none";
     setGridSize(difficult.diffCardsNum[idx] / (idx + 2));
     setTimeout(() => {
-        gameBoardloop(shuffle(createGameBoard(gameState, difficult.diffCardsNum[idx]))); //!Change the second parameter in createGameBoard function to 6 instead of 18 duw to UI problem
+        gameBoardloop(shuffle(createGameBoard(animals, difficult.diffCardsNum[idx]))); //!Change the second parameter in createGameBoard function to 6 instead of 18 duw to UI problem
         addBackgroundImageToAllCards(gameState);
         cards.resetFlipedCardsArr();
         observeNumOfFlippedCards(gameState);
@@ -120,15 +121,16 @@ function timer({ sidebar }) {
     }, 1000);
 }
 
-//! need to pass cards number of pairs and the counter of successes.
-function gameOver(successCounter, cardsNum) {
-    if (successCounter === cardsNum) {
-        return true;
+//! for now nothing happens when gameover except adds 10 to score, need to reset or decide how to go on from here.
+export function checkGameOver() {
+    const corrects = parseInt(document.querySelector(".correct-count").innerText);
+    if (corrects === gameState.difficult.coupleNum) {
+        const score = document.querySelector(".score-count");
+        score.innerText = parseInt(score.innerText) + 10;
     }
-    return false;
 }
 
-function createGameBoard({animals}, cardCouples) {
+function createGameBoard(animals, cardCouples) {
     if (animals.length < cardCouples) {
         return "Error occured. Please check array's size";
     }
@@ -199,8 +201,8 @@ const addBackgroundImageToAllCards = ({ cards }) => {
         const cardType = card.getAttribute("data-type");
         const backCard = card.lastChild;
         const frontCard = card.firstChild;
-        // backCard.style.backgroundImage = `url(../assets/img/${cardType}.webp)`;
-        backCard.style.backgroundImage = `url(../assets/img/back-mobile/dog-mobile.png)`; //!Will remove when I end working on cutting the images of cards to the correct width and height
+        backCard.style.backgroundImage = `url(../assets/img/${cardType}.webp)`;
+        // backCard.style.backgroundImage = `url(../assets/img/back-mobile/dog-mobile.png)`; //!Will remove when I end working on cutting the images of cards to the correct width and height
         backCard.classList.add("center-img");
         frontCard.style.backgroundImage = `url(../assets/img/front/paw1.png)`;
         frontCard.classList.add("center-img");

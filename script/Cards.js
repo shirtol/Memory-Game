@@ -1,4 +1,7 @@
 import { Observable } from "./Observable.js";
+import {
+    checkGameOver,
+} from "./script.js";
 
 const FLIP_HOLD = 1000;
 /**
@@ -91,6 +94,7 @@ export const stayOpenCardsIfNeeded = (cards) => {
         cards.flippedCardsArr.set([]);
         document.querySelector(".correct-count").innerText =
             parseInt(document.querySelector(".correct-count").innerText) + 1;
+        checkGameOver();
     }
 };
 
