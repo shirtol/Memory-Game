@@ -9,23 +9,23 @@ const gameState = new GameState();
 
 startGame();
 
-function startGame(){
+function startGame() {
     difficultyMenu(gameState);
     addDifficultyToContainer(gameState);
     pickDifficulty();
-    gameState.difficult.difficultyContainer.style.display= "flex";
+    gameState.difficult.difficultyContainer.style.display = "grid";
 }
 
 function difficultyMenu({ difficult }) {
     document.querySelector(".new-game-btn").addEventListener("click", () => {
         difficult.difficultyContainer.style.display =
-            difficult.difficultyContainer.style.display === "flex"
+            difficult.difficultyContainer.style.display === "grid"
                 ? "none"
-                : "flex";
+                : "grid";
     });
 }
 
-function addDifficultyToContainer ({ difficult }) {
+function addDifficultyToContainer({ difficult }) {
     for (const difficulty of difficult.difficulties) {
         const difficultyEl = document.createElement("div");
         difficultyEl.setAttribute("data-difficulty", difficulty);
@@ -33,13 +33,13 @@ function addDifficultyToContainer ({ difficult }) {
         difficultyEl.classList.add("center-img");
         difficult.difficultyContainer.appendChild(difficultyEl);
     }
-};
+}
 
-function pickDifficulty(){
+function pickDifficulty() {
     const options = document.querySelector(".difficulty-container");
     let index = 0;
-    options.addEventListener("click", (ev)=>{
-        switch(ev.target.getAttribute("data-difficulty")){
+    options.addEventListener("click", (ev) => {
+        switch (ev.target.getAttribute("data-difficulty")) {
             case "easy":
                 index = 0;
                 break;
@@ -60,7 +60,7 @@ function pickDifficulty(){
     });
 }
 
-function resetPickedDifficulty({cards, sidebar, difficult, animals}, idx){
+function resetPickedDifficulty({ cards, sidebar, difficult, animals }, idx) {
     document.querySelector(".cards-container").innerHTML = "";
     sidebar.correctGuesses.innerText = "0";
     sidebar.incorrectGuesses.innerText = "0";
@@ -69,7 +69,9 @@ function resetPickedDifficulty({cards, sidebar, difficult, animals}, idx){
     document.querySelector(".difficulty-container").style.display = "none";
     setGridSize(difficult.diffCardsNum[idx] / (idx + 2));
     setTimeout(() => {
-        gameBoardloop(shuffle(createGameBoard(animals, difficult.diffCardsNum[idx]))); //!Change the second parameter in createGameBoard function to 6 instead of 18 duw to UI problem
+        gameBoardloop(
+            shuffle(createGameBoard(animals, difficult.diffCardsNum[idx]))
+        ); //!Change the second parameter in createGameBoard function to 6 instead of 18 duw to UI problem
         addBackgroundImageToAllCards(gameState);
         cards.resetFlipedCardsArr();
         observeNumOfFlippedCards(gameState);
@@ -77,7 +79,7 @@ function resetPickedDifficulty({cards, sidebar, difficult, animals}, idx){
     }, 1000);
 }
 
-function setGridSize(size){
+function setGridSize(size) {
     const container = document.querySelector(".cards-container");
     console.log(size);
     container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
@@ -123,7 +125,9 @@ function timer({ sidebar }) {
 
 //! for now nothing happens when gameover except adds 10 to score, need to reset or decide how to go on from here.
 export function checkGameOver() {
-    const corrects = parseInt(document.querySelector(".correct-count").innerText);
+    const corrects = parseInt(
+        document.querySelector(".correct-count").innerText
+    );
     if (corrects === gameState.difficult.coupleNum) {
         const score = document.querySelector(".score-count");
         score.innerText = parseInt(score.innerText) + 10;
@@ -208,4 +212,3 @@ const addBackgroundImageToAllCards = ({ cards }) => {
         frontCard.classList.add("center-img");
     });
 };
-
