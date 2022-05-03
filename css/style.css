@@ -4,12 +4,19 @@
     box-sizing: border-box;
 }
 
+@font-face {
+    font-family: diloWorld;
+    src: url(../assets/fonts/diloWorld.ttf);
+}
+
 html {
     font-size: 62.5%;
     --columns: 4;
     --rows: 3;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: diloWorld;
+    letter-spacing: 3px;
 }
+
 .background-container {
     background-image: url("../assets/img/farm-background.png");
     opacity: 0.8;
@@ -61,7 +68,13 @@ html {
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
         rgba(0, 0, 0, 0.22) 0px 15px 12px;
     opacity: 0.8;
-    /* animation: fade 1s linear; */
+}
+
+.left-sidebar > * {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .box-shadow {
@@ -92,20 +105,20 @@ html {
 }
 
 footer {
-    height: 8%;
+    height: max-content;
 }
 
 .new-game-btn {
     font-size: 2vw;
     border: 1px black solid;
     padding: 1rem;
-    margin-bottom: 2rem;
-    margin-top: 3rem;
+    margin-bottom: 1rem;
+    margin-top: 4rem;
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
         rgba(0, 0, 0, 0.22) 0px 15px 12px;
     background: #d3a86c;
-    opacity: 0.6;
+    opacity: 0.8;
     font-weight: 700;
     border-radius: 8px;
     color: #f8f1eb;
@@ -161,20 +174,23 @@ footer {
 
 /* Related to the difficulty pop-up */
 .difficulty-container {
-    width: 40%;
-    height: 20%;
+    width: 50rem;
+    height: max-content;
     font-size: 2rem;
-    text-align: center;
     line-height: 2.5rem;
     z-index: 20;
     display: none;
     position: absolute;
     background: #f9ea81;
     padding: 4rem;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
     opacity: 0.9;
     animation: fade 1s linear;
+    flex-shrink: 0;
+    border-radius: 10px;
 }
 
 .difficulty-container > * {
@@ -186,6 +202,14 @@ footer {
     width: 8rem;
     height: 8rem;
     text-align: center;
+    flex-shrink: 0;
+    color: #fff;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    justify-self: center;
 }
 
 .difficulty-container > *:hover {
@@ -201,6 +225,20 @@ footer {
     }
 }
 
+[data-difficulty="easy"] {
+    background: #50ca91;
+}
+[data-difficulty="medium"] {
+    background: #599bc7;
+}
+[data-difficulty="hard"] {
+    background: #d74f4a;
+}
+[data-difficulty="ninja"] {
+    background: #2f3338;
+}
+
+/* media query */
 @media (max-width: 768px) {
     .game-container {
         flex-direction: column;
@@ -252,8 +290,38 @@ footer {
     }
 }
 
+@media (max-width: 530px) {
+    .difficulty-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        width: max-content;
+        height: max-content;
+    }
+
+    .difficulty-container > * {
+        width: 6rem;
+        height: 6rem;
+        font-size: 1.3rem;
+    }
+}
+
 @media (max-width: 400px) {
+    .header {
+        font-size: 1.3rem;
+    }
+
+    .left-sidebar {
+        width: 95%;
+    }
+
     .left-sidebar > * {
-        font-size: 1.1rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-height: 600px) {
+    .new-game-btn {
+        margin-bottom: 0;
+        margin-top: 0;
     }
 }
