@@ -27,13 +27,6 @@ export class Observable {
         /**
          * @type {((newValue :any)=> void)[]}
          */
-        this.get = () => this.value;
-        this.set = (newValue) => {
-            this.value = newValue;
-            this.listeners.forEach((listener) => {
-                listener(this.value);
-            });
-        };
         this.listeners = [];
         /**
          *

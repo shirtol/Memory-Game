@@ -20,13 +20,17 @@ export const Cards = function () {
      * @type {Observable}
      */
     this.flippedCardsArr = new Observable([]);
+
+    this.numOfCorrect = new Observable(0);
+    this.numOfFail = new Observable(0);
+
     this.resetFlipedCardsArr = () =>
         (this.flippedCardsArr = new Observable([]));
     /**
      * @description Check if we have 2 cards open
      * @type {()=> boolean}
      */
-    this.hasTwoFlipped = () => this.flippedCardsArr.get().length === 2;
+    this.hasTwoFlipped = () => this.flippedCardsArr.value.length === 2;
 };
 
 /**
@@ -49,11 +53,11 @@ function addFlipCardsToClass(e) {
     if (e.currentTarget.classList.contains("flipCard")) {
         return;
     }
-    e.currentTarget.deck.flippedCardsArr.set([
+    e.currentTarget.deck.flippedCardsArr.value = [
         //currentTarget is the actual element in HTML that was clicked.
-        ...e.currentTarget.deck.flippedCardsArr.get(),
+        ...e.currentTarget.deck.flippedCardsArr.value,
         e.currentTarget,
-    ]);
+    ];
     e.currentTarget.classList.add("flipCard");
 }
 
@@ -99,15 +103,13 @@ export const disableClickCards = (cards) => {
  */
 export const stayOpenCardsIfNeeded = (cards) => {
     if (isIdenticalCards(cards)) {
-        cards.flippedCardsArr.get().forEach((card) => {
+        updateCounters(cards);
+        cards.flippedCardsArr.value.forEach((card) => {
             card.style.pointerEvents = "none";
-            // card.replaceWith(card.cloneNode(true));
             card.removeEventListener("click", addFlipCardsToClass);
             card.style.cursor = "auto";
         });
-        cards.flippedCardsArr.set([]);
-        document.querySelector(".correct-count").innerText =
-            parseInt(document.querySelector(".correct-count").innerText) + 1;
+        cards.flippedCardsArr.value = [];
         checkGameOver();
     }
 };
@@ -118,14 +120,12 @@ export const stayOpenCardsIfNeeded = (cards) => {
 //!TODO: Check which attribute we need to use in getAttribute func (this attributer holds the type of card: cat, dog etc.)
 export const closeCardsIfNeeded = (cards) => {
     if (isDifferentCards(cards)) {
+        updateCounters(cards);
         setTimeout(() => {
-            cards.flippedCardsArr.get().forEach((card) => {
+            cards.flippedCardsArr.value.forEach((card) => {
                 card.classList.remove("flipCard");
             });
-            cards.flippedCardsArr.set([]);
-            document.querySelector(".incorrect-count").innerText =
-                parseInt(document.querySelector(".incorrect-count").innerText) +
-                1;
+            cards.flippedCardsArr.value = [];
         }, 1300);
     }
 };
@@ -138,8 +138,8 @@ export const closeCardsIfNeeded = (cards) => {
 
 export const isIdenticalCards = (cards) =>
     cards.hasTwoFlipped() &&
-    cards.flippedCardsArr.get()[0].getAttribute("data-type") ===
-        cards.flippedCardsArr.get()[1].getAttribute("data-type");
+    cards.flippedCardsArr.value[0].getAttribute("data-type") ===
+        cards.flippedCardsArr.value[1].getAttribute("data-type");
 
 /**
  * @description Check if the user flipped 2 different cards
@@ -148,7 +148,15 @@ export const isIdenticalCards = (cards) =>
  * ! I figured out that we must have this function because if we didn't use it and use the isIdenticalCards function with the "!" sign than we have stack overflow.
  * ! According to De Morgan law - !(a && b) === !a || !b, which in our case, "a" is cards.hasTwoFlipped() and we want to keep it as it is.
  */
-export const isDifferentCards = (cards) =>
-    cards.hasTwoFlipped() &&
-    cards.flippedCardsArr.get()[0].getAttribute("data-type") !==
-        cards.flippedCardsArr.get()[1].getAttribute("data-type");
+export const isDifferentCards = (cards) => {
+    return (
+        cards.hasTwoFlipped() &&
+        cards.flippedCardsArr.value[0].getAttribute("data-type") !==
+            cards.flippedCardsArr.value[1].getAttribute("data-type")
+    );
+};
+
+export const updateCounters = (cards) => {
+    if (isIdenticalCards(cards)) cards.numOfCorrect.value += 1;
+    else if (isDifferentCards(cards)) cards.numOfFail.value += 1;
+};

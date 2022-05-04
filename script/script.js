@@ -7,6 +7,7 @@ import {
 } from "./Cards.js";
 import { observeTime, Timer } from "./Timer.js";
 import { GameState } from "./GameState.js";
+import { observeChangesInCardsResults } from "./Sidebar.js";
 
 const gameState = new GameState();
 
@@ -75,6 +76,7 @@ function resetPickedDifficulty({ cards, sidebar, difficult, animals }, idx) {
     sidebar.incorrectGuesses.innerText = "0";
     clearInterval(sidebar.intervalID);
     timer(gameState);
+    observeChangesInCardsResults(gameState);
     document.querySelector(".difficulty-container").style.display = "none";
     setGridSize(difficult.diffCardsNum[idx] / (idx + 2));
     setTimeout(() => {
