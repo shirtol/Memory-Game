@@ -43,15 +43,15 @@ export const observeNumOfFlippedCards = ({ cards }) => {
 
 /**
  *
- * @param {*} param0
+ * @param {Event} e
  */
 function addFlipCardsToClass(e) {
-    if(e.currentTarget.classList.contains("flipCard")){
+    if (e.currentTarget.classList.contains("flipCard")) {
         return;
     }
-    console.log(e.currentTarget);
-    e.currentTarget.cards.flippedCardsArr.set([
-        ...e.currentTarget.cards.flippedCardsArr.get(),
+    e.currentTarget.deck.flippedCardsArr.set([
+        //currentTarget is the actual element in HTML that was clicked.
+        ...e.currentTarget.deck.flippedCardsArr.get(),
         e.currentTarget,
     ]);
     e.currentTarget.classList.add("flipCard");
@@ -64,7 +64,7 @@ function addFlipCardsToClass(e) {
  */
 export const addFlipCardEvent = ({ cards }) => {
     cards.getAllCards().forEach((card) => {
-        card.cards = cards;
+        card.deck = cards; //!card is an HTML element and deck is a property of card that we made up, and inside it we save cards. (I made it because I wanted to remove the callback afterwards)
         card.addEventListener("click", addFlipCardsToClass);
     });
 };

@@ -5,10 +5,12 @@
 
 import { Cards } from "./Cards.js";
 import { Sidebar } from "./Sidebar.js";
+import { Timer } from "./Timer.js";
 
 export const GameState = function () {
     this.cards = new Cards();
     this.sidebar = new Sidebar();
+    this.timer = new Timer();
     this.animals = [
         "dog",
         "cat",
