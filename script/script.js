@@ -16,6 +16,7 @@ startGame();
 function startGame() {
     difficultyMenu(gameState);
     addDifficultyToContainer(gameState);
+    observeChangesInCardsResults(gameState);
     pickDifficulty();
     gameState.difficult.difficultyContainer.style.display = "grid";
 }
@@ -76,7 +77,6 @@ function resetPickedDifficulty({ cards, sidebar, difficult, animals }, idx) {
     cards.numOfFail.value = 0;
     clearInterval(sidebar.intervalID);
     timer(gameState);
-    observeChangesInCardsResults(gameState);
     document.querySelector(".difficulty-container").style.display = "none";
     setGridSize(difficult.diffCardsNum[idx] / (idx + 2));
     setTimeout(() => {
@@ -124,16 +124,23 @@ export function checkGameOver() {
         clearInterval(gameState.sidebar.intervalID);
         setTimeout(() => (gameState.endGameEl.style.display = "flex"), 800);
 
-        const score = document.querySelector(".score-count");
-        score.innerText = parseInt(score.innerText) + 10;
-        console.log(gameState.endGameBtn);
-
+        updateFinalScore(gameState);
         gameState.endGameBtn.addEventListener("click", () => {
             removeFlipCardEvent(gameState);
             gameState.endGameEl.style.display = "none";
             gameState.difficult.difficultyContainer.style.display = "grid";
         });
     }
+}
+
+function updateFinalScore({timer, cards, difficult:{coupleNum}}){
+    const timeFactor = 1000, failFactor = 30, diffFactor = 20;
+    let timeBonus = coupleNum * timeFactor / timer.time.value;
+    let failPenalty = cards.numOfFail.value * failFactor / coupleNum;
+    let difficultyBonus = diffFactor * coupleNum;
+    let total = timeBonus + difficultyBonus - failPenalty;
+    
+    cards.scoreNum.value = total > coupleNum * diffFactor ? total | 0 : coupleNum * diffFactor;
 }
 
 //! gotta move this to a better place (maybe along with the call back checkGameOver)
