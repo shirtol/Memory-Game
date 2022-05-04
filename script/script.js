@@ -56,7 +56,7 @@ function pickDifficulty() {
                 index = 3;
                 break;
             default:
-                break;
+                return;
         }
         gameState.difficult.coupleNum = gameState.difficult.diffCardsNum[index];
         resetPickedDifficulty(gameState, index);
