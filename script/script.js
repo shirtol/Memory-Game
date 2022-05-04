@@ -92,7 +92,6 @@ function resetPickedDifficulty({ cards, sidebar, difficult, animals }, idx) {
 
 function setGridSize(size) {
     const container = document.querySelector(".cards-container");
-    console.log(size);
     container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
     container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
 }
@@ -133,8 +132,13 @@ export function checkGameOver() {
     }
 }
 
+/**
+ * 
+ * @param {{timer: Timer, cards: Cards, difficult: {coupleNum: Number}}} Obj 
+ */
+
 function updateFinalScore({timer, cards, difficult:{coupleNum}}){
-    const timeFactor = 1000, failFactor = 30, diffFactor = 20;
+    const timeFactor = 5000, failFactor = 30, diffFactor = 20;
     let timeBonus = coupleNum * timeFactor / timer.time.value;
     let failPenalty = cards.numOfFail.value * failFactor / coupleNum;
     let difficultyBonus = diffFactor * coupleNum;
