@@ -74,6 +74,7 @@ function resetPickedDifficulty({ cards, sidebar, difficult, animals }, idx) {
     document.querySelector(".cards-container").innerHTML = ""; //!Why not use textContent?
     cards.numOfCorrect.value = 0;
     cards.numOfFail.value = 0;
+    clearInterval(sidebar.intervalID);
     timer(gameState);
     observeChangesInCardsResults(gameState);
     document.querySelector(".difficulty-container").style.display = "none";
@@ -135,6 +136,7 @@ export function checkGameOver() {
     }
 }
 
+//! gotta move this to a better place (maybe along with the call back checkGameOver)
 gameState.cards.numOfCorrect.addChangeListener(checkGameOver);
 
 function createGameBoard(animals, cardCouples) {
