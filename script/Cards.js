@@ -46,6 +46,9 @@ export const observeNumOfFlippedCards = ({ cards }) => {
  * @param {*} param0
  */
 function addFlipCardsToClass(e) {
+    if(e.currentTarget.classList.contains("flipCard")){
+        return;
+    }
     console.log(e.currentTarget);
     e.currentTarget.cards.flippedCardsArr.set([
         ...e.currentTarget.cards.flippedCardsArr.get(),
