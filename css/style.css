@@ -4,14 +4,31 @@
     box-sizing: border-box;
 }
 
+@font-face {
+    font-family: diloWorld;
+    src: url(../assets/fonts/diloWorld.ttf);
+}
+
 html {
     font-size: 62.5%;
     --columns: 4;
     --rows: 3;
+    font-family: diloWorld;
+    letter-spacing: 3px;
 }
 
+.background-container {
+    background-image: url("../assets/img/farm-background.png");
+    opacity: 0.8;
+    z-index: -1;
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+
+    --columns: 6;
+    --rows: 6;
+}
 .container {
-    background: green;
     width: 100%;
     height: 100vh;
     display: flex;
@@ -22,9 +39,10 @@ html {
 }
 
 .header {
-    font-size: 2vw;
+    font-size: 2rem;
     text-align: center;
-    height: 20%;
+    height: max-content;
+    color: #cfa467;
 }
 
 .game-container {
@@ -33,42 +51,78 @@ html {
     justify-content: center;
     width: 100%;
     height: 60%;
+    margin-right: 10rem;
 }
 
 .left-sidebar {
     display: flex;
     flex-direction: column;
-    width: 30%;
+    width: 20%;
     align-items: center;
     justify-content: center;
     gap: 3rem;
+    background: #d3a86c;
+    margin-left: 8rem;
+    height: 80%;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+        rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    opacity: 0.8;
+}
+
+.left-sidebar > * {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.box-shadow {
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+        rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 
 .cards-container {
     display: grid;
     grid-template-columns: repeat(var(--columns), 1fr);
     grid-template-rows: repeat(var(--rows), 1fr);
-    width: 70%;
-    height: 80%;
+    width: 60%;
+    height: 100%;
+    padding: 0 3rem;
+}
+
+.card-scene {
+    min-width: 80%;
 }
 
 .correct-container,
 .incorrect-container,
+.score-container,
 .timer {
     height: 10rem;
     text-align: center;
     font-size: 1.5vw;
+    color: #f8f1eb;
 }
 
 footer {
-    height: 8%;
+    height: max-content;
 }
 
 .new-game-btn {
     font-size: 2vw;
     border: 1px black solid;
     padding: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+    margin-top: 4rem;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+        rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    background: #d3a86c;
+    opacity: 0.8;
+    font-weight: 700;
+    border-radius: 8px;
+    color: #f8f1eb;
 }
 
 /* Related to the flip card functionality */
@@ -95,12 +149,13 @@ footer {
     width: 100%;
     height: 100%;
     border: 1px black solid;
+    border-radius: 4px;
 }
 
 .card-back {
     transform: rotateY(180deg);
     /*!remove background when finish working*/
-    background: yellow;
+    background: #fff;
 }
 .card-front {
     /*!remove background when finish working*/
@@ -111,26 +166,111 @@ footer {
     gap: 1rem;
 }
 
-@media (max-width: 768px) {
-    .header {
-        height: max-content;
-        font-size: 2rem;
+/* Related to the cards styling */
+.center-img {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.item-img {
+    width: auto;
+    height: 100%;
+}
+
+/* Related to the difficulty pop-up */
+.difficulty-container {
+    width: 50rem;
+    height: max-content;
+    font-size: 2rem;
+    line-height: 2.5rem;
+    z-index: 20;
+    display: none;
+    position: absolute;
+    background: #f9ea81;
+    padding: 4rem;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    opacity: 0.9;
+    animation: fade 1s linear;
+    flex-shrink: 0;
+    border-radius: 10px;
+}
+
+.difficulty-container > * {
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+        rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    transition: 200ms ease-in-out;
+    cursor: pointer;
+    background: #f8f1eb;
+    width: 8rem;
+    height: 8rem;
+    text-align: center;
+    flex-shrink: 0;
+    color: #fff;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    justify-self: center;
+}
+
+.difficulty-container > *:hover {
+    transform: scale(1.05);
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0;
     }
+    50% {
+        opacity: 1;
+    }
+}
+
+[data-difficulty="easy"] {
+    background: #50ca91;
+}
+[data-difficulty="medium"] {
+    background: #599bc7;
+}
+[data-difficulty="hard"] {
+    background: #d74f4a;
+}
+[data-difficulty="ninja"] {
+    background: #2f3338;
+}
+
+/* media query */
+@media (max-width: 768px) {
     .game-container {
         flex-direction: column;
+        margin-right: 0;
     }
 
     .left-sidebar {
         flex-direction: row;
-        width: 30%;
+        width: 80%;
         align-items: center;
+        justify-content: center;
+        margin-bottom: 2rem;
+        height: max-content;
+        background: none;
+        margin-left: 0;
+        background: #d3a86c;
+        padding: 0.8rem;
 
         /* gap: 0; */
     }
 
     .left-sidebar > * {
-        height: max-content;
-        font-size: 1.7rem;
+        width: 100%;
+        margin-left: 0;
+        height: 80%;
+        font-size: 1.5rem;
     }
 
     .cards-container {
@@ -141,7 +281,72 @@ footer {
         height: 80%;
     }
 
+    .card-scene {
+        min-width: 100%;
+    }
+
     .new-game-btn {
         font-size: 1.5rem;
+        margin-top: 0;
+    }
+    .item-img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 530px) {
+    .difficulty-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        width: max-content;
+        height: max-content;
+    }
+
+    .difficulty-container > * {
+        width: 6rem;
+        height: 6rem;
+        font-size: 1.3rem;
+    }
+
+    .cards-container {
+        width: 95%;
+        padding: 0;
+    }
+    .left-sidebar {
+        width: 95%;
+    }
+
+    .left-sidebar > * {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .header {
+        font-size: 1.3rem;
+    }
+
+    .left-sidebar {
+        width: 95%;
+        margin: 3rem;
+        gap: 1rem;
+    }
+
+    .left-sidebar > * {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-height: 600px) {
+    .new-game-btn {
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 300px) {
+    .left-sidebar > * {
+        font-size: 1rem;
     }
 }

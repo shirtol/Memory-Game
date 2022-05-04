@@ -1,156 +1,216 @@
-
-import { addFlipCardEvent, observeNumOfFlippedCards } from "./Cards.js";
+import {
+    addFlipCardEvent,
+    observeNumOfFlippedCards,
+    isIdenticalCards,
+    Cards,
+    removeFlipCardEvent,
+} from "./Cards.js";
+import { observeTime, Timer } from "./Timer.js";
 import { GameState } from "./GameState.js";
+import { observeChangesInCardsResults } from "./Sidebar.js";
 
 const gameState = new GameState();
 
-observeNumOfFlippedCards(gameState);
-addFlipCardEvent(gameState);
+startGame();
 
-function timer() {
-  const timerCount = document.querySelector(".timer .count");
-  let seconds = 0,
-    mins = 0;
-  setInterval(() => {
-    let total = mins < 10 ? "0" + mins : mins;
-    seconds++;
-    timerCount.innerText =
-      seconds < 10 ? total + ":0" + seconds : total + ":" + seconds;
-    if (seconds === 59) {
-      seconds = -1;
-      mins++;
+function startGame() {
+    difficultyMenu(gameState);
+    addDifficultyToContainer(gameState);
+    pickDifficulty();
+    gameState.difficult.difficultyContainer.style.display = "grid";
+}
+
+function difficultyMenu({ difficult }) {
+    document.querySelector(".new-game-btn").addEventListener("click", () => {
+        removeFlipCardEvent(gameState);
+        difficult.difficultyContainer.style.display =
+            difficult.difficultyContainer.style.display === "grid"
+                ? "none"
+                : "grid";
+    });
+}
+
+function addDifficultyToContainer({ difficult }) {
+    for (const difficulty of difficult.difficulties) {
+        const difficultyEl = document.createElement("div");
+        difficultyEl.setAttribute("data-difficulty", difficulty);
+        difficultyEl.textContent = `${difficulty}`;
+        difficultyEl.classList.add("center-img");
+        difficult.difficultyContainer.appendChild(difficultyEl);
     }
-    //! settimeout limit if needed to end game here.
-    // if(mins === 60){
-
-    // }
-  }, 1000);
-}
-timer();
-
-//! need to pass cards number of pairs and the counter of successes.
-function gameOver(successCounter, cardsNum) {
-  if (successCounter === cardsNum) {
-    return true;
-  }
-  return false;
 }
 
-//! pass the guessesCount array from the game main obj
-function updateCounters({ guessesCount }) {
-  //! put flipCard func insted of true to see if second card flip is success or fail
-  if (true) {
-    document.querySelector(".correct-count").innerText = ++guessesCount[0];
-  } else {
-    document.querySelector(".incorrect-count").innerText = ++guessesCount[1];
-  }
+function pickDifficulty() {
+    const options = document.querySelector(".difficulty-container");
+    let index = 0;
+    options.addEventListener("click", (ev) => {
+        switch (ev.target.getAttribute("data-difficulty")) {
+            case "easy":
+                index = 0;
+                break;
+            case "medium":
+                index = 1;
+                break;
+            case "hard":
+                index = 2;
+                break;
+            case "ninja":
+                index = 3;
+                break;
+            default:
+                return;
+        }
+        gameState.difficult.coupleNum = gameState.difficult.diffCardsNum[index];
+        resetPickedDifficulty(gameState, index);
+    });
 }
 
-//! exmaple of main game obj, add here matrix, array of divs and other properties
-const obj = { guessesCount: [0, 0] };
-
-
-const animals= ["dog","cat", "duck", "horse", "cat","dog","horse","duck", "mouse", "mouse", "donkey","donkey"];
-
-
-
-
-
-
-function createGameBoard(array, rows, cols) {   //checked
-  if (array.length!== rows*cols) 
-  return "Error occured. Please check array's size";
-else{    
-const gameBoard= Array.from(Array(rows), () => new Array());
-// console.log(gameBoard);
-let c=0;
-let newAnimals= new Array();
-   for (let i = 0; i < gameBoard.length; i++){
-
-      newAnimals= animals.slice(c, c=c+cols); 
-      console.log(newAnimals);
-
-      for(let b = 0, j = 0; b <newAnimals.length, j < cols; b++, j++){
-          
-          gameBoard[i].push(newAnimals[b]);
-          
-      }   
-}
-console.log(gameBoard);
+/**
+ *
+ * @param {{cards: Cards, sidebar: Sidebar, difficult: Difficulty, animals: string[]}} Obj
+ * @param {number} idx
+ */
+function resetPickedDifficulty({ cards, sidebar, difficult, animals }, idx) {
+    document.querySelector(".cards-container").innerHTML = ""; //!Why not use textContent?
+    cards.numOfCorrect.value = 0;
+    cards.numOfFail.value = 0;
+    clearInterval(sidebar.intervalID);
+    timer(gameState);
+    observeChangesInCardsResults(gameState);
+    document.querySelector(".difficulty-container").style.display = "none";
+    setGridSize(difficult.diffCardsNum[idx] / (idx + 2));
+    setTimeout(() => {
+        gameBoardloop(
+            shuffle(createGameBoard(animals, difficult.diffCardsNum[idx]))
+        );
+        addBackgroundImageToAllCards(gameState);
+        cards.resetFlipedCardsArr();
+        observeNumOfFlippedCards(gameState);
+        addFlipCardEvent(gameState);
+    }, 1000);
 }
 
+function setGridSize(size) {
+    const container = document.querySelector(".cards-container");
+    console.log(size);
+    container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+    container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
 }
-console.log(createGameBoard(animals, 3, 4));
 
+/**
+ *
+ * @param {{sidebar : Sidebar, timer: Timer}} obj
+ */
+function timer({ sidebar, timer }) {
+    timer.time.value = 0;
+    timer.time.nukeListeners();
+    observeTime(timer);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+    sidebar.intervalID = setInterval(() => {
+        if (true) {
+            timer.time.value += 1;
+        } else {
+        }
+        //! settimeout limit if needed to end game here.
+        // if(mins === 60){
 
-function gameBoardloop(gameBoard){            ////checked
-  for(let i = 0; i < gameBoard.length; i++){
-      for(let j = 0; j < gameBoard[i].length; j++ ){
-          createGridElements(gameBoard[i][j]);
-          // console.log(gameBoard[i][j]);
-      }
-  }
-  
-  }
-  // console.log(gameBoardloop(board));
+        // }
+    }, 1000);
+}
+
+//! for now nothing happens when gameover except adds 10 to score, need to reset or decide how to go on from here.
+export function checkGameOver() {
+    const corrects = parseInt(
+        document.querySelector(".correct-count").innerText
+    );
+    if (corrects === gameState.difficult.coupleNum) {
+        const score = document.querySelector(".score-count");
+        score.innerText = parseInt(score.innerText) + 10;
+    }
+}
+
+function createGameBoard(animals, cardCouples) {
+    if (animals.length < cardCouples) {
+        return "Error occured. Please check array's size";
+    }
+    const gameBoard = [];
+    for (let i = 0; i < cardCouples; i++) {
+        gameBoard.push(animals[i]);
+        gameBoard.push(animals[i]);
+    }
+    return gameBoard;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function gameBoardloop(gameBoard) {
+    for (let i = 0; i < gameBoard.length; i++) {
+        createGridElements(gameBoard[i]);
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////
 
-const grid= document.querySelector(".cards-container");
-
-function createGridElements(item)  {            ////checked
-const cardScene= document.createElement("div");
-const cardwrap= document.createElement("div");
-const front= document.createElement("div");
-const back= document.createElement("div");
-cardScene.classList.add("card-scene");
-cardwrap.classList.add("card");
-front.classList.add(item);
-front.classList.add("card-front");
-back.classList.add("card-back");
-cardwrap.appendChild(front);
-cardwrap.appendChild(back);
-cardScene.appendChild(cardwrap);
-grid.appendChild(cardScene);
+function createGridElements(item) {
+    const grid = document.querySelector(".cards-container");
+    const keywords = ["card-front", "card-back", "card-scene"];
+    const cardWrap = document.createElement("div");
+    cardWrap.classList.add("card");
+    cardWrap.setAttribute("data-type", item);
+    for (let i = 0; i < 3; i++) {
+        const frontBackCardScene = document.createElement("div");
+        frontBackCardScene.classList.add(keywords[i]);
+        if (i < 2) cardWrap.appendChild(frontBackCardScene);
+        // i < 2 ? cardWrap.appendChild(frontBackCardScene) : 0; //! why not use if statement? because if the condition returns false then we don't do nothing..
+        if (i === 2) {
+            frontBackCardScene.appendChild(cardWrap);
+            grid.appendChild(frontBackCardScene);
+        }
+    }
 }
 
-// console.log(createGridElements("cat"));
-////////////////////////////////////////////////////////////////////////////////////////
+//? shufle ------------------
 
-function shuffle(array){     ////checked
+function shuffle(array) {
     let random;
-    const newShuffledArray= new Array(); 
-    console.log(newShuffledArray);
+    const newShuffledArray = new Array();
 
-    for(let i = 0; i< array.length; i++){
-        random= getRandomIntInclusive(0,array.length-1);
-        while (newShuffledArray[random]!==undefined){
-        random= getRandomIntInclusive(0,array.length-1);
+    for (let i = 0; i < array.length; i++) {
+        random = getRandomIntInclusive(0, array.length - 1);
+        while (newShuffledArray[random] !== undefined) {
+            random = getRandomIntInclusive(0, array.length - 1);
+        }
+        newShuffledArray[random] = array[i];
     }
-        newShuffledArray[random] = array[i];    
-    }
-    console.log(newShuffledArray);
+    return newShuffledArray;
 }
-// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function getRandomIntInclusive(min, max) {     ////checked
+
+function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1) + min)
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
-// console.log(getRandomIntInclusive(0,12));
 
-console.log((shuffle(animals)));
+/**
+ * @description Add the background image to all cards
+ */
 
+const addBackgroundImageToAllCards = ({ cards }) => {
+    cards.getAllCards().forEach((card) => {
+        card.classList.add("box-shadow");
+        const cardType = card.getAttribute("data-type");
+        const backCard = card.lastChild;
+        const frontCard = card.firstChild;
+        const img = document.createElement("img");
+        img.src = `./assets/img/animals/${cardType}.webp`;
+        img.classList.add("item-img");
+        backCard.appendChild(img);
+        backCard.style = "display: flex; justify-content: center;";
 
-
-
-
-
-
-
-
-
-
-
-            
+        // backCard.style.backgroundImage = `url(../assets/img/${cardType}.webp)`;
+        // backCard.style.backgroundImage = `url(../assets/img/back-mobile/cat-mobile.png)`; //!Will remove when I end working on cutting the images of cards to the correct width and height
+        backCard.classList.add("center-img");
+        frontCard.style.backgroundImage = `url(../assets/img/front/paw1.png)`;
+        frontCard.classList.add("center-img");
+    });
+};
