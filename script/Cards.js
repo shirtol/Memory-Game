@@ -30,6 +30,11 @@ export class Cards {
         this.numOfCorrect = new Observable(0);
 
         /**
+         * @type {Observable}
+         */
+        this.scoreNum = new Observable(0);
+
+        /**
          *
          * @type {Observable}
          */
