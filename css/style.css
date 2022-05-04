@@ -244,6 +244,24 @@ footer {
     background: #2f3338;
 }
 
+/* End game pop-up */
+.end-game {
+    position: absolute;
+    z-index: 30;
+    font-size: 6rem;
+    display: none;
+    background: #bffdc972;
+    width: 100%;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    /* display: flex; */
+    flex-direction: column;
+}
+.end-game > * {
+    text-align: center;
+}
+
 /* media query */
 @media (max-width: 768px) {
     .game-container {

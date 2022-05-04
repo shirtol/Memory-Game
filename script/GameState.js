@@ -65,4 +65,6 @@ export const GameState = function () {
         "whale",
     ];
     this.difficult = new Difficulty();
+    this.endGameEl = document.querySelector(".end-game");
+    this.endGameBtn = document.querySelector("#end-game-btn");
 };

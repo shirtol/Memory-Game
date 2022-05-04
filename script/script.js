@@ -74,7 +74,6 @@ function resetPickedDifficulty({ cards, sidebar, difficult, animals }, idx) {
     document.querySelector(".cards-container").innerHTML = ""; //!Why not use textContent?
     cards.numOfCorrect.value = 0;
     cards.numOfFail.value = 0;
-    clearInterval(sidebar.intervalID);
     timer(gameState);
     observeChangesInCardsResults(gameState);
     document.querySelector(".difficulty-container").style.display = "none";
@@ -120,14 +119,23 @@ function timer({ sidebar, timer }) {
 
 //! for now nothing happens when gameover except adds 10 to score, need to reset or decide how to go on from here.
 export function checkGameOver() {
-    const corrects = parseInt(
-        document.querySelector(".correct-count").innerText
-    );
-    if (corrects === gameState.difficult.coupleNum) {
+    if (gameState.cards.numOfCorrect.value === gameState.difficult.coupleNum) {
+        clearInterval(gameState.sidebar.intervalID);
+        setTimeout(() => (gameState.endGameEl.style.display = "flex"), 800);
+
         const score = document.querySelector(".score-count");
         score.innerText = parseInt(score.innerText) + 10;
+        console.log(gameState.endGameBtn);
+
+        gameState.endGameBtn.addEventListener("click", () => {
+            removeFlipCardEvent(gameState);
+            gameState.endGameEl.style.display = "none";
+            gameState.difficult.difficultyContainer.style.display = "grid";
+        });
     }
 }
+
+gameState.cards.numOfCorrect.addChangeListener(checkGameOver);
 
 function createGameBoard(animals, cardCouples) {
     if (animals.length < cardCouples) {
