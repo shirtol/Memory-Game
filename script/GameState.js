@@ -6,6 +6,7 @@
 import { Cards } from "./Cards.js";
 import { Sidebar } from "./Sidebar.js";
 import { Timer } from "./Timer.js";
+import { Difficulty } from "./Difficulty.js";
 
 export const GameState = function () {
     this.cards = new Cards();
@@ -64,13 +65,4 @@ export const GameState = function () {
         "whale",
     ];
     this.difficult = new Difficulty();
-};
-
-const Difficulty = function () {
-    this.difficulties = ["easy", "medium", "hard", "ninja"];
-    this.diffCardsNum = [8, 18, 32, 50];
-    this.coupleNum = 0;
-    this.difficultyContainer = document.querySelector(".difficulty-container");
-
-    this.getDifficulty = () => document.querySelectorAll("[data-difficulty]");
 };
