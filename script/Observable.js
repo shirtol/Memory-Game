@@ -25,6 +25,7 @@ export class Observable {
          */
         this._value = init;
         /**
+         * @private
          * @type {((newValue :any)=> void)[]}
          */
         this.listeners = [];
@@ -34,5 +35,8 @@ export class Observable {
          * @returns
          */
         this.addChangeListener = (listener) => this.listeners.push(listener);
+        this.removeChangeListener = (listener) =>
+            this.listeners.splice(this.listeners.indexOf(listener), 1);
+        this.nukeListeners = () => (this.listeners = []);
     }
 }
