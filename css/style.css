@@ -173,6 +173,11 @@ footer {
     background-position: center;
 }
 
+.item-img {
+    width: auto;
+    height: 100%;
+}
+
 /* Related to the difficulty pop-up */
 .difficulty-container {
     width: 50rem;
@@ -275,11 +280,6 @@ footer {
         width: 70%;
         height: 80%;
     }
-    /* 
-    .cards-container {
-        width: 100%;
-        height: 100%;
-    } */
 
     .card-scene {
         min-width: 100%;
@@ -288,6 +288,10 @@ footer {
     .new-game-btn {
         font-size: 1.5rem;
         margin-top: 0;
+    }
+    .item-img {
+        width: 100%;
+        height: auto;
     }
 }
 
