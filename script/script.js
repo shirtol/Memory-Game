@@ -72,8 +72,8 @@ function pickDifficulty() {
  */
 function resetPickedDifficulty({ cards, sidebar, difficult, animals }, idx) {
     document.querySelector(".cards-container").innerHTML = ""; //!Why not use textContent?
-    sidebar.correctGuesses.innerText = "0";
-    sidebar.incorrectGuesses.innerText = "0";
+    cards.numOfCorrect.value = 0;
+    cards.numOfFail.value = 0;
     clearInterval(sidebar.intervalID);
     timer(gameState);
     observeChangesInCardsResults(gameState);
@@ -102,6 +102,8 @@ function setGridSize(size) {
  * @param {{sidebar : Sidebar, timer: Timer}} obj
  */
 function timer({ sidebar, timer }) {
+    timer.time.value = 0;
+    timer.time.nukeListeners();
     observeTime(timer);
 
     sidebar.intervalID = setInterval(() => {
