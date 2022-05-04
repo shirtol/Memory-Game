@@ -5,6 +5,7 @@ import {
     Cards,
     removeFlipCardEvent,
 } from "./Cards.js";
+import { observeTime, Timer } from "./Timer.js";
 import { GameState } from "./GameState.js";
 
 const gameState = new GameState();
@@ -94,35 +95,17 @@ function setGridSize(size) {
     container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
 }
 
-function timer({ sidebar }) {
-    const timerCount = document.querySelector(".timer .count");
-    let p1seconds = -1,
-        p2seconds = 0,
-        p1mins = 0,
-        p2mins = 0;
+/**
+ *
+ * @param {{sidebar : Sidebar, timer: Timer}} obj
+ */
+function timer({ sidebar, timer }) {
+    observeTime(timer);
+
     sidebar.intervalID = setInterval(() => {
         if (true) {
-            let total = p1mins < 10 ? "0" + p1mins : p1mins;
-            p1seconds++;
-            timerCount.innerText =
-                p1seconds < 10
-                    ? total + ":0" + p1seconds
-                    : total + ":" + p1seconds;
-            if (p1seconds === 59) {
-                p1seconds = -1;
-                p1mins++;
-            }
+            timer.time.value += 1;
         } else {
-            let total = p2mins < 10 ? "0" + p2mins : p2mins;
-            p2seconds++;
-            timerCount.innerText =
-                p2seconds < 10
-                    ? total + ":0" + p2seconds
-                    : total + ":" + p2seconds;
-            if (p2seconds === 59) {
-                p2seconds = -1;
-                p2mins++;
-            }
         }
         //! settimeout limit if needed to end game here.
         // if(mins === 60){
@@ -173,7 +156,8 @@ function createGridElements(item) {
     for (let i = 0; i < 3; i++) {
         const frontBackCardScene = document.createElement("div");
         frontBackCardScene.classList.add(keywords[i]);
-        i < 2 ? cardWrap.appendChild(frontBackCardScene) : 0;
+        if (i < 2) cardWrap.appendChild(frontBackCardScene);
+        // i < 2 ? cardWrap.appendChild(frontBackCardScene) : 0; //! why not use if statement? because if the condition returns false then we don't do nothing..
         if (i === 2) {
             frontBackCardScene.appendChild(cardWrap);
             grid.appendChild(frontBackCardScene);
@@ -213,8 +197,14 @@ const addBackgroundImageToAllCards = ({ cards }) => {
         const cardType = card.getAttribute("data-type");
         const backCard = card.lastChild;
         const frontCard = card.firstChild;
-        backCard.style.backgroundImage = `url(../assets/img/${cardType}.webp)`;
-        // backCard.style.backgroundImage = `url(../assets/img/back-mobile/dog-mobile.png)`; //!Will remove when I end working on cutting the images of cards to the correct width and height
+        const img = document.createElement("img");
+        img.src = `./assets/img/${cardType}.webp`;
+        img.style = "width: 60%; height: 100%;";
+        backCard.appendChild(img);
+        backCard.style = "display: flex; justify-content: center;";
+
+        // backCard.style.backgroundImage = `url(../assets/img/${cardType}.webp)`;
+        // backCard.style.backgroundImage = `url(../assets/img/back-mobile/cat-mobile.png)`; //!Will remove when I end working on cutting the images of cards to the correct width and height
         backCard.classList.add("center-img");
         frontCard.style.backgroundImage = `url(../assets/img/front/paw1.png)`;
         frontCard.classList.add("center-img");

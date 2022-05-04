@@ -1,28 +1,45 @@
 /**
  * @description
- * @param {any} init
  * @class
+ * @param {any} init
  */
-export const Observable = function (init) {
-    /**
-     * @private
-     */
-    this.value = init;
-    this.get = () => this.value;
-    this.set = (newValue) => {
-        this.value = newValue;
+export class Observable {
+    get value() {
+        return this._value;
+    }
+
+    set value(newValue) {
+        this._value = newValue;
         this.listeners.forEach((listener) => {
-            listener(this.value);
+            listener(this._value);
         });
-    };
-    /**
-     * @type {((newValue :any)=> void)[]}
-     */
-    this.listeners = [];
+    }
+
     /**
      *
-     * @param {(newValue :any)=> void} listener
-     * @returns
+     * @param {*} init
      */
-    this.addChangeListener = (listener) => this.listeners.push(listener);
-};
+    constructor(init) {
+        /**
+         * @private
+         */
+        this._value = init;
+        /**
+         * @type {((newValue :any)=> void)[]}
+         */
+        this.get = () => this.value;
+        this.set = (newValue) => {
+            this.value = newValue;
+            this.listeners.forEach((listener) => {
+                listener(this.value);
+            });
+        };
+        this.listeners = [];
+        /**
+         *
+         * @param {(newValue :any)=> void} listener
+         * @returns
+         */
+        this.addChangeListener = (listener) => this.listeners.push(listener);
+    }
+}

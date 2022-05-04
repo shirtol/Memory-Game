@@ -155,7 +155,7 @@ footer {
 .card-back {
     transform: rotateY(180deg);
     /*!remove background when finish working*/
-    background: yellow;
+    background: #fff;
 }
 .card-front {
     /*!remove background when finish working*/
