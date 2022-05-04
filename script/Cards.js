@@ -1,37 +1,49 @@
 import { Observable } from "./Observable.js";
-import { checkGameOver } from "./script.js";
-
-const FLIP_HOLD = 1000;
 
 /**
  *  @description cards constructor holds all the cards methods and elements
  * @type {Cards}
  * @class
  */
-export const Cards = function () {
-    /**
-     *
-     * @type {() => NodeList}
-     */
-    this.getAllCards = () => document.querySelectorAll(".card");
+export class Cards {
+    static get FLIP_HOLD() {
+        return 1000;
+    }
 
-    /**
-     *
-     * @type {Observable}
-     */
-    this.flippedCardsArr = new Observable([]);
+    constructor() {
+        /**
+         *
+         * @type {() => NodeList}
+         */
+        this.getAllCards = () => document.querySelectorAll(".card");
 
-    this.numOfCorrect = new Observable(0);
-    this.numOfFail = new Observable(0);
+        /**
+         *
+         * @type {Observable}
+         */
+        this.flippedCardsArr = new Observable([]);
 
-    this.resetFlipedCardsArr = () =>
-        (this.flippedCardsArr = new Observable([]));
-    /**
-     * @description Check if we have 2 cards open
-     * @type {()=> boolean}
-     */
-    this.hasTwoFlipped = () => this.flippedCardsArr.value.length === 2;
-};
+        /**
+         *
+         * @type {Observable}
+         */
+        this.numOfCorrect = new Observable(0);
+
+        /**
+         *
+         * @type {Observable}
+         */
+        this.numOfFail = new Observable(0);
+
+        this.resetFlipedCardsArr = () =>
+            (this.flippedCardsArr = new Observable([]));
+        /**
+         * @description Check if we have 2 cards open
+         * @type {()=> boolean}
+         */
+        this.hasTwoFlipped = () => this.flippedCardsArr.value.length === 2;
+    }
+}
 
 /**
  *
@@ -75,13 +87,27 @@ export const addFlipCardEvent = ({ cards }) => {
 
 /**
  *
+ * @param {HTMLElement} card
+ */
+const removeEventListenerFromCard = (card) => {
+    card.style.cursor = "auto";
+    card.removeEventListener("click", addFlipCardsToClass);
+};
+
+/**
+ *
  * @param {cards: Cards} cards
  */
-export const removeFlipCardEvent = ({ cards }) => {
-    cards.getAllCards().forEach((card) => {
-        card.style.cursor = "auto";
-        card.removeEventListener("click", addFlipCardsToClass);
-    });
+export const removeFlipCardEvent = ({ cards }) =>
+    cards.getAllCards().forEach(removeEventListenerFromCard);
+
+/**
+ *
+ * @param {HTMLElement} card
+ */
+const disableClickOnCardWithTimeout = (card) => {
+    card.style.pointerEvents = "none";
+    setTimeout(() => (card.style.pointerEvents = "auto"), Cards.FLIP_HOLD);
 };
 
 /**
@@ -90,11 +116,18 @@ export const removeFlipCardEvent = ({ cards }) => {
  */
 export const disableClickCards = (cards) => {
     if (cards.hasTwoFlipped()) {
-        cards.getAllCards().forEach((card) => {
-            card.style.pointerEvents = "none";
-            setTimeout(() => (card.style.pointerEvents = "auto"), FLIP_HOLD);
-        });
+        cards.getAllCards().forEach(disableClickOnCardWithTimeout);
     }
+};
+
+/**
+ *
+ * @param {*} cards
+ */
+const removeClickOnCard = (card) => {
+    card.style.pointerEvents = "none";
+    card.removeEventListener("click", addFlipCardsToClass);
+    card.style.cursor = "auto";
 };
 
 /**
@@ -104,27 +137,25 @@ export const disableClickCards = (cards) => {
 export const stayOpenCardsIfNeeded = (cards) => {
     if (isIdenticalCards(cards)) {
         updateCounters(cards);
-        cards.flippedCardsArr.value.forEach((card) => {
-            card.style.pointerEvents = "none";
-            card.removeEventListener("click", addFlipCardsToClass);
-            card.style.cursor = "auto";
-        });
+        cards.flippedCardsArr.value.forEach(removeClickOnCard);
         cards.flippedCardsArr.value = [];
-        checkGameOver();
     }
 };
 
 /**
+ *
+ * @param {HTMLElement} card
+ */
+const removeFlipCardClass = (card) => card.classList.remove("flipCard");
+
+/**
  * @description If the 2 cards we flipped aren't in the same type close them
  */
-//!TODO: Check which attribute we need to use in getAttribute func (this attributer holds the type of card: cat, dog etc.)
 export const closeCardsIfNeeded = (cards) => {
     if (isDifferentCards(cards)) {
         updateCounters(cards);
         setTimeout(() => {
-            cards.flippedCardsArr.value.forEach((card) => {
-                card.classList.remove("flipCard");
-            });
+            cards.flippedCardsArr.value.forEach(removeFlipCardClass);
             cards.flippedCardsArr.value = [];
         }, 1300);
     }
