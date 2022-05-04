@@ -198,8 +198,8 @@ const addBackgroundImageToAllCards = ({ cards }) => {
         const backCard = card.lastChild;
         const frontCard = card.firstChild;
         const img = document.createElement("img");
-        img.src = `./assets/img/${cardType}.webp`;
-        img.style = "width: 60%; height: 100%;";
+        img.src = `./assets/img/animals/${cardType}.webp`;
+        img.classList.add("item-img");
         backCard.appendChild(img);
         backCard.style = "display: flex; justify-content: center;";
 
