@@ -9,7 +9,7 @@ export const Observable = function (init) {
     this.set = (newValue) => {
         this.value = newValue;
         this.listeners.forEach((listener) => {
-            listener(this.value);
+            listener(this.value); 
         });
     };
     this.listeners = [];
