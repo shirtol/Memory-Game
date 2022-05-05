@@ -109,7 +109,7 @@ footer {
     height: max-content;
 }
 
-.new-game-btn {
+.btn {
     font-size: 2vw;
     border: 1px black solid;
     padding: 1rem;
@@ -262,6 +262,11 @@ footer {
 }
 .end-game > * {
     text-align: center;
+}
+
+.btn-container {
+    display: flex;
+    gap: 2rem;
 }
 
 /* media query */
