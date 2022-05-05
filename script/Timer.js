@@ -18,10 +18,14 @@ export const observeTime = (timer) => {
     );
 };
 
-const updateTime = (newTime, timerView) => {
+export const secondToTimeStr = (newTime) => {
     let minutes = (newTime / 60) | 0;
     let seconds = newTime % 60;
-    timerView.textContent = `${minutes < 10 ? `0${minutes}` : minutes}:${
+    return `${minutes < 10 ? `0${minutes}` : minutes}:${
         seconds < 10 ? `0${seconds}` : seconds
     }`;
+};
+
+const updateTime = (newTime, timerView) => {
+    timerView.textContent = secondToTimeStr(newTime);
 };

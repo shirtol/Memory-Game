@@ -8,6 +8,7 @@ import {
 import { observeTime, Timer } from "./Timer.js";
 import { GameState } from "./GameState.js";
 import { observeChangesInCardsResults } from "./Sidebar.js";
+import { displayTime } from "./EndGame.js";
 
 const gameState = new GameState();
 
@@ -259,3 +260,5 @@ const toggleScoreboardDisplay = () => {
 };
 
 addClickEventToScoreboard(gameState);
+
+displayTime();
