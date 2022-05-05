@@ -1,3 +1,4 @@
+import { gameState } from "./script.js";
 import { Observable } from "./Observable.js";
 
 /**
@@ -23,22 +24,22 @@ export class Cards {
          */
         this.flippedCardsArr = new Observable([]);
 
-        /**
-         *
-         * @type {Observable}
-         */
-        this.numOfCorrect = new Observable(0);
+        // /**
+        //  *
+        //  * @type {Observable}
+        //  */
+        // this.numOfCorrect = new Observable(0);
 
-        /**
-         * @type {Observable}
-         */
-        this.scoreNum = new Observable(0);
+        // /**
+        //  * @type {Observable}
+        //  */
+        // this.scoreNum = new Observable(0);
 
-        /**
-         *
-         * @type {Observable}
-         */
-        this.numOfFail = new Observable(0);
+        // /**
+        //  *
+        //  * @type {Observable}
+        //  */
+        // this.numOfFail = new Observable(0);
 
         this.resetFlipedCardsArr = () =>
             (this.flippedCardsArr = new Observable([]));
@@ -142,7 +143,7 @@ const removeClickOnCard = (card) => {
  */
 export const stayOpenCardsIfNeeded = (cards) => {
     if (isIdenticalCards(cards)) {
-        updateCounters(cards);
+        updateCounters(cards, gameState);
         cards.flippedCardsArr.value.forEach(removeClickOnCard);
         cards.flippedCardsArr.value = [];
     }
@@ -159,7 +160,7 @@ const removeFlipCardClass = (card) => card.classList.remove("flipCard");
  */
 export const closeCardsIfNeeded = (cards) => {
     if (isDifferentCards(cards)) {
-        updateCounters(cards);
+        updateCounters(cards, gameState);
         setTimeout(() => {
             cards.flippedCardsArr.value.forEach(removeFlipCardClass);
             cards.flippedCardsArr.value = [];
@@ -182,8 +183,6 @@ export const isIdenticalCards = (cards) =>
  * @description Check if the user flipped 2 different cards
  * @param {Object} Obj
  * @param {Cards} Obj.cards
- * ! I figured out that we must have this function because if we didn't use it and use the isIdenticalCards function with the "!" sign than we have stack overflow.
- * ! According to De Morgan law - !(a && b) === !a || !b, which in our case, "a" is cards.hasTwoFlipped() and we want to keep it as it is.
  */
 export const isDifferentCards = (cards) => {
     return (
@@ -193,7 +192,7 @@ export const isDifferentCards = (cards) => {
     );
 };
 
-export const updateCounters = (cards) => {
-    if (isIdenticalCards(cards)) cards.numOfCorrect.value += 1;
-    else if (isDifferentCards(cards)) cards.numOfFail.value += 1;
+export const updateCounters = (cards, {playerMode}) => {
+    if (isIdenticalCards(cards)) playerMode.players[0].numOfCorrect.value += 1;
+    else if (isDifferentCards(cards)) playerMode.players[0].numOfFail.value += 1;
 };

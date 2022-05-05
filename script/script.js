@@ -9,16 +9,31 @@ import { observeTime, Timer } from "./Timer.js";
 import { GameState } from "./GameState.js";
 import { observeChangesInCardsResults } from "./Sidebar.js";
 
-const gameState = new GameState();
+export const gameState = new GameState();
 
 startGame();
 
 function startGame() {
     difficultyMenu(gameState);
+    gameModeMenu(gameState)
+    addGameModeToContainer(gameState);
     addDifficultyToContainer(gameState);
     observeChangesInCardsResults(gameState);
     pickDifficulty();
     gameState.difficult.difficultyContainer.style.display = "grid";
+    gameState.playerMode.players[gameState.playerMode.turn]
+}
+
+function gameModeMenu({ playerMode }) {
+    document.querySelector(".change-mode-btn").addEventListener("click", () => {
+        
+        playerMode.modeContainer.style.display =
+            playerMode.modeContainer.style.display === "grid"
+                ? "none"
+                : "grid";
+                playerMode.modeContainer.style.display === "none" ? addFlipCardEvent(gameState) : removeFlipCardEvent(gameState);
+        
+    });
 }
 
 function difficultyMenu({ difficult }) {
@@ -31,6 +46,16 @@ function difficultyMenu({ difficult }) {
                 difficult.difficultyContainer.style.display === "none" ? addFlipCardEvent(gameState) : removeFlipCardEvent(gameState);
         
     });
+}
+
+function addGameModeToContainer({ playerMode }) {
+    for (const mode of playerMode.modes) {
+        const modeEl = document.createElement("div");
+        modeEl.setAttribute("data-mode", mode);
+        modeEl.textContent = `${mode}`;
+        modeEl.classList.add("center-img");
+        playerMode.modeContainer.appendChild(modeEl);
+    }
 }
 
 function addDifficultyToContainer({ difficult }) {
@@ -73,11 +98,11 @@ function pickDifficulty() {
  * @param {{cards: Cards, sidebar: Sidebar, difficult: Difficulty, animals: string[]}} Obj
  * @param {number} idx
  */
-function resetPickedDifficulty({ cards, sidebar, difficult, animals }, idx) {
+function resetPickedDifficulty({ cards, playerMode ,playerMode: {players}, difficult, animals }, idx) {
     document.querySelector(".cards-container").innerHTML = ""; //!Why not use textContent?
-    cards.numOfCorrect.value = 0;
-    cards.numOfFail.value = 0;
-    clearInterval(sidebar.intervalID);
+    players[playerMode.turn].numOfCorrect.value = 0;
+    players[playerMode.turn].numOfFail.value = 0;
+    clearInterval(players[playerMode.turn].intervalID);
     timer(gameState);
     document.querySelector(".difficulty-container").style.display = "none";
     setGridSize(difficult.diffCardsNum[idx] / (idx + 2));
@@ -102,14 +127,14 @@ function setGridSize(size) {
  *
  * @param {{sidebar : Sidebar, timer: Timer}} obj
  */
-function timer({ sidebar, timer }) {
-    timer.time.value = 0;
-    timer.time.nukeListeners();
-    observeTime(timer);
+function timer({ playerMode, playerMode: {players} }) {
+    players[playerMode.turn].timer.time.value = 0;
+    players[playerMode.turn].timer.time.nukeListeners();
+    observeTime(players[playerMode.turn].timer);
 
-    sidebar.intervalID = setInterval(() => {
+    players[playerMode.turn].intervalID = setInterval(() => {
         if (true) {
-            timer.time.value += 1;
+            players[playerMode.turn].timer.time.value += 1;
         } else {
         }
         //! settimeout limit if needed to end game here.
@@ -121,8 +146,8 @@ function timer({ sidebar, timer }) {
 
 //! for now nothing happens when gameover except adds 10 to score, need to reset or decide how to go on from here.
 export function checkGameOver() {
-    if (gameState.cards.numOfCorrect.value === gameState.difficult.coupleNum) {
-        clearInterval(gameState.sidebar.intervalID);
+    if (gameState.playerMode.players[0].numOfCorrect.value === gameState.difficult.coupleNum) {
+        clearInterval(gameState.playerMode.players[0].intervalID);
         setTimeout(() => (gameState.endGameEl.style.display = "flex"), 800);
 
         updateFinalScore(gameState);
@@ -140,19 +165,19 @@ export function checkGameOver() {
  * @param {{timer: Timer, cards: Cards, difficult: {coupleNum: Number}}} Obj 
  */
 
-function updateFinalScore({timer, cards, difficult:{coupleNum}}){
+function updateFinalScore({playerMode: {players}, difficult:{coupleNum}}){
     const timeFactor = 5000, failFactor = 30, diffFactor = 20;
-    let timeBonus = coupleNum * timeFactor / timer.time.value;
-    let failPenalty = cards.numOfFail.value * failFactor / coupleNum;
+    let timeBonus = coupleNum * timeFactor / players[0].timer.time.value;
+    let failPenalty = players[0].numOfFail.value * failFactor / coupleNum;
     let difficultyBonus = diffFactor * coupleNum;
     let total = timeBonus + difficultyBonus - failPenalty;
 
-    cards.scoreNum.value =
+    players[0].scoreNum.value =
         total > coupleNum * diffFactor ? total | 0 : coupleNum * diffFactor;
 }
 
 //! gotta move this to a better place (maybe along with the call back checkGameOver)
-gameState.cards.numOfCorrect.addChangeListener(checkGameOver);
+gameState.playerMode.players[0].numOfCorrect.addChangeListener(checkGameOver);
 
 function createGameBoard(animals, cardCouples) {
     if (animals.length < cardCouples) {
