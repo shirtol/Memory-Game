@@ -177,6 +177,7 @@ footer {
     width: auto;
     height: auto;
     border-radius: 4px;
+    object-fit: contain;
 }
 
 /* Related to the difficulty pop-up */
