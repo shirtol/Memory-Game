@@ -9,5 +9,6 @@ export class EndGame {
             ".scoreboard-container"
         );
         this.closeScoreboard = document.querySelector(".fa-xmark");
+        this.difficultyScores = document.querySelector(".difficulty-score");
     }
 }

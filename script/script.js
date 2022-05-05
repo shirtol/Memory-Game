@@ -15,7 +15,10 @@ startGame();
 
 function startGame() {
     difficultyMenu(gameState);
-    addDifficultyToContainer(gameState);
+    addDifficultyToContainer(
+        gameState,
+        gameState.difficult.difficultyContainer
+    );
     observeChangesInCardsResults(gameState);
     pickDifficulty();
     gameState.difficult.difficultyContainer.style.display = "grid";
@@ -31,13 +34,13 @@ function difficultyMenu({ difficult }) {
     });
 }
 
-function addDifficultyToContainer({ difficult }) {
+function addDifficultyToContainer({ difficult }, container) {
     for (const difficulty of difficult.difficulties) {
         const difficultyEl = document.createElement("div");
         difficultyEl.setAttribute("data-difficulty", difficulty);
         difficultyEl.textContent = `${difficulty}`;
         difficultyEl.classList.add("center-img");
-        difficult.difficultyContainer.appendChild(difficultyEl);
+        container.appendChild(difficultyEl);
     }
 }
 

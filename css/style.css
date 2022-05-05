@@ -202,7 +202,8 @@ footer {
     border-radius: 10px;
 }
 
-.difficulty-container > * {
+.difficulty-container > *,
+.difficulty-score > * {
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
         rgba(0, 0, 0, 0.22) 0px 15px 12px;
     transition: 200ms ease-in-out;
@@ -219,6 +220,23 @@ footer {
     justify-content: center;
     align-self: center;
     justify-self: center;
+}
+
+.difficulty-score {
+    display: flex;
+    height: max-content;
+    justify-content: center;
+    align-self: flex-end;
+    gap: 2rem;
+}
+
+.difficulty-score > * {
+    height: 3.3rem;
+    padding: 0 5rem;
+}
+
+.scoreboard-container {
+    display: flex;
 }
 
 .difficulty-container > *:hover {
@@ -289,6 +307,10 @@ footer {
 .scoreboard-container i:hover {
     color: #d4b876;
     transition: 100ms ease-in-out;
+}
+
+.difficulty-score {
+    z-index: 40;
 }
 
 /* media query */
