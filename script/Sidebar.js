@@ -3,6 +3,7 @@ import { Observable } from "./Observable.js";
 
 /**
  * @description This constructor holds all the elements and methods related to the sidebar element
+ * @type {Sidebar}
  * @class
  */
 
@@ -10,8 +11,13 @@ export const Sidebar = function (correctContainer, incorrectContainer, scoreCont
     this.correctGuesses = document.querySelector(correctContainer);
     this.incorrectGuesses = document.querySelector(incorrectContainer);
     this.score = document.querySelector(scoreContainer);
+    
+    /**
+     * @type {Timer}
+     */
     this.timer = new Timer();
     this.intervalID = 0;
+
     /**
      *
      * @type {Observable}

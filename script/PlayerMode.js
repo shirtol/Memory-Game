@@ -2,6 +2,7 @@ import { Sidebar } from "./Sidebar.js";
 
 /**
  * @description This constructor holds the player mode list/picked, whos player turn it is and players ELs which are sidebars
+ * @type {PlayerMode}
  * @class
  */
 export const PlayerMode = function () {
