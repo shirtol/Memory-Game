@@ -63,7 +63,7 @@ html {
     gap: 3rem;
     background: #d3a86c;
     margin-left: 8rem;
-    height: 80%;
+    height: 90%;
     border-radius: 8px;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
         rgba(0, 0, 0, 0.22) 0px 15px 12px;
@@ -130,7 +130,7 @@ footer {
 .card {
     cursor: pointer;
     /* preserve-3d meaning that the children of the 
-    element positioned in the #D space */
+    element positioned in the 3D space */
     transform-style: preserve-3d;
     transform-origin: center right;
     transition: transform 1s;
@@ -159,7 +159,7 @@ footer {
 }
 .card-front {
     /*!remove background when finish working*/
-    background: pink;
+    background: #f8f1eb;
 }
 
 .cards-container {
@@ -174,8 +174,9 @@ footer {
 }
 
 .item-img {
-    width: 100%;
-    height: 100%;
+    width: auto;
+    height: auto;
+    border-radius: 4px;
 }
 
 /* Related to the difficulty pop-up */
@@ -295,8 +296,9 @@ footer {
         display: grid;
         grid-template-columns: repeat(var(--columns), 1fr);
         grid-template-rows: repeat(var(--rows), 1fr);
-        width: 70%;
+        width: 90%;
         height: 80%;
+        padding: 0;
     }
 
     .card-scene {
@@ -307,13 +309,17 @@ footer {
         font-size: 1.5rem;
         margin-top: 0;
     }
-    .item-img {
-        width: 100%;
-        height: auto;
-    }
 }
 
 @media (max-width: 530px) {
+    .header h1 {
+        font-size: 3rem;
+    }
+
+    .header h2 {
+        font-size: 2rem;
+    }
+
     .difficulty-container {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -329,7 +335,7 @@ footer {
 
     .cards-container {
         width: 95%;
-        padding: 0;
+        padding: 3px;
     }
     .left-sidebar {
         width: 95%;
