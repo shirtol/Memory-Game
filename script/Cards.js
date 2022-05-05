@@ -86,6 +86,7 @@ function addFlipCardsToClass(e) {
 export const addFlipCardEvent = ({ cards }) => {
     cards.getAllCards().forEach((card) => {
         card.deck = cards; //!card is an HTML element and deck is a property of card that we made up, and inside it we save cards. (I made it because I wanted to remove the callback afterwards)
+        card.style.cursor = "pointer";
         card.addEventListener("click", addFlipCardsToClass);
     });
 };

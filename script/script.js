@@ -23,11 +23,13 @@ function startGame() {
 
 function difficultyMenu({ difficult }) {
     document.querySelector(".new-game-btn").addEventListener("click", () => {
-        removeFlipCardEvent(gameState);
+        
         difficult.difficultyContainer.style.display =
             difficult.difficultyContainer.style.display === "grid"
                 ? "none"
                 : "grid";
+                difficult.difficultyContainer.style.display === "none" ? addFlipCardEvent(gameState) : removeFlipCardEvent(gameState);
+        
     });
 }
 
