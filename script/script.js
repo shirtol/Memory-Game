@@ -132,6 +132,7 @@ export function checkGameOver() {
     }
 }
 
+
 /**
  * 
  * @param {{timer: Timer, cards: Cards, difficult: {coupleNum: Number}}} Obj 
@@ -143,8 +144,9 @@ function updateFinalScore({timer, cards, difficult:{coupleNum}}){
     let failPenalty = cards.numOfFail.value * failFactor / coupleNum;
     let difficultyBonus = diffFactor * coupleNum;
     let total = timeBonus + difficultyBonus - failPenalty;
-    
-    cards.scoreNum.value = total > coupleNum * diffFactor ? total | 0 : coupleNum * diffFactor;
+
+    cards.scoreNum.value =
+        total > coupleNum * diffFactor ? total | 0 : coupleNum * diffFactor;
 }
 
 //! gotta move this to a better place (maybe along with the call back checkGameOver)
@@ -223,15 +225,20 @@ const addBackgroundImageToAllCards = ({ cards }) => {
         const backCard = card.lastChild;
         const frontCard = card.firstChild;
         const img = document.createElement("img");
+        const frontImg = document.createElement("img");
         img.src = `./assets/img/animals/${cardType}.webp`;
+        frontImg.src = `./assets/img/front/paw1.png`;
         img.classList.add("item-img");
+        frontImg.classList.add("item-img");
+        frontCard.appendChild(frontImg);
         backCard.appendChild(img);
         backCard.style = "display: flex; justify-content: center;";
+        frontCard.style = "display: flex; justify-content: center;";
 
         // backCard.style.backgroundImage = `url(../assets/img/${cardType}.webp)`;
         // backCard.style.backgroundImage = `url(../assets/img/back-mobile/cat-mobile.png)`; //!Will remove when I end working on cutting the images of cards to the correct width and height
+        // frontCard.style.backgroundImage = `url(../assets/img/front/paw1.png)`;
         backCard.classList.add("center-img");
-        frontCard.style.backgroundImage = `url(../assets/img/front/paw1.png)`;
         frontCard.classList.add("center-img");
     });
 };
