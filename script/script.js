@@ -132,16 +132,17 @@ export function checkGameOver() {
     }
 }
 
-
 /**
- * 
- * @param {{timer: Timer, cards: Cards, difficult: {coupleNum: Number}}} Obj 
+ *
+ * @param {{timer: Timer, cards: Cards, difficult: {coupleNum: Number}}} Obj
  */
 
-function updateFinalScore({timer, cards, difficult:{coupleNum}}){
-    const timeFactor = 5000, failFactor = 30, diffFactor = 20;
-    let timeBonus = coupleNum * timeFactor / timer.time.value;
-    let failPenalty = cards.numOfFail.value * failFactor / coupleNum;
+function updateFinalScore({ timer, cards, difficult: { coupleNum } }) {
+    const timeFactor = 5000,
+        failFactor = 30,
+        diffFactor = 20;
+    let timeBonus = (coupleNum * timeFactor) / timer.time.value;
+    let failPenalty = (cards.numOfFail.value * failFactor) / coupleNum;
     let difficultyBonus = diffFactor * coupleNum;
     let total = timeBonus + difficultyBonus - failPenalty;
 
@@ -221,24 +222,23 @@ function getRandomIntInclusive(min, max) {
 const addBackgroundImageToAllCards = ({ cards }) => {
     cards.getAllCards().forEach((card) => {
         card.classList.add("box-shadow");
-        const cardType = card.getAttribute("data-type");
-        const backCard = card.lastChild;
-        const frontCard = card.firstChild;
-        const img = document.createElement("img");
-        const frontImg = document.createElement("img");
-        img.src = `./assets/img/animals/${cardType}.webp`;
-        frontImg.src = `./assets/img/front/paw1.png`;
-        img.classList.add("item-img");
-        frontImg.classList.add("item-img");
-        frontCard.appendChild(frontImg);
-        backCard.appendChild(img);
-        backCard.style = "display: flex; justify-content: center;";
-        frontCard.style = "display: flex; justify-content: center;";
-
-        // backCard.style.backgroundImage = `url(../assets/img/${cardType}.webp)`;
-        // backCard.style.backgroundImage = `url(../assets/img/back-mobile/cat-mobile.png)`; //!Will remove when I end working on cutting the images of cards to the correct width and height
-        // frontCard.style.backgroundImage = `url(../assets/img/front/paw1.png)`;
-        backCard.classList.add("center-img");
-        frontCard.classList.add("center-img");
+        const [cardType, backCard, frontCard] = getElementsForCard(card);
+        applyStylesToCard(backCard, `./assets/img/animals/${cardType}.webp`);
+        applyStylesToCard(frontCard, `./assets/img/front/paw1.png`);
     });
+};
+
+const getElementsForCard = (card) => [
+    card.getAttribute("data-type"),
+    card.lastChild,
+    card.firstChild,
+];
+
+const applyStylesToCard = (cardEl, imgSrc) => {
+    const imgEl = document.createElement("img");
+    imgEl.src = imgSrc;
+    imgEl.classList.add("item-img");
+    cardEl.appendChild(imgEl);
+    cardEl.style = "display: flex; justify-content: center;";
+    cardEl.classList.add("center-img");
 };
