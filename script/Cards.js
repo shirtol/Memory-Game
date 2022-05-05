@@ -7,7 +7,7 @@ import { Observable } from "./Observable.js";
  */
 export class Cards {
     static get FLIP_HOLD() {
-        return 1000;
+        return 800;
     }
 
     constructor() {
@@ -162,7 +162,7 @@ export const closeCardsIfNeeded = (cards) => {
         setTimeout(() => {
             cards.flippedCardsArr.value.forEach(removeFlipCardClass);
             cards.flippedCardsArr.value = [];
-        }, 1300);
+        }, 1000);
     }
 };
 
