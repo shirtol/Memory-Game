@@ -52,7 +52,7 @@ export class Cards {
 }
 
 /**
- *
+ * @description adds changeListeners to handle all states while flipping cards
  * @param {{cards: Cards}} cards
  */
 export const observeNumOfFlippedCards = ({ cards }) => {
@@ -64,7 +64,7 @@ export const observeNumOfFlippedCards = ({ cards }) => {
 };
 
 /**
- *
+ * @description adds fliped card to array to check when we have 2 also adds class to it for the changes,
  * @param {Event} e
  */
 function addFlipCardsToClass(e) {
@@ -93,7 +93,7 @@ export const addFlipCardEvent = ({ cards }) => {
 };
 
 /**
- *
+ * @description when a card is paired to its matching
  * @param {HTMLElement} card
  */
 const removeEventListenerFromCard = (card) => {
@@ -102,14 +102,14 @@ const removeEventListenerFromCard = (card) => {
 };
 
 /**
- *
+ * @description when clicking newgame menu to disable clicking on cards in the background
  * @param {cards: Cards} cards
  */
 export const removeFlipCardEvent = ({ cards }) =>
     cards.getAllCards().forEach(removeEventListenerFromCard);
 
 /**
- *
+ * @description disabling clicking other cards after flipping two, while they flip back
  * @param {HTMLElement} card
  */
 const disableClickOnCardWithTimeout = (card) => {
@@ -128,7 +128,7 @@ export const disableClickCards = (cards) => {
 };
 
 /**
- *
+ * @description when a card is matched dont need to click it anymore
  * @param {*} cards
  */
 const removeClickOnCard = (card) => {
@@ -150,13 +150,14 @@ export const stayOpenCardsIfNeeded = (cards) => {
 };
 
 /**
- *
+ * @description unflip a card
  * @param {HTMLElement} card
  */
 const removeFlipCardClass = (card) => card.classList.remove("flipCard");
 
 /**
  * @description If the 2 cards we flipped aren't in the same type close them
+ * @param {Cards} cards
  */
 export const closeCardsIfNeeded = (cards) => {
     if (isDifferentCards(cards)) {
@@ -170,8 +171,7 @@ export const closeCardsIfNeeded = (cards) => {
 
 /**
  * @description Check if the user flipped 2 identical cards
- * @param {Object} Obj
- * @param {Cards} Obj.cards
+ * @param {Cards} cards
  */
 
 export const isIdenticalCards = (cards) =>
@@ -181,8 +181,7 @@ export const isIdenticalCards = (cards) =>
 
 /**
  * @description Check if the user flipped 2 different cards
- * @param {Object} Obj
- * @param {Cards} Obj.cards
+ * @param {Cards} cards
  */
 export const isDifferentCards = (cards) => {
     return (
@@ -192,6 +191,11 @@ export const isDifferentCards = (cards) => {
     );
 };
 
+/**
+ * @description update correct and incorrect counters
+ * @param {Cards} cards 
+ * @param {{playerMode: PlayerMode}} Obj 
+ */
 export const updateCounters = (cards, {playerMode}) => {
     if (isIdenticalCards(cards)) playerMode.players[0].numOfCorrect.value += 1;
     else if (isDifferentCards(cards)) playerMode.players[0].numOfFail.value += 1;

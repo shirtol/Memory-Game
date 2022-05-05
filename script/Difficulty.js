@@ -1,5 +1,6 @@
 /**
  * @description This constructor holds the difficulty menu list, number of couples of cards array, the amount picked and the container.
+ * @type {Difficulty}
  * @class
  */
 export const Difficulty = function () {
