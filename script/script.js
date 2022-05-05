@@ -242,3 +242,17 @@ const applyStylesToCard = (cardEl, imgSrc) => {
     cardEl.style = "display: flex; justify-content: center;";
     cardEl.classList.add("center-img");
 };
+
+const addClickEventToScoreboard = ({ endGame }) => {
+    endGame.scoreboardBtn.addEventListener("click", toggleScoreboardDisplay);
+    endGame.closeScoreboard.addEventListener("click", toggleScoreboardDisplay);
+};
+
+const toggleScoreboardDisplay = () => {
+    gameState.endGame.scoreboardContainer.style.display =
+        gameState.endGame.scoreboardContainer.style.display === "grid"
+            ? "none"
+            : "grid";
+};
+
+addClickEventToScoreboard(gameState);

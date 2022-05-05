@@ -110,11 +110,11 @@ footer {
 }
 
 .btn {
-    font-size: 2vw;
+    font-size: 1.5rem;
     border: 1px black solid;
     padding: 1rem;
     margin-bottom: 1rem;
-    margin-top: 4rem;
+    /* margin-top: 4rem; */
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
         rgba(0, 0, 0, 0.22) 0px 15px 12px;
@@ -181,7 +181,8 @@ footer {
 }
 
 /* Related to the difficulty pop-up */
-.difficulty-container {
+.difficulty-container,
+.scoreboard-container {
     width: 50rem;
     height: max-content;
     font-size: 2rem;
@@ -269,7 +270,36 @@ footer {
     gap: 2rem;
 }
 
+/* Scoreboard */
+.scoreboard-container {
+    z-index: 40;
+    opacity: 1;
+    width: 40%;
+    height: 50%;
+}
+
+.scoreboard-container i {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+.scoreboard-container i:hover {
+    color: #d4b876;
+    transition: 100ms ease-in-out;
+}
+
 /* media query */
+
+@media (max-width: 1000px) {
+    /* Scoreboard */
+    .scoreboard-container {
+        width: 60%;
+        height: 40%;
+    }
+}
 @media (max-width: 768px) {
     .game-container {
         flex-direction: column;
@@ -310,10 +340,21 @@ footer {
     .card-scene {
         min-width: 100%;
     }
-
+    .btn {
+        padding: 0.7rem;
+    }
     .new-game-btn {
         font-size: 1.5rem;
         margin-top: 0;
+        height: max-content;
+    }
+
+    .end-game > * {
+        font-size: 2.2rem;
+    }
+
+    .btn-container {
+        margin-top: 2rem;
     }
 }
 
@@ -349,6 +390,15 @@ footer {
 
     .left-sidebar > * {
         font-size: 1.1rem;
+    }
+    /* Scoreboard */
+    .scoreboard-container {
+        width: 80%;
+        height: 20%;
+    }
+
+    .btn {
+        font-size: 1.2rem;
     }
 }
 
