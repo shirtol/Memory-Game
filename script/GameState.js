@@ -6,12 +6,14 @@
 import { Cards } from "./Cards.js";
 import { Sidebar } from "./Sidebar.js";
 import { Timer } from "./Timer.js";
+import { PlayerMode } from "./PlayerMode.js";
 import { Difficulty } from "./Difficulty.js";
 
 export const GameState = function () {
     this.cards = new Cards();
-    this.sidebar = new Sidebar();
-    this.timer = new Timer();
+    // this.sidebar = new Sidebar();
+    // this.timer = new Timer();
+    this.playerMode = new PlayerMode();
     this.animals = [
         "dog",
         "cat",
@@ -64,6 +66,7 @@ export const GameState = function () {
         "hedgehog",
         "whale",
     ];
+    
     this.difficult = new Difficulty();
     this.endGameEl = document.querySelector(".end-game");
     this.endGameBtn = document.querySelector("#end-game-btn");
