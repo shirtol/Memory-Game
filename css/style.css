@@ -312,11 +312,12 @@ footer {
 .scoreboard-container {
     z-index: 40;
     opacity: 1;
-    width: 40%;
-    height: 50%;
+    width: 60rem;
+    height: 40%;
     display: none;
     flex-direction: column;
     justify-content: flex-end;
+    flex-shrink: 0;
 }
 
 .scoreboard-container i {
@@ -348,11 +349,19 @@ footer {
     width: 25%;
     height: 10rem;
     align-self: baseline;
+    position: relative;
+    overflow: hidden;
 }
 
 .podium > *::after {
     content: attr(data-timeScore);
     position: absolute;
+    position: absolute;
+    font-weight: 200;
+    color: #fff;
+    left: 25%;
+    margin-left: -5px;
+    margin-right: -5px;
 }
 
 .second-place {
@@ -372,12 +381,56 @@ footer {
     display: flex;
 }
 
+#difficulty-score {
+    gap: 3rem;
+}
+
+#difficulty-score > * {
+    width: 10rem;
+    height: 3rem;
+}
+
+@keyframes firstBarGrowth {
+    0% {
+        height: 0;
+    }
+    100% {
+        height: 15rem;
+    }
+}
+@keyframes secondBarGrowth {
+    0% {
+        height: 0;
+    }
+    100% {
+        height: 10rem;
+    }
+}
+@keyframes thirdBarGrowth {
+    0% {
+        height: 0;
+    }
+    100% {
+        height: 6rem;
+    }
+}
+
+.first-place-animate {
+    animation: firstBarGrowth 1s linear;
+}
+.second-place-animate {
+    animation: secondBarGrowth 1s linear;
+}
+.third-place-animate {
+    animation: thirdBarGrowth 1s linear;
+}
+
 /* media query */
 
 @media (max-width: 1000px) {
     /* Scoreboard */
     .scoreboard-container {
-        width: 60%;
+        width: 60rem;
         height: 40%;
     }
 }
@@ -448,6 +501,20 @@ footer {
     .end-game-btn-container {
         margin-top: 2rem;
     }
+
+    .scoreboard-container {
+        width: 40rem;
+        height: 30rem;
+    }
+
+    #difficulty-score > * {
+        font-size: 1.2rem;
+        width: 6rem;
+    }
+
+    .podium > *::after {
+        font-size: 1.2rem;
+    }
 }
 
 @media (max-width: 530px) {
@@ -486,12 +553,21 @@ footer {
     }
     /* Scoreboard */
     .scoreboard-container {
-        width: 80%;
-        height: 20%;
+        width: 20rem;
+        height: 40rem;
     }
 
     .btn {
         font-size: 1.2rem;
+    }
+
+    .podium > *::after {
+        transform: rotate(90deg);
+        /* top: 0; */
+        right: auto;
+        left: auto;
+        top: 1rem;
+        font-size: 1rem;
     }
 }
 
