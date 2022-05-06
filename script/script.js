@@ -25,10 +25,30 @@ function startGame() {
 
     addGameModeToContainer(gameState);
     observeChangesInCardsResults(gameState);
-    pickDifficulty();
+    gameModeListener(gameState);
+    difficultyListener(gameState);
     addGameOverListener(gameState);
-    gameState.difficult.difficultyContainer.style.display = "grid";
-    gameState.playerMode.players[gameState.playerMode.turn];
+}
+
+function gameModeListener({playerMode}){
+    document.querySelector(".new-game-btn").style.pointerEvents = "none";
+    const modeBtn = document.querySelector(".change-mode-btn");
+    modeBtn.style.pointerEvents = "none";
+    playerMode.modeContainer.addEventListener("click", (ev) => {
+        switch (ev.target.getAttribute("data-mode")) {
+            case "Solo":
+                playerMode.pickedMode = "onePlayer";
+                break;
+            case "One Vs One":
+                playerMode.pickedMode = "twoPlayer";
+                break;
+            default:
+                return;
+        }
+        playerMode.modeContainer.style.display = "none";
+        modeBtn.style.pointerEvents = "none";
+        gameState.difficult.difficultyContainer.style.display = "grid";
+    });
 }
 
 /**
@@ -39,9 +59,13 @@ function gameModeMenu({ playerMode }) {
     document.querySelector(".change-mode-btn").addEventListener("click", () => {
         playerMode.modeContainer.style.display =
             playerMode.modeContainer.style.display === "grid" ? "none" : "grid";
-        playerMode.modeContainer.style.display === "none"
-            ? addFlipCardEvent(gameState)
-            : removeFlipCardEvent(gameState);
+        if(playerMode.modeContainer.style.display === "none"){
+            addFlipCardEvent(gameState);
+            document.querySelector(".new-game-btn").style.pointerEvents = "auto";
+        } else{
+            removeFlipCardEvent(gameState);
+            document.querySelector(".new-game-btn").style.pointerEvents = "none";
+        }
     });
 }
 
@@ -55,9 +79,13 @@ function difficultyMenu({ difficult }) {
             difficult.difficultyContainer.style.display === "grid"
                 ? "none"
                 : "grid";
-        difficult.difficultyContainer.style.display === "none"
-            ? addFlipCardEvent(gameState)
-            : removeFlipCardEvent(gameState);
+        if(difficult.difficultyContainer.style.display === "none"){
+            addFlipCardEvent(gameState);
+            document.querySelector(".change-mode-btn").style.pointerEvents = "auto";
+        } else{
+            removeFlipCardEvent(gameState);
+            document.querySelector(".change-mode-btn").style.pointerEvents = "none";
+        }
     });
 }
 
@@ -92,10 +120,9 @@ function addDifficultyToContainer(container) {
 /**
  * @description listens to click on difficulty element to call resetPickedDifficulty with right params
  */
-function pickDifficulty() {
-    const options = document.querySelector(".difficulty-container");
+function difficultyListener({difficult}) {
     let index = 0;
-    options.addEventListener("click", (ev) => {
+    difficult.difficultyContainer.addEventListener("click", (ev) => {
         switch (ev.target.getAttribute("data-difficulty")) {
             case "easy":
                 index = 0;
@@ -113,6 +140,8 @@ function pickDifficulty() {
                 return;
         }
         gameState.difficult.coupleNum = gameState.difficult.diffCardsNum[index];
+        document.querySelector(".new-game-btn").style.pointerEvents = "auto";
+        document.querySelector(".change-mode-btn").style.pointerEvents = "auto";
         gameState.difficult.chosenDifficulty = Difficulty.difficulties[index];
         resetPickedDifficulty(gameState, index);
     });

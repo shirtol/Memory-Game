@@ -214,6 +214,7 @@ footer {
     border-radius: 10px;
 }
 .player-mode-container {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
 }
 
