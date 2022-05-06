@@ -108,7 +108,7 @@ html {
 .sidebar-txt {
     height: 10rem;
     text-align: center;
-    font-size: 1.5vw;
+    font-size: 1.4vw;
     color: var(--sidebar-txt-color);
 }
 
@@ -225,8 +225,7 @@ footer {
 }
 
 .btn-container > * {
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
-        rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    box-shadow: var(--btn-shadow);
     transition: 200ms ease-in-out;
     cursor: pointer;
     background: var(--btn-txt-color);
@@ -234,7 +233,7 @@ footer {
     height: 8rem;
     text-align: center;
     flex-shrink: 0;
-    color: var(--card-back-bg-color);
+    color: var(--popup-txt-color);
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -382,7 +381,8 @@ footer {
 }
 
 .align-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
 }
 
 #difficulty-score {
@@ -390,8 +390,8 @@ footer {
 }
 
 #difficulty-score > * {
-    width: 10rem;
-    height: 3rem;
+    width: var(--difficulty-score-width);
+    height: var(--difficulty-score-height);
 }
 
 @keyframes firstBarGrowth {
@@ -467,9 +467,11 @@ footer {
 
     .sidebar-txt {
         height: max-content;
+        font-size: 1rem;
     }
     .sidebar-title {
         margin-top: 0;
+        font-size: 1rem;
     }
 
     .left-sidebar > * {
@@ -515,13 +517,14 @@ footer {
     }
 
     #difficulty-score > * {
-        font-size: 1.2rem;
-        width: 6rem;
+        font-size: var(--difficulty-txt-font-mobile-768px);
+        width: var(--difficulty-score-width-mobile);
+        height: var(--difficulty-score-height);
     }
+}
 
-    .podium > *::after {
-        font-size: 1.2rem;
-    }
+.podium > *::after {
+    font-size: 1.2rem;
 }
 
 @media (max-width: 530px) {
@@ -535,7 +538,6 @@ footer {
 
     .difficulty-container,
     .player-mode-container {
-
         grid-template-columns: repeat(2, 1fr);
         width: max-content;
         height: max-content;
@@ -545,6 +547,10 @@ footer {
     .player-mode-container > * {
         width: 6rem;
         height: 6rem;
+        font-size: var(--difficulty-txt-font-mobile);
+    }
+
+    .player-mode-container > * {
         font-size: 1.3rem;
     }
 
@@ -554,10 +560,13 @@ footer {
     }
     .left-sidebar {
         width: 95%;
+        overflow-x: auto;
+        overflow-y: hidden;
     }
 
     .left-sidebar > * {
         font-size: 1.1rem;
+        /* margin-left: 10rem; */
     }
     /* Scoreboard */
     .scoreboard-container {
@@ -579,7 +588,7 @@ footer {
     }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 425px) {
     .header {
         font-size: 1.3rem;
     }
@@ -589,9 +598,8 @@ footer {
         margin: 3rem;
         gap: 1rem;
     }
-
-    .left-sidebar > * {
-        font-size: 1.2rem;
+    .left-sidebar > * > *:first-child {
+        margin-left: 5rem;
     }
 }
 
@@ -606,5 +614,8 @@ footer {
 @media (max-width: 300px) {
     .left-sidebar > * {
         font-size: 1rem;
+    }
+    .left-sidebar > * > *:first-child {
+        margin-left: 15rem;
     }
 }
