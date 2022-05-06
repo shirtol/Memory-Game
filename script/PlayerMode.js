@@ -8,6 +8,7 @@ export const PlayerMode = function () {
     this.modes = ["Solo", "One Vs One"];
     this.pickedMode = "onePlayer";
     this.turn = 0;
+    this.intervalID = 0;
     this.modeContainer = document.querySelector(".player-mode-container");
     /**
      * @type {[Sidebar]}
@@ -17,3 +18,5 @@ export const PlayerMode = function () {
     ];
     // this.getMode = () => document.querySelectorAll("[data-Mode]");
 };
+
+

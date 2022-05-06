@@ -17,7 +17,6 @@ export const Sidebar = function (correctContainer, incorrectContainer, scoreCont
      * @type {Timer}
      */
     this.timer = new Timer();
-    this.intervalID = 0;
 
     /**
      *
@@ -46,7 +45,7 @@ export const observeChangesInCardsResults = (gameState) => {
         updateFailsCounts(gameState, failCount)
     );
         player.scoreNum.addChangeListener((newScore) =>
-        updateScore(gameState, newScore)
+        updateScore(player.score, newScore)
     );
     }) 
 };
@@ -57,8 +56,6 @@ const updateSuccessCounts = ({ playerMode, playerMode: {players} }, newSuccessCo
 const updateFailsCounts = ({ playerMode, playerMode: {players} }, newFailCounts) =>
     (players[playerMode.turn].incorrectGuesses.textContent = newFailCounts);
 
-const updateScore = ({ playerMode, playerMode: {players} }, newScore) =>  {
-    players[playerMode.turn].score.textContent = parseInt(players[playerMode.turn].score.textContent) + newScore;
-    //! temporary here, need to decide if to show only score on popup or how it got calculated too, (eg: you finnished in X minutes and have 10 wrong guesses so ur score is XY..)
-    document.querySelector("#scoreShow").textContent = `Score: ${newScore}`;
+const updateScore = (scoreContainer, newScore) =>  {
+    scoreContainer.textContent = parseInt(scoreContainer.textContent) + newScore;
 }

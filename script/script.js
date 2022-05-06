@@ -4,7 +4,7 @@ import {
     Cards,
     removeFlipCardEvent,
 } from "./Cards.js";
-import { observeTime, Timer } from "./Timer.js";
+import { observeTime } from "./Timer.js";
 import { GameState } from "./GameState.js";
 import { observeChangesInCardsResults, Sidebar } from "./Sidebar.js";
 import { Difficulty } from "./Difficulty.js";
@@ -28,7 +28,7 @@ function startGame() {
     difficultyListener(gameState);
 }
 
-function gameModeListener({playerMode}){
+function gameModeListener({ playerMode }) {
     document.querySelector(".new-game-btn").style.pointerEvents = "none";
     const modeBtn = document.querySelector(".change-mode-btn");
     modeBtn.style.pointerEvents = "none";
@@ -42,11 +42,13 @@ function gameModeListener({playerMode}){
             case "One Vs One":
                 playerMode.pickedMode = "twoPlayer";
                 document.querySelector(".player2").style.display = "flex";
-                document.querySelector(".player1-title").style.display = "block";
+                document.querySelector(".player1-title").style.display =
+                    "block";
                 break;
             default:
                 return;
         }
+        resetPlayerTwoElements();
         updatePlayersArr(playerMode);
         observeChangesInCardsResults(gameState);
         addGameOverListener(gameState);
@@ -56,11 +58,38 @@ function gameModeListener({playerMode}){
     });
 }
 
-function updatePlayersArr(playerMode){
-    if(playerMode.pickedMode === "onePlayer" && playerMode.players.length === 2){
+function resetPlayerTwoElements(){
+    const elements = [
+    ".correct-count",
+    ".incorrect-count",
+    ".score-count",
+    ".p2-correct-count",
+    ".p2-incorrect-count",
+    ".p2-score-count"];
+    for(let el of elements){
+        document.querySelector(el).textContent = "0";
+    }
+    document.querySelector(".p2-timer .p2-count").textContent = "00:00";
+}
+
+function updatePlayersArr(playerMode) {
+    if (
+        playerMode.pickedMode === "onePlayer" &&
+        playerMode.players.length === 2
+    ) {
         playerMode.players.pop();
-    } else if(playerMode.pickedMode === "twoPlayer" && playerMode.players.length === 1){
-        playerMode.players.push(new Sidebar(".p2-correct-count", ".p2-incorrect-count", ".p2-score-count", ".p2-timer .p2-count"));
+    } else if (
+        playerMode.pickedMode === "twoPlayer" &&
+        playerMode.players.length === 1
+    ) {
+        playerMode.players.push(
+            new Sidebar(
+                ".p2-correct-count",
+                ".p2-incorrect-count",
+                ".p2-score-count",
+                ".p2-timer .p2-count"
+            )
+        );
     }
 }
 
@@ -72,12 +101,16 @@ function gameModeMenu({ playerMode }) {
     document.querySelector(".change-mode-btn").addEventListener("click", () => {
         playerMode.modeContainer.style.display =
             playerMode.modeContainer.style.display === "grid" ? "none" : "grid";
-        if(playerMode.modeContainer.style.display === "none"){
+        if (playerMode.modeContainer.style.display === "none") {
             addFlipCardEvent(gameState);
-            document.querySelector(".new-game-btn").style.pointerEvents = "auto";
-        } else{
+            document.querySelector(".new-game-btn").style.pointerEvents =
+                "auto";
+            timer(gameState);
+        } else {
             removeFlipCardEvent(gameState);
-            document.querySelector(".new-game-btn").style.pointerEvents = "none";
+            document.querySelector(".new-game-btn").style.pointerEvents =
+                "none";
+            clearInterval(playerMode.intervalID);
         }
     });
 }
@@ -92,12 +125,14 @@ function difficultyMenu({ difficult }) {
             difficult.difficultyContainer.style.display === "grid"
                 ? "none"
                 : "grid";
-        if(difficult.difficultyContainer.style.display === "none"){
+        if (difficult.difficultyContainer.style.display === "none") {
             addFlipCardEvent(gameState);
-            document.querySelector(".change-mode-btn").style.pointerEvents = "auto";
-        } else{
+            document.querySelector(".change-mode-btn").style.pointerEvents =
+                "auto";
+        } else {
             removeFlipCardEvent(gameState);
-            document.querySelector(".change-mode-btn").style.pointerEvents = "none";
+            document.querySelector(".change-mode-btn").style.pointerEvents =
+                "none";
         }
     });
 }
@@ -133,10 +168,15 @@ function addDifficultyToContainer(container) {
 /**
  * @description listens to click on difficulty element to call resetPickedDifficulty with right params
  */
-function difficultyListener({difficult}) {
+function difficultyListener({ difficult }) {
     let index = 0;
     difficult.difficultyContainer.addEventListener("click", (ev) => {
-        index = Difficulty.difficulties.indexOf(ev.target.getAttribute("data-difficulty"));
+        index = Difficulty.difficulties.indexOf(
+            ev.target.getAttribute("data-difficulty")
+        );
+        if(index === -1){
+            return;
+        }
         gameState.difficult.coupleNum = gameState.difficult.diffCardsNum[index];
         document.querySelector(".new-game-btn").style.pointerEvents = "auto";
         document.querySelector(".change-mode-btn").style.pointerEvents = "auto";
@@ -151,10 +191,12 @@ function difficultyListener({difficult}) {
  * @param {number} idx
  */
 function resetPickedDifficulty(
-    { cards, playerMode: { players }, difficult, animals },
+    { cards, playerMode, playerMode: { players }, difficult, animals },
     idx
 ) {
+    playerMode.turn = 0;
     resetCardsContainer();
+    clearInterval(playerMode.intervalID);
     resetPlayers(players);
     timer(gameState);
     document.querySelector(".difficulty-container").style.display = "none";
@@ -170,7 +212,7 @@ function resetPickedDifficulty(
     }, 1000);
 }
 
-function resetCardsContainer(){
+function resetCardsContainer() {
     const gameCon = document.querySelector(".game-container");
     const newCardContainer = document.createElement("div");
     document.querySelector(".cards-container").remove();
@@ -178,12 +220,14 @@ function resetCardsContainer(){
     gameCon.appendChild(newCardContainer);
 }
 
-function resetPlayers(players){
+function resetPlayers(players) {
     players.forEach((player) => {
         player.numOfCorrect.value = 0;
         player.numOfFail.value = 0;
-        clearInterval(player.intervalID);
-    })
+        player.timer.time.nukeListeners();
+        observeTime(player.timer);
+        player.timer.time.value = 0;
+    });
 }
 
 /**
@@ -201,13 +245,7 @@ function setGridSize(size) {
  * @param {{playerMode : PlayerMode}} Obj
  */
 function timer({ playerMode, playerMode: { players } }) {
-    players.forEach((player) =>{
-        player.timer.time.value = 0;
-        player.timer.time.nukeListeners();
-        observeTime(player.timer);
-    });
-
-    players[playerMode.turn].intervalID = setInterval(() => {
+    playerMode.intervalID = setInterval(() => {
     players[playerMode.turn].timer.time.value += 1;
     }, 1000);
 }
@@ -216,8 +254,8 @@ function timer({ playerMode, playerMode: { players } }) {
  *
  * @param {*} param0
  */
-const updateScoreboard = (bestTimeScore, chosenDifficulty, playerOne) => {
-    bestTimeScore[chosenDifficulty].push(playerOne.timer.time.value);
+const updateScoreboard = (bestTimeScore, chosenDifficulty, player) => {
+    bestTimeScore[chosenDifficulty].push(player.timer.time.value);
     bestTimeScore[chosenDifficulty].sort((a, b) => a - b);
     bestTimeScore[chosenDifficulty] = bestTimeScore[chosenDifficulty].slice(
         0,
@@ -236,36 +274,37 @@ const updateScoreboard = (bestTimeScore, chosenDifficulty, playerOne) => {
     endGameEl,
     endGameBtn,
 }) {
-    let player = playerMode.players[0];
+    let winner = playerMode.players[0];
     const cardCouples = playerMode.players.reduce(
         (acc, player) => (acc += player.numOfCorrect.value),
         0
     );
-    console.log(cardCouples);
     if (cardCouples === difficult.coupleNum) {
-        clearInterval(player.intervalID);
-        if (playerMode.players.length === 2) {
+        const scoreMsg = document.querySelector("#scoreMsg");
+        const scoreNum = document.querySelector("#scoreShow");
+        clearInterval(winner.intervalID);
+        playerMode.players.forEach((player) => updateFinalScore(gameState, player));
+        console.log(playerMode.players[0].scoreNum.value);
+        if (playerMode.pickedMode === "twoPlayer") {
+            let winnerName = "Player 1";
             if (
-                playerMode.players[0].numOfCorrect.value <
-                playerMode.players[1].numOfCorrect.value
+                playerMode.players[0].scoreNum.value <
+                playerMode.players[1].scoreNum.value
             ) {
-                player = playerMode.players[0];
-            } else {
-                player = playerMode.players[1];
+                winner = playerMode.players[1];
+                winnerName = "Player 2";
             }
+            scoreMsg.textContent = `${winnerName} Won!`;
+        } else {
+            scoreMsg.textContent = `You Won!`;
         }
+        scoreNum.textContent = `Score: ${winner.scoreNum.value}`;
         updateScoreboard(
             scoreboard.bestTimeScore,
             difficult.chosenDifficulty,
-            player
+            winner
         );
-        setTimeout(() => (endGameEl.style.display = "flex"), 800);
-        updateFinalScore(gameState);
-        endGameBtn.addEventListener("click", () => {
-            removeFlipCardEvent(gameState);
-            endGameEl.style.display = "none";
-            difficult.difficultyContainer.style.display = "grid";
-        });
+        popEndGame(difficult, endGameEl, endGameBtn);
     }
 }
 
@@ -283,30 +322,29 @@ function popEndGame(difficult, endGameEl, endGameBtn){
  * @param {{playerMode: {players: Sidebar[]}, difficult: {coupleNum: Number}}} Obj
  */
 
-function updateFinalScore({
-    playerMode: { players },
+function updateFinalScore({playerMode,
     difficult: { coupleNum },
-}) {
-    const timeFactor = 5000,
+}, player) {
+    const timeFactor = 1000,
         failFactor = 30,
         diffFactor = 20;
-    let timeBonus = (coupleNum * timeFactor) / players[0].timer.time.value;
-    let failPenalty = (players[0].numOfFail.value * failFactor) / coupleNum;
+    let timeBonus = (coupleNum * timeFactor) / player.timer.time.value;
+    let failPenalty = (player.numOfFail.value * failFactor) / coupleNum;
     let difficultyBonus = diffFactor * coupleNum;
     let total = timeBonus + difficultyBonus - failPenalty;
 
-    players[0].scoreNum.value =
+    player.scoreNum.value =
         total > coupleNum * diffFactor ? total | 0 : coupleNum * diffFactor;
 }
 
 /**
  * @description huh ? u dont need this here, its self explanatory dummy !! :P
- * @param { {playerMode: {players: sidebar[]}} } Obj
+ * @param { {playerMode: {players: Sidebar[]}} } Obj
  */
 function addGameOverListener({ playerMode: { players } }) {
     players.forEach((player) => {
         player.numOfCorrect.addChangeListener((_) => checkGameOver(gameState));
-    })
+    });
 }
 
 /**

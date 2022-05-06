@@ -196,10 +196,12 @@ export const isDifferentCards = (cards) => {
 
 /**
  * @description update correct and incorrect counters
- * @param {Cards} cards 
- * @param {{playerMode: PlayerMode}} Obj 
+ * @param {Cards} cards
+ * @param {{playerMode: PlayerMode}} Obj
  */
-export const updateCounters = (cards, {playerMode}) => {
-    if (isIdenticalCards(cards)) playerMode.players[playerMode.turn].numOfCorrect.value += 1;
-    else if (isDifferentCards(cards)) playerMode.players[playerMode.turn].numOfFail.value += 1;
+export const updateCounters = (cards, { playerMode }) => {
+    if (isIdenticalCards(cards))
+        playerMode.players[playerMode.turn].numOfCorrect.value += 1;
+    else if (isDifferentCards(cards))
+        playerMode.players[playerMode.turn].numOfFail.value += 1;
 };
