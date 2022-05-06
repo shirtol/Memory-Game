@@ -166,10 +166,10 @@ export const closeCardsIfNeeded = (cards) => {
             cards.flippedCardsArr.value.forEach(removeFlipCardClass);
             cards.flippedCardsArr.value = [];
         }, 1000);
-        console.log(gameState.playerMode.players[gameState.playerMode.turn]);
-        if(gameState.playerMode.pickedMode === "twoPlayer"){
+        // console.log(gameState.playerMode.players[gameState.playerMode.turn]);
+        if (gameState.playerMode.pickedMode === "twoPlayer") {
             gameState.playerMode.turn = (gameState.playerMode.turn + 1) % 2;
-            console.log(gameState.playerMode.turn);
+            // console.log(gameState.playerMode.turn);
         }
     }
 };
@@ -198,10 +198,12 @@ export const isDifferentCards = (cards) => {
 
 /**
  * @description update correct and incorrect counters
- * @param {Cards} cards 
- * @param {{playerMode: PlayerMode}} Obj 
+ * @param {Cards} cards
+ * @param {{playerMode: PlayerMode}} Obj
  */
-export const updateCounters = (cards, {playerMode}) => {
-    if (isIdenticalCards(cards)) playerMode.players[playerMode.turn].numOfCorrect.value += 1;
-    else if (isDifferentCards(cards)) playerMode.players[playerMode.turn].numOfFail.value += 1;
+export const updateCounters = (cards, { playerMode }) => {
+    if (isIdenticalCards(cards))
+        playerMode.players[playerMode.turn].numOfCorrect.value += 1;
+    else if (isDifferentCards(cards))
+        playerMode.players[playerMode.turn].numOfFail.value += 1;
 };
