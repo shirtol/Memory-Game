@@ -7,6 +7,7 @@ import { Observable } from "./Observable.js";
  */
 export const Timer = function () {
     /**
+     * @description how many seconds passed since the game started
      * @type {Observable}
      */
     this.time = new Observable(0);

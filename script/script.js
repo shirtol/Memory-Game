@@ -7,7 +7,9 @@ import {
 import { observeTime, Timer } from "./Timer.js";
 import { GameState } from "./GameState.js";
 import { observeChangesInCardsResults } from "./Sidebar.js";
-import { displayTime } from "./EndGame.js";
+import { Difficulty } from "./Difficulty.js";
+import { Scoreboard } from "./Scoreboard.js";
+import { ScoreboardView } from "./ScoreboardView.js";
 
 export const gameState = new GameState();
 
@@ -19,10 +21,7 @@ startGame();
 function startGame() {
     gameModeMenu(gameState);
     difficultyMenu(gameState);
-    addDifficultyToContainer(
-        gameState,
-        gameState.difficult.difficultyContainer
-    );
+    addDifficultyToContainer(gameState.difficult.difficultyContainer);
 
     addGameModeToContainer(gameState);
     observeChangesInCardsResults(gameState);
@@ -108,8 +107,8 @@ function addGameModeToContainer({ playerMode }) {
  * @description adds the difficulty menu pop up to the DOM
  * @param {{ difficult: Difficulty }} Obj
  */
-function addDifficultyToContainer({ difficult }, container) {
-    for (const difficulty of difficult.difficulties) {
+function addDifficultyToContainer(container) {
+    for (const difficulty of Difficulty.difficulties) {
         const difficultyEl = document.createElement("div");
         difficultyEl.setAttribute("data-difficulty", difficulty);
         difficultyEl.textContent = `${difficulty}`;
@@ -143,6 +142,7 @@ function difficultyListener({difficult}) {
         gameState.difficult.coupleNum = gameState.difficult.diffCardsNum[index];
         document.querySelector(".new-game-btn").style.pointerEvents = "auto";
         document.querySelector(".change-mode-btn").style.pointerEvents = "auto";
+        gameState.difficult.chosenDifficulty = Difficulty.difficulties[index];
         resetPickedDifficulty(gameState, index);
     });
 }
@@ -203,21 +203,44 @@ function timer({ playerMode, playerMode: { players } }) {
 }
 
 /**
- * @description check if game is over update the score pop up the game end and listen to a new game click
+ *
+ * @param {*} param0
  */
-export function checkGameOver() {
-    if (
-        gameState.playerMode.players[0].numOfCorrect.value ===
-        gameState.difficult.coupleNum
-    ) {
-        clearInterval(gameState.playerMode.players[0].intervalID);
-        setTimeout(() => (gameState.endGameEl.style.display = "flex"), 800);
+const updateScoreboard = (bestTimeScore, chosenDifficulty, playerOne) => {
+    bestTimeScore[chosenDifficulty].push(playerOne.timer.time.value);
+    bestTimeScore[chosenDifficulty].sort((a, b) => a - b);
+    bestTimeScore[chosenDifficulty] = bestTimeScore[chosenDifficulty].slice(
+        0,
+        3
+    );
+};
 
+/**
+ * @description check if game is over update the score pop up the game end and listen to a new game click
+ * @param {{playerMode: PlayerMode, difficult: Difficulty, scoreboard: Scoreboard, endGameEl: ScoreboardView, endGameBtn: ScoreboardView}}
+ */
+export function checkGameOver({
+    playerMode,
+    difficult,
+    scoreboard,
+    endGameEl,
+    endGameBtn,
+}) {
+    const playerOne = playerMode.players[0];
+
+    if (playerOne.numOfCorrect.value === difficult.coupleNum) {
+        clearInterval(playerOne.intervalID);
+        updateScoreboard(
+            scoreboard.bestTimeScore,
+            difficult.chosenDifficulty,
+            playerOne
+        );
+        setTimeout(() => (endGameEl.style.display = "flex"), 800);
         updateFinalScore(gameState);
-        gameState.endGameBtn.addEventListener("click", () => {
+        endGameBtn.addEventListener("click", () => {
             removeFlipCardEvent(gameState);
-            gameState.endGameEl.style.display = "none";
-            gameState.difficult.difficultyContainer.style.display = "grid";
+            endGameEl.style.display = "none";
+            difficult.difficultyContainer.style.display = "grid";
         });
     }
 }
@@ -248,7 +271,7 @@ function updateFinalScore({
  * @param { {playerMode: {players: sidebar[]}} } Obj
  */
 function addGameOverListener({ playerMode: { players } }) {
-    players[0].numOfCorrect.addChangeListener(checkGameOver);
+    players[0].numOfCorrect.addChangeListener((_) => checkGameOver(gameState));
 }
 
 /**
@@ -360,18 +383,24 @@ const applyStylesToCard = (cardEl, imgSrc) => {
     cardEl.classList.add("center-img");
 };
 
-const addClickEventToScoreboard = ({ endGame }) => {
-    endGame.scoreboardBtn.addEventListener("click", toggleScoreboardDisplay);
-    endGame.closeScoreboard.addEventListener("click", toggleScoreboardDisplay);
+const addClickEventToScoreboard = ({ scoreboardView, scoreboard }) => {
+    scoreboardView.scoreboardBtn.addEventListener("click", () => {
+        toggleScoreboardDisplay();
+        scoreboardView.displayTime(
+            scoreboard.bestTimeScore[Difficulty.difficulties[0]]
+        );
+    });
+    scoreboardView.closeScoreboard.addEventListener(
+        "click",
+        toggleScoreboardDisplay
+    );
 };
 
 const toggleScoreboardDisplay = () => {
-    gameState.endGame.scoreboardContainer.style.display =
-        gameState.endGame.scoreboardContainer.style.display === "flex"
+    gameState.scoreboardView.scoreboardContainer.style.display =
+        gameState.scoreboardView.scoreboardContainer.style.display === "flex"
             ? "none"
             : "flex";
 };
 
 addClickEventToScoreboard(gameState);
-
-displayTime();
