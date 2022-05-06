@@ -68,6 +68,7 @@ function resetPlayerTwoElements(){
         document.querySelector(el).textContent = "0";
     }
     document.querySelector(".p2-timer .p2-count").textContent = "00:00";
+    document.querySelector(".timer .count").textContent = "00:00";
 }
 
 function updatePlayersArr(playerMode) {
