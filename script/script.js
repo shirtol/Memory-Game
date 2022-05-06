@@ -338,9 +338,9 @@ const addClickEventToScoreboard = ({ endGame }) => {
 
 const toggleScoreboardDisplay = () => {
     gameState.endGame.scoreboardContainer.style.display =
-        gameState.endGame.scoreboardContainer.style.display === "grid"
+        gameState.endGame.scoreboardContainer.style.display === "flex"
             ? "none"
-            : "grid";
+            : "flex";
 };
 
 addClickEventToScoreboard(gameState);

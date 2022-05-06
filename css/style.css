@@ -109,14 +109,7 @@ html {
     min-width: 80%;
 }
 
-.correct-container,
-.incorrect-container,
-.score-container,
-.timer,
-.p2-correct-container,
-.p2-incorrect-container,
-.p2-score-container,
-.p2-timer {
+.sidebar-txt {
     height: 10rem;
     text-align: center;
     font-size: 1.5vw;
@@ -201,9 +194,7 @@ footer {
 }
 
 /* Related to the difficulty pop-up */
-.difficulty-container,
-.scoreboard-container,
-.player-mode-container {
+.popup-container {
     width: 50rem;
     height: max-content;
     font-size: 2rem;
@@ -226,9 +217,7 @@ footer {
     grid-template-columns: repeat(2, 1fr);
 }
 
-.difficulty-container > *,
-.difficulty-score > *,
-.player-mode-container > * {
+.btn-container > * {
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
         rgba(0, 0, 0, 0.22) 0px 15px 12px;
     transition: 200ms ease-in-out;
@@ -260,8 +249,7 @@ footer {
     padding: 0 5rem;
 }
 
-.difficulty-container > *:hover,
-.player-mode-container > *:hover {
+.difficulty-container > *:hover {
     transform: scale(1.05);
 }
 
@@ -314,7 +302,7 @@ footer {
     text-align: center;
 }
 
-.btn-container {
+.end-game-btn-container {
     display: flex;
     gap: 2rem;
 }
@@ -325,7 +313,7 @@ footer {
     opacity: 1;
     width: 40%;
     height: 50%;
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: flex-end;
 }
@@ -379,6 +367,10 @@ footer {
     background: #bb7760;
 }
 
+.align-row {
+    display: flex;
+}
+
 /* media query */
 
 @media (max-width: 1000px) {
@@ -415,14 +407,7 @@ footer {
         justify-content: space-around;
     }
 
-    .correct-container,
-    .incorrect-container,
-    .score-container,
-    .timer,
-    .p2-correct-container,
-    .p2-incorrect-container,
-    .p2-score-container,
-    .p2-timer {
+    .sidebar-txt {
         height: max-content;
     }
 
@@ -459,7 +444,7 @@ footer {
         font-size: 2.2rem;
     }
 
-    .btn-container {
+    .end-game-btn-container {
         margin-top: 2rem;
     }
 }
