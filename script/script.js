@@ -136,22 +136,7 @@ function addDifficultyToContainer(container) {
 function difficultyListener({difficult}) {
     let index = 0;
     difficult.difficultyContainer.addEventListener("click", (ev) => {
-        switch (ev.target.getAttribute("data-difficulty")) {
-            case "easy":
-                index = 0;
-                break;
-            case "medium":
-                index = 1;
-                break;
-            case "hard":
-                index = 2;
-                break;
-            case "ninja":
-                index = 3;
-                break;
-            default:
-                return;
-        }
+        index = Difficulty.difficulties.indexOf(ev.target.getAttribute("data-difficulty"));
         gameState.difficult.coupleNum = gameState.difficult.diffCardsNum[index];
         document.querySelector(".new-game-btn").style.pointerEvents = "auto";
         document.querySelector(".change-mode-btn").style.pointerEvents = "auto";
@@ -221,9 +206,6 @@ function timer({ playerMode, playerMode: { players } }) {
         player.timer.time.nukeListeners();
         observeTime(player.timer);
     });
-    // players[playerMode.turn].timer.time.value = 0;
-    // players[playerMode.turn].timer.time.nukeListeners();
-    // observeTime(players[playerMode.turn].timer);
 
     players[playerMode.turn].intervalID = setInterval(() => {
         if (true) {
