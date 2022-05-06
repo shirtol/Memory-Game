@@ -166,10 +166,8 @@ export const closeCardsIfNeeded = (cards) => {
             cards.flippedCardsArr.value.forEach(removeFlipCardClass);
             cards.flippedCardsArr.value = [];
         }, 1000);
-        console.log(gameState.playerMode.players[gameState.playerMode.turn]);
         if(gameState.playerMode.pickedMode === "twoPlayer"){
             gameState.playerMode.turn = (gameState.playerMode.turn + 1) % 2;
-            console.log(gameState.playerMode.turn);
         }
     }
 };
