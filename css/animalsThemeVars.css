@@ -27,6 +27,9 @@
 
     /* Images Links */
     --bg-image: url("../assets/img/farm-background.png");
+
+    /* Text-sizes */
+    --difficulty-txt-font-mobile: 1.3rem;
 }
 
 @font-face {

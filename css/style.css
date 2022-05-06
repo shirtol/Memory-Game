@@ -466,9 +466,11 @@ footer {
 
     .sidebar-txt {
         height: max-content;
+        font-size: 1rem;
     }
     .sidebar-title {
         margin-top: 0;
+        font-size: 1rem;
     }
 
     .left-sidebar > * {
@@ -543,6 +545,10 @@ footer {
     .player-mode-container > * {
         width: 6rem;
         height: 6rem;
+        font-size: var(--difficulty-txt-font-mobile);
+    }
+
+    .player-mode-container > * {
         font-size: 1.3rem;
     }
 
@@ -552,10 +558,13 @@ footer {
     }
     .left-sidebar {
         width: 95%;
+        overflow-x: scroll;
+        overflow-y: hidden;
     }
 
     .left-sidebar > * {
         font-size: 1.1rem;
+        margin-left: 10rem;
     }
     /* Scoreboard */
     .scoreboard-container {
