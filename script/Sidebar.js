@@ -7,10 +7,11 @@ import { Observable } from "./Observable.js";
  * @class
  */
 
-export const Sidebar = function (correctContainer, incorrectContainer, scoreContainer) {
+export const Sidebar = function (correctContainer, incorrectContainer, scoreContainer, timeContainer) {
     this.correctGuesses = document.querySelector(correctContainer);
     this.incorrectGuesses = document.querySelector(incorrectContainer);
     this.score = document.querySelector(scoreContainer);
+    this.timerView = document.querySelector(timeContainer);
     
     /**
      * @type {Timer}
@@ -37,25 +38,27 @@ export const Sidebar = function (correctContainer, incorrectContainer, scoreCont
 };
 
 export const observeChangesInCardsResults = (gameState) => {
-    gameState.playerMode.players[0].numOfCorrect.addChangeListener((correctCount) =>
+    gameState.playerMode.players.forEach((player) => {
+        player.numOfCorrect.addChangeListener((correctCount) =>
         updateSuccessCounts(gameState, correctCount)
     );
-    gameState.playerMode.players[0].numOfFail.addChangeListener((failCount) =>
+        player.numOfFail.addChangeListener((failCount) =>
         updateFailsCounts(gameState, failCount)
     );
-    gameState.playerMode.players[0].scoreNum.addChangeListener((newScore) =>
+        player.scoreNum.addChangeListener((newScore) =>
         updateScore(gameState, newScore)
     );
+    }) 
 };
 
-const updateSuccessCounts = ({ playerMode: {players} }, newSuccessCounts) =>
-    (players[0].correctGuesses.textContent = newSuccessCounts);
+const updateSuccessCounts = ({ playerMode, playerMode: {players} }, newSuccessCounts) =>
+    (players[playerMode.turn].correctGuesses.textContent = newSuccessCounts);
 
-const updateFailsCounts = ({ playerMode: {players} }, newFailCounts) =>
-    (players[0].incorrectGuesses.textContent = newFailCounts);
+const updateFailsCounts = ({ playerMode, playerMode: {players} }, newFailCounts) =>
+    (players[playerMode.turn].incorrectGuesses.textContent = newFailCounts);
 
-const updateScore = ({ playerMode: {players} }, newScore) =>  {
-    players[0].score.textContent = parseInt(players[0].score.textContent) + newScore;
+const updateScore = ({ playerMode, playerMode: {players} }, newScore) =>  {
+    players[playerMode.turn].score.textContent = parseInt(players[playerMode.turn].score.textContent) + newScore;
     //! temporary here, need to decide if to show only score on popup or how it got calculated too, (eg: you finnished in X minutes and have 10 wrong guesses so ur score is XY..)
     document.querySelector("#scoreShow").textContent = `Score: ${newScore}`;
 }

@@ -13,7 +13,7 @@ export const PlayerMode = function () {
      * @type {[Sidebar]}
      */
     this.players = [
-        new Sidebar(".correct-count", ".incorrect-count", ".score-count"),
+        new Sidebar(".correct-count", ".incorrect-count", ".score-count", ".timer .count"),
     ];
     // this.getMode = () => document.querySelectorAll("[data-Mode]");
 };

@@ -57,7 +57,7 @@ html {
 .left-sidebar {
     display: flex;
     /* flex-direction: column; */
-    width: 20%;
+    width: 25%;
     /* align-items: center; */
     justify-content: center;
     gap: 1rem;
@@ -114,6 +114,18 @@ html {
     text-align: center;
     font-size: 1.5vw;
     color: #f8f1eb;
+}
+
+.sidebar-title {
+    height: max-content;
+    text-align: center;
+    font-size: 1.7vw;
+    color: #f8f1eb;
+    margin-top: 1rem;
+}
+
+.player1-title{
+    display: none;
 }
 
 footer {
@@ -410,6 +422,9 @@ footer {
 
     .sidebar-txt {
         height: max-content;
+    }
+    .sidebar-title{
+        margin-top: 0;
     }
 
     .left-sidebar > * {
