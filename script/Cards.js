@@ -59,6 +59,7 @@ function addFlipCardsToClass(e) {
         ...e.currentTarget.deck.flippedCardsArr.value,
         e.currentTarget,
     ];
+    gameState.media.playSound("flip");
     e.currentTarget.classList.add("flipCard");
 }
 
@@ -129,6 +130,7 @@ export const stayOpenCardsIfNeeded = (cards) => {
         updateCounters(cards, gameState);
         cards.flippedCardsArr.value.forEach(removeClickOnCard);
         cards.flippedCardsArr.value = [];
+        setTimeout(() => gameState.media.playSound("success"),500)
     }
 };
 
@@ -148,6 +150,7 @@ export const closeCardsIfNeeded = (cards) => {
         setTimeout(() => {
             cards.flippedCardsArr.value.forEach(removeFlipCardClass);
             cards.flippedCardsArr.value = [];
+            gameState.media.playSound("flipBack");
         }, 1000);
         if(gameState.playerMode.pickedMode === "twoPlayer"){
             gameState.playerMode.turn = (gameState.playerMode.turn + 1) % 2;
