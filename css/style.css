@@ -15,6 +15,7 @@ html {
     --rows: 3;
     font-family: diloWorld;
     letter-spacing: 3px;
+    user-select: none;
 }
 
 .background-container {

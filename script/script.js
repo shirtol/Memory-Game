@@ -29,9 +29,9 @@ function startGame() {
 }
 
 function gameModeListener({ playerMode }) {
-    document.querySelector(".new-game-btn").style.pointerEvents = "none";
+    document.querySelector(".new-game-btn").style = "pointer-events: none; opacity: 0.5;";
     const modeBtn = document.querySelector(".change-mode-btn");
-    modeBtn.style.pointerEvents = "none";
+    modeBtn.style = "pointer-events: none; opacity: 0.5;";
     playerMode.modeContainer.addEventListener("click", (ev) => {
         switch (ev.target.getAttribute("data-mode")) {
             case "Solo":
@@ -50,10 +50,8 @@ function gameModeListener({ playerMode }) {
         }
         resetPlayerTwoElements();
         updatePlayersArr(playerMode);
-        observeChangesInCardsResults(gameState);
-        addGameOverListener(gameState);
         playerMode.modeContainer.style.display = "none";
-        modeBtn.style.pointerEvents = "none";
+        modeBtn.style = "pointer-events: none; opacity: 0.5;";
         gameState.difficult.difficultyContainer.style.display = "grid";
     });
 }
@@ -101,15 +99,14 @@ function gameModeMenu({ playerMode }) {
     document.querySelector(".change-mode-btn").addEventListener("click", () => {
         playerMode.modeContainer.style.display =
             playerMode.modeContainer.style.display === "grid" ? "none" : "grid";
+        const newGameBtn =  document.querySelector(".new-game-btn");
         if (playerMode.modeContainer.style.display === "none") {
             addFlipCardEvent(gameState);
-            document.querySelector(".new-game-btn").style.pointerEvents =
-                "auto";
+            newGameBtn.style = "Pointer-events: auto; opacity: 1";
             timer(gameState);
         } else {
             removeFlipCardEvent(gameState);
-            document.querySelector(".new-game-btn").style.pointerEvents =
-                "none";
+            newGameBtn.style = "Pointer-events: none; opacity: 0.5";
             clearInterval(playerMode.intervalID);
         }
     });
@@ -119,20 +116,21 @@ function gameModeMenu({ playerMode }) {
  * @description pops up the difficulty menu when clicking the new game button
  * @param {{ difficult: Difficulty }} Obj
  */
-function difficultyMenu({ difficult }) {
+function difficultyMenu({playerMode, difficult }) {
     document.querySelector(".new-game-btn").addEventListener("click", () => {
         difficult.difficultyContainer.style.display =
             difficult.difficultyContainer.style.display === "grid"
                 ? "none"
                 : "grid";
+        const modBtn = document.querySelector(".change-mode-btn");
         if (difficult.difficultyContainer.style.display === "none") {
             addFlipCardEvent(gameState);
-            document.querySelector(".change-mode-btn").style.pointerEvents =
-                "auto";
+            modBtn.style = "Pointer-events: auto; opacity: 1";
+            timer(gameState);
         } else {
             removeFlipCardEvent(gameState);
-            document.querySelector(".change-mode-btn").style.pointerEvents =
-                "none";
+            modBtn.style = "Pointer-events: none; opacity: 0.5";
+            clearInterval(playerMode.intervalID);
         }
     });
 }
@@ -178,8 +176,8 @@ function difficultyListener({ difficult }) {
             return;
         }
         gameState.difficult.coupleNum = gameState.difficult.diffCardsNum[index];
-        document.querySelector(".new-game-btn").style.pointerEvents = "auto";
-        document.querySelector(".change-mode-btn").style.pointerEvents = "auto";
+        document.querySelector(".new-game-btn").style = "pointer-events: auto; opacity: 1;";
+        document.querySelector(".change-mode-btn").style = "pointer-events: auto; opacity: 1;";
         gameState.difficult.chosenDifficulty = Difficulty.difficulties[index];
         resetPickedDifficulty(gameState, index);
     });
@@ -208,6 +206,8 @@ function resetPickedDifficulty(
         addBackgroundImageToAllCards(gameState);
         cards.resetFlipedCardsArr();
         observeNumOfFlippedCards(gameState);
+        addGameOverListener(gameState);
+        observeChangesInCardsResults(gameState);
         addFlipCardEvent(gameState);
     }, 1000);
 }
@@ -223,7 +223,10 @@ function resetCardsContainer() {
 function resetPlayers(players) {
     players.forEach((player) => {
         player.numOfCorrect.value = 0;
+        player.numOfCorrect.nukeListeners();
         player.numOfFail.value = 0;
+        player.numOfFail.nukeListeners();
+        player.scoreNum.nukeListeners();
         player.timer.time.nukeListeners();
         observeTime(player.timer);
         player.timer.time.value = 0;
@@ -282,9 +285,9 @@ const updateScoreboard = (bestTimeScore, chosenDifficulty, player) => {
     if (cardCouples === difficult.coupleNum) {
         const scoreMsg = document.querySelector("#scoreMsg");
         const scoreNum = document.querySelector("#scoreShow");
-        clearInterval(winner.intervalID);
+        clearInterval(playerMode.intervalID);
         playerMode.players.forEach((player) => updateFinalScore(gameState, player));
-        console.log(playerMode.players[0].scoreNum.value);
+        console.log(playerMode.players[0].score.textContent);
         if (playerMode.pickedMode === "twoPlayer") {
             let winnerName = "Player 1";
             if (
@@ -325,16 +328,16 @@ function popEndGame(difficult, endGameEl, endGameBtn){
 function updateFinalScore({playerMode,
     difficult: { coupleNum },
 }, player) {
-    const timeFactor = 1000,
-        failFactor = 30,
-        diffFactor = 20;
+    const timeFactor = 2000,
+        failFactor = 150;
     let timeBonus = (coupleNum * timeFactor) / player.timer.time.value;
     let failPenalty = (player.numOfFail.value * failFactor) / coupleNum;
-    let difficultyBonus = diffFactor * coupleNum;
-    let total = timeBonus + difficultyBonus - failPenalty;
+    let difficultyBonus = coupleNum / 8;
+    let correctBonus = playerMode.pickedMode === "twoPlayer" ? player.numOfCorrect.value * 50 : 0;
+    let total = (timeBonus + correctBonus - failPenalty) * difficultyBonus;
 
     player.scoreNum.value =
-        total > coupleNum * diffFactor ? total | 0 : coupleNum * diffFactor;
+        total > coupleNum * 20 ? total | 0 : coupleNum * 20;
 }
 
 /**

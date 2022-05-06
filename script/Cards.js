@@ -24,23 +24,6 @@ export class Cards {
          */
         this.flippedCardsArr = new Observable([]);
 
-        // /**
-        //  *
-        //  * @type {Observable}
-        //  */
-        // this.numOfCorrect = new Observable(0);
-
-        // /**
-        //  * @type {Observable}
-        //  */
-        // this.scoreNum = new Observable(0);
-
-        // /**
-        //  *
-        //  * @type {Observable}
-        //  */
-        // this.numOfFail = new Observable(0);
-
         this.resetFlipedCardsArr = () =>
             (this.flippedCardsArr = new Observable([]));
         /**
