@@ -56,20 +56,34 @@ html {
 
 .left-sidebar {
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     width: 20%;
-    align-items: center;
+    /* align-items: center; */
     justify-content: center;
-    gap: 3rem;
+    gap: 1rem;
     background: #d3a86c;
     margin-left: 8rem;
-    height: 80%;
+    height: 90%;
     border-radius: 8px;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
         rgba(0, 0, 0, 0.22) 0px 15px 12px;
     opacity: 0.8;
 }
 
+.player1,
+.player2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+}
+
+.left-sidebar .player2 {
+    display: none;
+}
+
+/* may not need this after 2 player change */
 .left-sidebar > * {
     align-items: center;
     display: flex;
@@ -86,7 +100,7 @@ html {
     display: grid;
     grid-template-columns: repeat(var(--columns), 1fr);
     grid-template-rows: repeat(var(--rows), 1fr);
-    width: 60%;
+    width: 70%;
     height: 100%;
     padding: 0 3rem;
 }
@@ -95,10 +109,7 @@ html {
     min-width: 80%;
 }
 
-.correct-container,
-.incorrect-container,
-.score-container,
-.timer {
+.sidebar-txt {
     height: 10rem;
     text-align: center;
     font-size: 1.5vw;
@@ -107,14 +118,16 @@ html {
 
 footer {
     height: max-content;
+    display: flex;
+    gap: 10rem;
 }
 
-.new-game-btn {
-    font-size: 2vw;
+.btn {
+    font-size: 1.5rem;
     border: 1px black solid;
     padding: 1rem;
     margin-bottom: 1rem;
-    margin-top: 4rem;
+    /* margin-top: 4rem; */
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
         rgba(0, 0, 0, 0.22) 0px 15px 12px;
@@ -130,7 +143,7 @@ footer {
 .card {
     cursor: pointer;
     /* preserve-3d meaning that the children of the 
-    element positioned in the #D space */
+    element positioned in the 3D space */
     transform-style: preserve-3d;
     transform-origin: center right;
     transition: transform 1s;
@@ -159,7 +172,7 @@ footer {
 }
 .card-front {
     /*!remove background when finish working*/
-    background: pink;
+    background: #f8f1eb;
 }
 
 .cards-container {
@@ -174,12 +187,14 @@ footer {
 }
 
 .item-img {
-    width: auto;
+    width: 100%;
     height: 100%;
+    border-radius: 4px;
+    object-fit: contain;
 }
 
 /* Related to the difficulty pop-up */
-.difficulty-container {
+.popup-container {
     width: 50rem;
     height: max-content;
     font-size: 2rem;
@@ -198,8 +213,11 @@ footer {
     flex-shrink: 0;
     border-radius: 10px;
 }
+.player-mode-container {
+    grid-template-columns: repeat(2, 1fr);
+}
 
-.difficulty-container > * {
+.btn-container > * {
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
         rgba(0, 0, 0, 0.22) 0px 15px 12px;
     transition: 200ms ease-in-out;
@@ -216,6 +234,19 @@ footer {
     justify-content: center;
     align-self: center;
     justify-self: center;
+}
+
+.difficulty-score {
+    display: flex;
+    height: max-content;
+    justify-content: center;
+    align-self: center;
+    gap: 2rem;
+}
+
+.difficulty-score > * {
+    height: 3.3rem;
+    padding: 0 5rem;
 }
 
 .difficulty-container > *:hover {
@@ -243,8 +274,112 @@ footer {
 [data-difficulty="ninja"] {
     background: #2f3338;
 }
+[data-mode="Solo"],
+[data-mode="One Vs One"] {
+    width: max-content;
+    padding: 0 2rem;
+    background: #08066e;
+}
+[data-mode="One Vs One"] {
+    background: #831d0b;
+}
+
+/* End game pop-up */
+.end-game {
+    position: absolute;
+    z-index: 30;
+    font-size: 6rem;
+    display: none;
+    background: #bffdc972;
+    width: 100%;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    /* display: flex; */
+    flex-direction: column;
+}
+.end-game > * {
+    text-align: center;
+}
+
+.end-game-btn-container {
+    display: flex;
+    gap: 2rem;
+}
+
+/* Scoreboard */
+.scoreboard-container {
+    z-index: 40;
+    opacity: 1;
+    width: 40%;
+    height: 50%;
+    display: none;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.scoreboard-container i {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+.scoreboard-container i:hover {
+    color: #d4b876;
+    transition: 100ms ease-in-out;
+}
+
+.difficulty-score {
+    z-index: 40;
+}
+
+.podium {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    width: 80%;
+}
+
+.podium > * {
+    background: #599bc7;
+    width: 25%;
+    height: 10rem;
+    align-self: baseline;
+}
+
+.podium > *::after {
+    content: attr(data-timeScore);
+    position: absolute;
+}
+
+.second-place {
+    height: 10rem;
+    background: silver;
+}
+.first-place {
+    height: 15rem;
+    background: gold;
+}
+.third-place {
+    height: 6rem;
+    background: #bb7760;
+}
+
+.align-row {
+    display: flex;
+}
 
 /* media query */
+
+@media (max-width: 1000px) {
+    /* Scoreboard */
+    .scoreboard-container {
+        width: 60%;
+        height: 40%;
+    }
+}
 @media (max-width: 768px) {
     .game-container {
         flex-direction: column;
@@ -252,10 +387,10 @@ footer {
     }
 
     .left-sidebar {
-        flex-direction: row;
+        flex-direction: column;
         width: 80%;
-        align-items: center;
-        justify-content: center;
+        /* align-items: center; */
+        /* justify-content: center; */
         margin-bottom: 2rem;
         height: max-content;
         background: none;
@@ -264,6 +399,16 @@ footer {
         padding: 0.8rem;
 
         /* gap: 0; */
+    }
+
+    .player1,
+    .player2 {
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .sidebar-txt {
+        height: max-content;
     }
 
     .left-sidebar > * {
@@ -277,25 +422,42 @@ footer {
         display: grid;
         grid-template-columns: repeat(var(--columns), 1fr);
         grid-template-rows: repeat(var(--rows), 1fr);
-        width: 70%;
+        width: 90%;
         height: 80%;
+        padding: 0;
     }
 
     .card-scene {
         min-width: 100%;
     }
-
-    .new-game-btn {
+    .btn {
+        padding: 0.7rem;
+    }
+    .new-game-btn,
+    .change-mode-btn {
         font-size: 1.5rem;
         margin-top: 0;
+        height: max-content;
     }
-    .item-img {
-        width: 100%;
-        height: auto;
+
+    .end-game > * {
+        font-size: 2.2rem;
+    }
+
+    .end-game-btn-container {
+        margin-top: 2rem;
     }
 }
 
 @media (max-width: 530px) {
+    .header h1 {
+        font-size: 3rem;
+    }
+
+    .header h2 {
+        font-size: 2rem;
+    }
+
     .difficulty-container {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -303,7 +465,8 @@ footer {
         height: max-content;
     }
 
-    .difficulty-container > * {
+    .difficulty-container > *,
+    .player-mode-container > * {
         width: 6rem;
         height: 6rem;
         font-size: 1.3rem;
@@ -311,7 +474,7 @@ footer {
 
     .cards-container {
         width: 95%;
-        padding: 0;
+        padding: 3px;
     }
     .left-sidebar {
         width: 95%;
@@ -319,6 +482,15 @@ footer {
 
     .left-sidebar > * {
         font-size: 1.1rem;
+    }
+    /* Scoreboard */
+    .scoreboard-container {
+        width: 80%;
+        height: 20%;
+    }
+
+    .btn {
+        font-size: 1.2rem;
     }
 }
 
@@ -339,7 +511,8 @@ footer {
 }
 
 @media (max-height: 600px) {
-    .new-game-btn {
+    .new-game-btn,
+    .change-mode-btn {
         margin-bottom: 0;
         margin-top: 0;
     }

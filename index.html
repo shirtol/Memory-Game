@@ -1,50 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./css/normalize.css" />
+        <link rel="stylesheet" href="./css/style.css" />
+        <script src="./script/script.js" defer type="module"></script>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="./css/normalize.css" />
-  <link rel="stylesheet" href="./css/style.css" />
-  <script src="./script/script.js" defer type="module"></script>
-  <link rel="icon" type="image/x-icon" href="/assets/img/ico/card-game.ico" />
-  <title>Memory Game</title>
-</head>
-
-<body>
-  <div class="background-container center-img"></div>
-  <div class="container">
-    <div class="header">
-      <h1>Memory Game!</h1>
-      <h2>By KTS</h2>
-    </div>
-    <main class="game-container">
-      <div class="left-sidebar">
-        <div class="correct-container">
-          <h3>Correct</h3>
-          <div class="correct-count">0</div>
+        <script
+            src="https://kit.fontawesome.com/54d7603b2e.js"
+            crossorigin="anonymous"
+        ></script>
+        <link
+            rel="icon"
+            type="image/x-icon"
+            href="/assets/img/ico/card-game.ico"
+        />
+        <title>Memory Game</title>
+    </head>
+    <body>
+        <div class="background-container center-img"></div>
+        <div class="container">
+            <div class="header">
+                <h1>Memory Game!</h1>
+                <h2>By KTS</h2>
+            </div>
+            <main class="game-container">
+                <div class="left-sidebar">
+                    <div class="player1">
+                        <div class="correct-container sidebar-txt">
+                            <h3>Correct</h3>
+                            <div class="correct-count">0</div>
+                        </div>
+                        <div class="incorrect-container sidebar-txt">
+                            <h3>Incorrect</h3>
+                            <div class="incorrect-count">0</div>
+                        </div>
+                        <div class="score-container sidebar-txt">
+                            <h3>total score</h3>
+                            <div class="score-count">0</div>
+                        </div>
+                        <div class="timer sidebar-txt">
+                            <h4>Timer:</h4>
+                            <div class="count">00:00</div>
+                        </div>
+                    </div>
+                    <div class="player2">
+                        <div class="p2-correct-container sidebar-txt">
+                            <h3>Correct</h3>
+                            <div class="p2-correct-count">0</div>
+                        </div>
+                        <div class="p2-incorrect-container sidebar-txt">
+                            <h3>Incorrect</h3>
+                            <div class="p2-incorrect-count">0</div>
+                        </div>
+                        <div class="p2-score-container sidebar-txt">
+                            <h3>total score</h3>
+                            <div class="p2-score-count">0</div>
+                        </div>
+                        <div class="p2-timer sidebar-txt">
+                            <h4>Timer:</h4>
+                            <div class="p2-count">00:00</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cards-container"></div>
+            </main>
+            <footer>
+                <div class="new-game-btn btn">New Game</div>
+                <div class="change-mode-btn btn">Change Mode</div>
+            </footer>
+            <div
+                class="player-mode-container btn-container popup-container"
+            ></div>
+            <div
+                class="difficulty-container btn-container popup-container"
+            ></div>
+            <div class="end-game">
+                <p>
+                    YOU WON!<br />
+                    <span id="scoreShow"></span>
+                </p>
+                <div class="end-game-btn-container">
+                    <div class="new-game-btn btn" id="end-game-btn">
+                        New Game
+                    </div>
+                    <div class="score-board-btn btn">Scoreboard</div>
+                </div>
+            </div>
+            <div class="scoreboard-container popup-container">
+                <i class="fa-solid fa-xmark"></i>
+                <div class="podium">
+                    <div class="second-place" data-timeScore="00:00"></div>
+                    <div class="first-place" data-timeScore="00:00"></div>
+                    <div class="third-place" data-timeScore="00:00"></div>
+                </div>
+                <div class="difficulty-container btn-container align-row">
+                    <div data-difficulty="easy" class="center-img">easy</div>
+                    <div data-difficulty="medium" class="center-img">
+                        medium
+                    </div>
+                    <div data-difficulty="hard" class="center-img">hard</div>
+                    <div data-difficulty="ninja" class="center-img">ninja</div>
+                </div>
+            </div>
         </div>
-        <div class="incorrect-container">
-          <h3>Incorrect</h3>
-          <div class="incorrect-count">0</div>
-        </div>
-        <div class="score-container">
-          <h3>score</h3>
-          <div class="score-count">0</div>
-        </div>
-        <div class="timer">
-          <h4>Timer:</h4>
-          <div class="count">00:00</div>
-        </div>
-      </div>
-      <div class="cards-container"></div>
-    </main>
-    <footer>
-      <div class="new-game-btn">New Game</div>
-    </footer>
-    <div class="difficulty-container"></div>
-  </div>
-</body>
-
+    </body>
 </html>
