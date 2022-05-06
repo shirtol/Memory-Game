@@ -349,12 +349,12 @@ footer {
     height: 10rem;
     align-self: baseline;
     position: relative;
+    overflow: hidden;
 }
 
 .podium > *::after {
     content: attr(data-timeScore);
     position: absolute;
-    /* transform: rotate(90deg); */
     position: absolute;
     font-weight: 200;
     color: #fff;
@@ -387,6 +387,41 @@ footer {
 #difficulty-score > * {
     width: 10rem;
     height: 3rem;
+}
+
+@keyframes firstBarGrowth {
+    0% {
+        height: 0;
+    }
+    100% {
+        height: 15rem;
+    }
+}
+@keyframes secondBarGrowth {
+    0% {
+        height: 0;
+    }
+    100% {
+        height: 10rem;
+    }
+}
+@keyframes thirdBarGrowth {
+    0% {
+        height: 0;
+    }
+    100% {
+        height: 6rem;
+    }
+}
+
+.first-place-animate {
+    animation: firstBarGrowth 1s linear;
+}
+.second-place-animate {
+    animation: secondBarGrowth 1s linear;
+}
+.third-place-animate {
+    animation: thirdBarGrowth 1s linear;
 }
 
 /* media query */

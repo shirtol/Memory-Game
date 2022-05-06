@@ -43,7 +43,7 @@ export class ScoreboardView {
      */
     addClickEventToDiffScoreboard = (scoreboard) => {
         for (let i = 0; i < this.difficultyScores.length; i++) {
-            this.difficultyScores[i].addEventListener("click", (_) => {
+            this.difficultyScores[i].addEventListener("click", () => {
                 this.displayTime(
                     scoreboard.bestTimeScore[Difficulty.difficulties[i]]
                 );
@@ -55,14 +55,21 @@ export class ScoreboardView {
      * @param {number[]} timesArr Array of best 3 times of the user
      */
     displayTime = (timesArr) => {
-        document
-            .querySelector(".first-place")
-            .setAttribute("data-timeScore", secondToTimeStr(timesArr[0] ?? 0));
-        document
-            .querySelector(".second-place")
-            .setAttribute("data-timeScore", secondToTimeStr(timesArr[1] ?? 0));
-        document
-            .querySelector(".third-place")
-            .setAttribute("data-timeScore", secondToTimeStr(timesArr[2] ?? 0));
+        this.stylePodiumPlace("first", timesArr[0]);
+        this.stylePodiumPlace("second", timesArr[1]);
+        this.stylePodiumPlace("third", timesArr[2]);
+    };
+
+    /**
+     * @param {string} placeStr
+     * @param {number} time
+     */
+    stylePodiumPlace = (placeStr, time) => {
+        const podiumEl = document.querySelector(`.${placeStr}-place`);
+
+        podiumEl.setAttribute("data-timeScore", secondToTimeStr(time ?? 0));
+        podiumEl.classList.remove(`${placeStr}-place-animate`);
+        void podiumEl.offsetWidth;
+        podiumEl.classList.add(`${placeStr}-place-animate`);
     };
 }
