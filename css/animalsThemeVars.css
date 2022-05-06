@@ -1,0 +1,35 @@
+:root {
+    /* Colors */
+    --header-color: #cfa467;
+    --sidebar-bg-color: #d3a86c;
+    --sidebar-txt-color: #f8f1eb;
+    --btn-bg-color: #d3a86c;
+    --btn-txt-color: #f8f1eb;
+    --card-back-bg-color: #fff;
+    --card-front-bg-color: #f8f1eb;
+    --popup-container-bg-color: #f9ea81;
+    --easy-color: #50ca91;
+    --medium-color: #599bc7;
+    --hard-color: #d74f4a;
+    --ninja-color: #2f3338;
+    --solo-mode-color: #08066e;
+    --vs-mode-color: #831d0b;
+    --end-game-popup-bg-color: #bffdc972;
+    --close-icon-color: #fff;
+    --close-icon-hover-color: #d4b876;
+    --podium-txt-color: #fff;
+    --podium-second-color: silver;
+    --podium-first-color: gold;
+    --podium-third-color: #bb7760;
+
+    /* Font */
+    --font-name: diloWorld;
+
+    /* Images Links */
+    --bg-image: url("../assets/img/farm-background.png");
+}
+
+@font-face {
+    font-family: diloWorld;
+    src: url(../assets/fonts/diloWorld.ttf);
+}
