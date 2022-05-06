@@ -70,7 +70,8 @@ html {
     opacity: 0.8;
 }
 
-.player1, .player2{
+.player1,
+.player2 {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -108,14 +109,7 @@ html {
     min-width: 80%;
 }
 
-.correct-container,
-.incorrect-container,
-.score-container,
-.timer,
-.p2-correct-container,
-.p2-incorrect-container,
-.p2-score-container,
-.p2-timer {
+.sidebar-txt {
     height: 10rem;
     text-align: center;
     font-size: 1.5vw;
@@ -128,12 +122,12 @@ footer {
     gap: 10rem;
 }
 
-.new-game-btn, .change-mode-btn {
-    font-size: 2vw;
+.btn {
+    font-size: 1.5rem;
     border: 1px black solid;
     padding: 1rem;
     margin-bottom: 1rem;
-    margin-top: 4rem;
+    /* margin-top: 4rem; */
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
         rgba(0, 0, 0, 0.22) 0px 15px 12px;
@@ -200,7 +194,7 @@ footer {
 }
 
 /* Related to the difficulty pop-up */
-.difficulty-container, .player-mode-container {
+.popup-container {
     width: 50rem;
     height: max-content;
     font-size: 2rem;
@@ -219,11 +213,11 @@ footer {
     flex-shrink: 0;
     border-radius: 10px;
 }
-.player-mode-container{
+.player-mode-container {
     grid-template-columns: repeat(2, 1fr);
 }
 
-.difficulty-container > *, .player-mode-container > * {
+.btn-container > * {
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
         rgba(0, 0, 0, 0.22) 0px 15px 12px;
     transition: 200ms ease-in-out;
@@ -242,8 +236,20 @@ footer {
     justify-self: center;
 }
 
-.difficulty-container > *:hover,
-.player-mode-container > *:hover {
+.difficulty-score {
+    display: flex;
+    height: max-content;
+    justify-content: center;
+    align-self: center;
+    gap: 2rem;
+}
+
+.difficulty-score > * {
+    height: 3.3rem;
+    padding: 0 5rem;
+}
+
+.difficulty-container > *:hover {
     transform: scale(1.05);
 }
 
@@ -268,12 +274,13 @@ footer {
 [data-difficulty="ninja"] {
     background: #2f3338;
 }
-[data-mode="Solo"], [data-mode="One Vs One"] {
+[data-mode="Solo"],
+[data-mode="One Vs One"] {
     width: max-content;
     padding: 0 2rem;
     background: #08066e;
 }
-[data-mode="One Vs One"]{
+[data-mode="One Vs One"] {
     background: #831d0b;
 }
 
@@ -295,7 +302,84 @@ footer {
     text-align: center;
 }
 
+.end-game-btn-container {
+    display: flex;
+    gap: 2rem;
+}
+
+/* Scoreboard */
+.scoreboard-container {
+    z-index: 40;
+    opacity: 1;
+    width: 40%;
+    height: 50%;
+    display: none;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.scoreboard-container i {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+.scoreboard-container i:hover {
+    color: #d4b876;
+    transition: 100ms ease-in-out;
+}
+
+.difficulty-score {
+    z-index: 40;
+}
+
+.podium {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    width: 80%;
+}
+
+.podium > * {
+    background: #599bc7;
+    width: 25%;
+    height: 10rem;
+    align-self: baseline;
+}
+
+.podium > *::after {
+    content: attr(data-timeScore);
+    position: absolute;
+}
+
+.second-place {
+    height: 10rem;
+    background: silver;
+}
+.first-place {
+    height: 15rem;
+    background: gold;
+}
+.third-place {
+    height: 6rem;
+    background: #bb7760;
+}
+
+.align-row {
+    display: flex;
+}
+
 /* media query */
+
+@media (max-width: 1000px) {
+    /* Scoreboard */
+    .scoreboard-container {
+        width: 60%;
+        height: 40%;
+    }
+}
 @media (max-width: 768px) {
     .game-container {
         flex-direction: column;
@@ -317,19 +401,13 @@ footer {
         /* gap: 0; */
     }
 
-    .player1, .player2{
+    .player1,
+    .player2 {
         flex-direction: row;
         justify-content: space-around;
     }
 
-    .correct-container,
-    .incorrect-container,
-    .score-container,
-    .timer,
-    .p2-correct-container,
-    .p2-incorrect-container,
-    .p2-score-container,
-    .p2-timer {
+    .sidebar-txt {
         height: max-content;
     }
 
@@ -352,10 +430,22 @@ footer {
     .card-scene {
         min-width: 100%;
     }
-
-    .new-game-btn, .change-mode-btn {
+    .btn {
+        padding: 0.7rem;
+    }
+    .new-game-btn,
+    .change-mode-btn {
         font-size: 1.5rem;
         margin-top: 0;
+        height: max-content;
+    }
+
+    .end-game > * {
+        font-size: 2.2rem;
+    }
+
+    .end-game-btn-container {
+        margin-top: 2rem;
     }
 }
 
@@ -375,7 +465,8 @@ footer {
         height: max-content;
     }
 
-    .difficulty-container > *, .player-mode-container > * {
+    .difficulty-container > *,
+    .player-mode-container > * {
         width: 6rem;
         height: 6rem;
         font-size: 1.3rem;
@@ -391,6 +482,15 @@ footer {
 
     .left-sidebar > * {
         font-size: 1.1rem;
+    }
+    /* Scoreboard */
+    .scoreboard-container {
+        width: 80%;
+        height: 20%;
+    }
+
+    .btn {
+        font-size: 1.2rem;
     }
 }
 
@@ -411,7 +511,8 @@ footer {
 }
 
 @media (max-height: 600px) {
-    .new-game-btn, .change-mode-btn {
+    .new-game-btn,
+    .change-mode-btn {
         margin-bottom: 0;
         margin-top: 0;
     }

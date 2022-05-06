@@ -7,6 +7,7 @@ import {
 import { observeTime, Timer } from "./Timer.js";
 import { GameState } from "./GameState.js";
 import { observeChangesInCardsResults } from "./Sidebar.js";
+import { displayTime } from "./EndGame.js";
 
 export const gameState = new GameState();
 
@@ -16,52 +17,54 @@ startGame();
  * @description call for menu elements of difficulty and gameMode, starts card oberver and starts by picking difficulty function
  */
 function startGame() {
-    gameModeMenu(gameState)
+    gameModeMenu(gameState);
     difficultyMenu(gameState);
-    addDifficultyToContainer(gameState);
+    addDifficultyToContainer(
+        gameState,
+        gameState.difficult.difficultyContainer
+    );
+
     addGameModeToContainer(gameState);
     observeChangesInCardsResults(gameState);
     pickDifficulty();
     addGameOverListener(gameState);
     gameState.difficult.difficultyContainer.style.display = "grid";
-    gameState.playerMode.players[gameState.playerMode.turn]
+    gameState.playerMode.players[gameState.playerMode.turn];
 }
 
 /**
  * @description pops up the gameMode menu when clicking the game mode button
- * @param { {playerMode: PlayerMode} } Obj 
+ * @param { {playerMode: PlayerMode} } Obj
  */
 function gameModeMenu({ playerMode }) {
     document.querySelector(".change-mode-btn").addEventListener("click", () => {
-        
         playerMode.modeContainer.style.display =
-            playerMode.modeContainer.style.display === "grid"
-                ? "none"
-                : "grid";
-                playerMode.modeContainer.style.display === "none" ? addFlipCardEvent(gameState) : removeFlipCardEvent(gameState);
-        
+            playerMode.modeContainer.style.display === "grid" ? "none" : "grid";
+        playerMode.modeContainer.style.display === "none"
+            ? addFlipCardEvent(gameState)
+            : removeFlipCardEvent(gameState);
     });
 }
 
 /**
  * @description pops up the difficulty menu when clicking the new game button
- * @param {{ difficult: Difficulty }} Obj 
+ * @param {{ difficult: Difficulty }} Obj
  */
 function difficultyMenu({ difficult }) {
     document.querySelector(".new-game-btn").addEventListener("click", () => {
-        
         difficult.difficultyContainer.style.display =
             difficult.difficultyContainer.style.display === "grid"
                 ? "none"
                 : "grid";
-                difficult.difficultyContainer.style.display === "none" ? addFlipCardEvent(gameState) : removeFlipCardEvent(gameState);
-        
+        difficult.difficultyContainer.style.display === "none"
+            ? addFlipCardEvent(gameState)
+            : removeFlipCardEvent(gameState);
     });
 }
 
 /**
  * @description adds the gamemode pop up to the DOM
- * @param {{ playerMode: PlayerMode }} Obj 
+ * @param {{ playerMode: PlayerMode }} Obj
  */
 function addGameModeToContainer({ playerMode }) {
     for (const mode of playerMode.modes) {
@@ -75,15 +78,15 @@ function addGameModeToContainer({ playerMode }) {
 
 /**
  * @description adds the difficulty menu pop up to the DOM
- * @param {{ difficult: Difficulty }} Obj 
+ * @param {{ difficult: Difficulty }} Obj
  */
-function addDifficultyToContainer({ difficult }) {
+function addDifficultyToContainer({ difficult }, container) {
     for (const difficulty of difficult.difficulties) {
         const difficultyEl = document.createElement("div");
         difficultyEl.setAttribute("data-difficulty", difficulty);
         difficultyEl.textContent = `${difficulty}`;
         difficultyEl.classList.add("center-img");
-        difficult.difficultyContainer.appendChild(difficultyEl);
+        container.appendChild(difficultyEl);
     }
 }
 
@@ -120,7 +123,10 @@ function pickDifficulty() {
  * @param {{cards: Cards, playerMode: PlayerMode, difficult: Difficulty, animals: string[]}} Obj
  * @param {number} idx
  */
-function resetPickedDifficulty({ cards, playerMode, playerMode: {players}, difficult, animals }, idx) {
+function resetPickedDifficulty(
+    { cards, playerMode, playerMode: { players }, difficult, animals },
+    idx
+) {
     document.querySelector(".cards-container").innerHTML = ""; //!Why not use textContent?
     players[playerMode.turn].numOfCorrect.value = 0;
     players[playerMode.turn].numOfFail.value = 0;
@@ -141,7 +147,7 @@ function resetPickedDifficulty({ cards, playerMode, playerMode: {players}, diffi
 
 /**
  * @description sets grid size when changing difficulty
- * @param {Number} size 
+ * @param {Number} size
  */
 function setGridSize(size) {
     const container = document.querySelector(".cards-container");
@@ -153,7 +159,7 @@ function setGridSize(size) {
  * @description starts time interval and updates time counter
  * @param {{playerMode : PlayerMode}} Obj
  */
-function timer({ playerMode, playerMode: {players} }) {
+function timer({ playerMode, playerMode: { players } }) {
     players[playerMode.turn].timer.time.value = 0;
     players[playerMode.turn].timer.time.nukeListeners();
     observeTime(players[playerMode.turn].timer);
@@ -171,7 +177,10 @@ function timer({ playerMode, playerMode: {players} }) {
  * @description check if game is over update the score pop up the game end and listen to a new game click
  */
 export function checkGameOver() {
-    if (gameState.playerMode.players[0].numOfCorrect.value === gameState.difficult.coupleNum) {
+    if (
+        gameState.playerMode.players[0].numOfCorrect.value ===
+        gameState.difficult.coupleNum
+    ) {
         clearInterval(gameState.playerMode.players[0].intervalID);
         setTimeout(() => (gameState.endGameEl.style.display = "flex"), 800);
 
@@ -184,16 +193,20 @@ export function checkGameOver() {
     }
 }
 
-
 /**
  * @description updates the score at a game end
- * @param {{playerMode: {players: Sidebar[]}, difficult: {coupleNum: Number}}} Obj 
+ * @param {{playerMode: {players: Sidebar[]}, difficult: {coupleNum: Number}}} Obj
  */
 
-function updateFinalScore({playerMode: {players}, difficult:{coupleNum}}){
-    const timeFactor = 5000, failFactor = 30, diffFactor = 20;
-    let timeBonus = coupleNum * timeFactor / players[0].timer.time.value;
-    let failPenalty = players[0].numOfFail.value * failFactor / coupleNum;
+function updateFinalScore({
+    playerMode: { players },
+    difficult: { coupleNum },
+}) {
+    const timeFactor = 5000,
+        failFactor = 30,
+        diffFactor = 20;
+    let timeBonus = (coupleNum * timeFactor) / players[0].timer.time.value;
+    let failPenalty = (players[0].numOfFail.value * failFactor) / coupleNum;
     let difficultyBonus = diffFactor * coupleNum;
     let total = timeBonus + difficultyBonus - failPenalty;
 
@@ -205,14 +218,14 @@ function updateFinalScore({playerMode: {players}, difficult:{coupleNum}}){
  * @description huh ? u dont need this here, its self explanatory dummy !! :P
  * @param { {playerMode: {players: sidebar[]}} } Obj
  */
-function addGameOverListener({playerMode: {players}}){
+function addGameOverListener({ playerMode: { players } }) {
     players[0].numOfCorrect.addChangeListener(checkGameOver);
 }
 
 /**
- * 
- * @param {String[]} animals 
- * @param {Number} cardCouples 
+ *
+ * @param {String[]} animals
+ * @param {Number} cardCouples
  * @returns array filled with couples of animal names
  */
 function createGameBoard(animals, cardCouples) {
@@ -229,7 +242,7 @@ function createGameBoard(animals, cardCouples) {
 
 /**
  * @description loops over the animal names to create DOM element for each one
- * @param {String[]} gameBoard 
+ * @param {String[]} gameBoard
  */
 function gameBoardloop(gameBoard) {
     for (let i = 0; i < gameBoard.length; i++) {
@@ -239,7 +252,7 @@ function gameBoardloop(gameBoard) {
 
 /**
  * @description takes animal name and create its DOM elements
- * @param {String} item 
+ * @param {String} item
  */
 function createGridElements(item) {
     const grid = document.querySelector(".cards-container");
@@ -259,8 +272,8 @@ function createGridElements(item) {
 }
 
 /**
- * 
- * @param {String} array 
+ *
+ * @param {String} array
  * @returns shuffles array of animal names
  */
 function shuffle(array) {
@@ -278,9 +291,9 @@ function shuffle(array) {
 }
 
 /**
- * 
- * @param {Number} min 
- * @param {Number} max 
+ *
+ * @param {Number} min
+ * @param {Number} max
  * @returns random number between min and max
  */
 function getRandomIntInclusive(min, max) {
@@ -297,24 +310,39 @@ function getRandomIntInclusive(min, max) {
 const addBackgroundImageToAllCards = ({ cards }) => {
     cards.getAllCards().forEach((card) => {
         card.classList.add("box-shadow");
-        const cardType = card.getAttribute("data-type");
-        const backCard = card.lastChild;
-        const frontCard = card.firstChild;
-        const img = document.createElement("img");
-        const frontImg = document.createElement("img");
-        img.src = `./assets/img/animals/${cardType}.webp`;
-        frontImg.src = `./assets/img/front/paw1.png`;
-        img.classList.add("item-img");
-        frontImg.classList.add("item-img");
-        frontCard.appendChild(frontImg);
-        backCard.appendChild(img);
-        backCard.style = "display: flex; justify-content: center;";
-        frontCard.style = "display: flex; justify-content: center;";
-
-        // backCard.style.backgroundImage = `url(../assets/img/${cardType}.webp)`;
-        // backCard.style.backgroundImage = `url(../assets/img/back-mobile/cat-mobile.png)`; //!Will remove when I end working on cutting the images of cards to the correct width and height
-        // frontCard.style.backgroundImage = `url(../assets/img/front/paw1.png)`;
-        backCard.classList.add("center-img");
-        frontCard.classList.add("center-img");
+        const [cardType, backCard, frontCard] = getElementsForCard(card);
+        applyStylesToCard(backCard, `./assets/img/animals/${cardType}.webp`);
+        applyStylesToCard(frontCard, `./assets/img/front/paw1.png`);
     });
 };
+
+const getElementsForCard = (card) => [
+    card.getAttribute("data-type"),
+    card.lastChild,
+    card.firstChild,
+];
+
+const applyStylesToCard = (cardEl, imgSrc) => {
+    const imgEl = document.createElement("img");
+    imgEl.src = imgSrc;
+    imgEl.classList.add("item-img");
+    cardEl.appendChild(imgEl);
+    cardEl.style = "display: flex; justify-content: center;";
+    cardEl.classList.add("center-img");
+};
+
+const addClickEventToScoreboard = ({ endGame }) => {
+    endGame.scoreboardBtn.addEventListener("click", toggleScoreboardDisplay);
+    endGame.closeScoreboard.addEventListener("click", toggleScoreboardDisplay);
+};
+
+const toggleScoreboardDisplay = () => {
+    gameState.endGame.scoreboardContainer.style.display =
+        gameState.endGame.scoreboardContainer.style.display === "flex"
+            ? "none"
+            : "flex";
+};
+
+addClickEventToScoreboard(gameState);
+
+displayTime();
