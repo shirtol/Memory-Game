@@ -33,6 +33,8 @@ function gameModeListener({ playerMode }) {
     const modeBtn = document.querySelector(".change-mode-btn");
     modeBtn.style = "pointer-events: none; opacity: 0.5;";
     playerMode.modeContainer.addEventListener("click", (ev) => {
+        gameState.media.playSoundLoop("bgSound");
+        gameState.media.playSound("click");
         switch (ev.target.getAttribute("data-mode")) {
             case "Solo":
                 playerMode.pickedMode = "onePlayer";
@@ -105,10 +107,12 @@ function gameModeMenu({ playerMode }) {
             addFlipCardEvent(gameState);
             newGameBtn.style = "Pointer-events: auto; opacity: 1";
             timer(gameState);
+            gameState.media.playSound("popDown2");
         } else {
             removeFlipCardEvent(gameState);
             newGameBtn.style = "Pointer-events: none; opacity: 0.5";
             clearInterval(playerMode.intervalID);
+            gameState.media.playSound("popUp2");
         }
     });
 }
@@ -128,10 +132,12 @@ function difficultyMenu({playerMode, difficult }) {
             addFlipCardEvent(gameState);
             modBtn.style = "Pointer-events: auto; opacity: 1";
             timer(gameState);
+            gameState.media.playSound("popDown");
         } else {
             removeFlipCardEvent(gameState);
             modBtn.style = "Pointer-events: none; opacity: 0.5";
             clearInterval(playerMode.intervalID);
+            gameState.media.playSound("popUp");
         }
     });
 }
@@ -170,6 +176,7 @@ function addDifficultyToContainer(container) {
 function difficultyListener({ difficult }) {
     let index = 0;
     difficult.difficultyContainer.addEventListener("click", (ev) => {
+        gameState.media.playSound("click");
         index = Difficulty.difficulties.indexOf(
             ev.target.getAttribute("data-difficulty")
         );
@@ -180,6 +187,7 @@ function difficultyListener({ difficult }) {
         document.querySelector(".new-game-btn").style = "pointer-events: auto; opacity: 1;";
         document.querySelector(".change-mode-btn").style = "pointer-events: auto; opacity: 1;";
         gameState.difficult.chosenDifficulty = Difficulty.difficulties[index];
+        gameState.media.playSound("deal");
         resetPickedDifficulty(gameState, index);
     });
 }
@@ -210,7 +218,7 @@ function resetPickedDifficulty(
         addGameOverListener(gameState);
         observeChangesInCardsResults(gameState);
         addFlipCardEvent(gameState);
-    }, 1000);
+    }, 1600);
 }
 
 function resetCardsContainer() {
@@ -313,7 +321,11 @@ const updateScoreboard = (bestTimeScore, chosenDifficulty, player) => {
 }
 
 function popEndGame(difficult, endGameEl, endGameBtn){
-    setTimeout(() => (endGameEl.style.display = "flex"), 800);
+    setTimeout(() => {
+        endGameEl.style.display = "flex";
+        gameState.media.playSound("winSound");
+        gameState.media.playSound("winVoice");
+    }, 800);
     endGameBtn.addEventListener("click", () => {
         removeFlipCardEvent(gameState);
         endGameEl.style.display = "none";
@@ -478,6 +490,9 @@ const toggleScoreboardDisplay = () => {
         gameState.scoreboardView.scoreboardContainer.style.display === "flex"
             ? "none"
             : "flex";
+    if(gameState.scoreboardView.scoreboardContainer.style.display === "flex"){
+        gameState.media.playSound("scoreBoard");
+    }
 };
 
 addClickEventToScoreboard(gameState);
