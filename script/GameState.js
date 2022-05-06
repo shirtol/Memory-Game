@@ -9,12 +9,14 @@ import { PlayerMode } from "./PlayerMode.js";
 import { Difficulty } from "./Difficulty.js";
 import { ScoreboardView } from "./ScoreboardView.js";
 import { Scoreboard } from "./Scoreboard.js";
+import { Theme } from "./Theme.js";
 
 export const GameState = function () {
     this.cards = new Cards();
     this.scoreboard = new Scoreboard();
     this.scoreboardView = new ScoreboardView(this.scoreboard);
     this.playerMode = new PlayerMode();
+    this.theme = new Theme();
     this.animals = [
         "dog",
         "cat",

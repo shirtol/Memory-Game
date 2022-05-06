@@ -429,6 +429,44 @@ footer {
     animation: thirdBarGrowth 1s linear;
 }
 
+/* Theme */
+[data-theme="pokemon"] img,
+[data-theme="animals"] img {
+    width: 8rem;
+    height: 8rem;
+    border-radius: 20px;
+}
+
+[data-theme="pokemon"],
+[data-theme="animals"] {
+    background: transparent;
+    cursor: pointer;
+}
+
+[data-theme="pokemon"]::before {
+    content: "Themes";
+    position: absolute;
+    left: 0;
+    padding-left: 1rem;
+    top: 1rem;
+    z-index: 50;
+    display: block;
+}
+
+[data-mode="Solo"]::before {
+    content: "Modes";
+    position: absolute;
+    left: 0;
+    padding-left: 1rem;
+    bottom: 1rem;
+    z-index: 50;
+}
+
+/* !TODO: Try to figure out how to scale the elements without affecting the pseudo elements  */
+/* .btn-container > *:hover {
+    -webkit-transform: scale(1.05);
+} */
+
 /* media query */
 
 @media (max-width: 1000px) {
@@ -539,7 +577,7 @@ footer {
     .difficulty-container,
     .player-mode-container {
         grid-template-columns: repeat(2, 1fr);
-        width: max-content;
+        width: 70%;
         height: max-content;
     }
 
