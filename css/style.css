@@ -10,6 +10,7 @@ html {
     --rows: 3;
     font-family: var(--font-name);
     letter-spacing: 3px;
+    user-select: none;
 }
 
 .background-container {
