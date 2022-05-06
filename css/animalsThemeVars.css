@@ -21,6 +21,14 @@
     --podium-second-color: silver;
     --podium-first-color: gold;
     --podium-third-color: #bb7760;
+    --popup-txt-color: var(--card-back-bg-color);
+    --btn-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+        rgba(0, 0, 0, 0.22) 0px 15px 12px;
+
+    /* width and height */
+    --difficulty-score-width: 10rem;
+    --difficulty-score-height: 3rem;
+    --difficulty-score-width-mobile: 6rem;
 
     /* Font */
     --font-name: diloWorld;
@@ -30,6 +38,7 @@
 
     /* Text-sizes */
     --difficulty-txt-font-mobile: 1.3rem;
+    --difficulty-txt-font-mobile-768px: 1.2rem;
 }
 
 @font-face {

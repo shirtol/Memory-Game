@@ -1,13 +1,13 @@
 :root {
     /* Colors */
-    --header-color: #f9dc49;
+    --header-color: #f8f056;
     --sidebar-bg-color: var(--header-color);
     --sidebar-txt-color: #111;
     --btn-bg-color: var(--header-color);
     --btn-txt-color: var(--sidebar-txt-color);
     --card-back-bg-color: #fff;
     --card-front-bg-color: #f8f1eb;
-    --popup-container-bg-color: #f9ea81;
+    --popup-container-bg-color: var(--header-color);
     --easy-color: url("../assets/img/pokemon/difficulty/easy.png") center
         center/cover no-repeat;
     --medium-color: url("../assets/img/pokemon/difficulty/medium.png") center
@@ -16,8 +16,8 @@
         center/cover no-repeat;
     --ninja-color: url("../assets/img/pokemon/difficulty/ninja.png") center
         center/cover no-repeat;
-    --solo-mode-color: #08066e;
-    --vs-mode-color: #831d0b;
+    --solo-mode-color: #5452c8;
+    --vs-mode-color: #b46152;
     --end-game-popup-bg-color: #bffdc972;
     --close-icon-color: #fff;
     --close-icon-hover-color: #d4b876;
@@ -25,6 +25,13 @@
     --podium-second-color: silver;
     --podium-first-color: gold;
     --podium-third-color: #bb7760;
+    --popup-txt-color: var(--sidebar-txt-color);
+    --btn-shadow: none;
+
+    /* width and height */
+    --difficulty-score-width: 5rem;
+    --difficulty-score-height: 5rem;
+    --difficulty-score-width-mobile: 4.5rem;
 
     /* Font */
     --font-name: diloWorld;
@@ -34,6 +41,7 @@
 
     /* Text-sizes */
     --difficulty-txt-font-mobile: 0;
+    --difficulty-txt-font-mobile-768px: 0;
 }
 
 @font-face {
@@ -52,6 +60,6 @@
 .difficulty-container > *::after {
     position: absolute;
     content: attr(data-difficulty);
-    font-size: 1rem;
-    bottom: -2rem;
+    font-size: 1.2rem;
+    bottom: -2.5rem;
 }

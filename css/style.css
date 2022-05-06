@@ -225,8 +225,7 @@ footer {
 }
 
 .btn-container > * {
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
-        rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    box-shadow: var(--btn-shadow);
     transition: 200ms ease-in-out;
     cursor: pointer;
     background: var(--btn-txt-color);
@@ -234,7 +233,7 @@ footer {
     height: 8rem;
     text-align: center;
     flex-shrink: 0;
-    color: var(--card-back-bg-color);
+    color: var(--popup-txt-color);
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -382,7 +381,8 @@ footer {
 }
 
 .align-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
 }
 
 #difficulty-score {
@@ -390,8 +390,8 @@ footer {
 }
 
 #difficulty-score > * {
-    width: 10rem;
-    height: 3rem;
+    width: var(--difficulty-score-width);
+    height: var(--difficulty-score-height);
 }
 
 @keyframes firstBarGrowth {
@@ -517,13 +517,14 @@ footer {
     }
 
     #difficulty-score > * {
-        font-size: 1.2rem;
-        width: 6rem;
+        font-size: var(--difficulty-txt-font-mobile-768px);
+        width: var(--difficulty-score-width-mobile);
+        height: var(--difficulty-score-height);
     }
+}
 
-    .podium > *::after {
-        font-size: 1.2rem;
-    }
+.podium > *::after {
+    font-size: 1.2rem;
 }
 
 @media (max-width: 530px) {
@@ -537,7 +538,6 @@ footer {
 
     .difficulty-container,
     .player-mode-container {
-
         grid-template-columns: repeat(2, 1fr);
         width: max-content;
         height: max-content;
