@@ -4,21 +4,16 @@
     box-sizing: border-box;
 }
 
-@font-face {
-    font-family: diloWorld;
-    src: url(../assets/fonts/diloWorld.ttf);
-}
-
 html {
     font-size: 62.5%;
     --columns: 4;
     --rows: 3;
-    font-family: diloWorld;
+    font-family: var(--font-name);
     letter-spacing: 3px;
 }
 
 .background-container {
-    background-image: url("../assets/img/farm-background.png");
+    background-image: var(--bg-image);
     opacity: 0.8;
     z-index: -1;
     width: 100%;
@@ -42,7 +37,7 @@ html {
     font-size: 2rem;
     text-align: center;
     height: max-content;
-    color: #cfa467;
+    color: var(--header-color);
 }
 
 .game-container {
@@ -61,7 +56,7 @@ html {
     /* align-items: center; */
     justify-content: center;
     gap: 1rem;
-    background: #d3a86c;
+    background: var(--sidebar-bg-color);
     margin-left: 8rem;
     height: 90%;
     border-radius: 8px;
@@ -113,18 +108,18 @@ html {
     height: 10rem;
     text-align: center;
     font-size: 1.5vw;
-    color: #f8f1eb;
+    color: var(--sidebar-txt-color);
 }
 
 .sidebar-title {
     height: max-content;
     text-align: center;
     font-size: 1.7vw;
-    color: #f8f1eb;
+    color: var(--sidebar-txt-color);
     margin-top: 1rem;
 }
 
-.player1-title{
+.player1-title {
     display: none;
 }
 
@@ -143,11 +138,11 @@ footer {
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
         rgba(0, 0, 0, 0.22) 0px 15px 12px;
-    background: #d3a86c;
+    background: var(--btn-bg-color);
     opacity: 0.8;
     font-weight: 700;
     border-radius: 8px;
-    color: #f8f1eb;
+    color: var(--btn-txt-color);
 }
 
 /* Related to the flip card functionality */
@@ -179,12 +174,10 @@ footer {
 
 .card-back {
     transform: rotateY(180deg);
-    /*!remove background when finish working*/
-    background: #fff;
+    background: var(--card-back-bg-color);
 }
 .card-front {
-    /*!remove background when finish working*/
-    background: #f8f1eb;
+    background: var(--card-front-bg-color);
 }
 
 .cards-container {
@@ -214,7 +207,7 @@ footer {
     z-index: 20;
     display: none;
     position: absolute;
-    background: #f9ea81;
+    background: var(--popup-container-bg-color);
     padding: 4rem;
     justify-content: center;
     align-items: center;
@@ -235,12 +228,12 @@ footer {
         rgba(0, 0, 0, 0.22) 0px 15px 12px;
     transition: 200ms ease-in-out;
     cursor: pointer;
-    background: #f8f1eb;
+    background: var(--btn-txt-color);
     width: 8rem;
     height: 8rem;
     text-align: center;
     flex-shrink: 0;
-    color: #fff;
+    color: var(--card-back-bg-color);
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -276,25 +269,25 @@ footer {
 }
 
 [data-difficulty="easy"] {
-    background: #50ca91;
+    background: var(--easy-color);
 }
 [data-difficulty="medium"] {
-    background: #599bc7;
+    background: var(--medium-color);
 }
 [data-difficulty="hard"] {
-    background: #d74f4a;
+    background: var(--hard-color);
 }
 [data-difficulty="ninja"] {
-    background: #2f3338;
+    background: var(--ninja-color);
 }
 [data-mode="Solo"],
 [data-mode="One Vs One"] {
     width: max-content;
     padding: 0 2rem;
-    background: #08066e;
+    background: var(--solo-mode-color);
 }
 [data-mode="One Vs One"] {
-    background: #831d0b;
+    background: var(--vs-mode-color);
 }
 
 /* End game pop-up */
@@ -303,12 +296,11 @@ footer {
     z-index: 30;
     font-size: 6rem;
     display: none;
-    background: #bffdc972;
+    background: var(--end-game-popup-bg-color);
     width: 100%;
     height: 100vh;
     align-items: center;
     justify-content: center;
-    /* display: flex; */
     flex-direction: column;
 }
 .end-game > * {
@@ -336,12 +328,12 @@ footer {
     position: absolute;
     top: 1rem;
     right: 1rem;
-    color: #fff;
+    color: var(--close-icon-color);
     cursor: pointer;
 }
 
 .scoreboard-container i:hover {
-    color: #d4b876;
+    color: var(--close-icon-hover-color);
     transition: 100ms ease-in-out;
 }
 
@@ -357,7 +349,6 @@ footer {
 }
 
 .podium > * {
-    background: #599bc7;
     width: 25%;
     height: 10rem;
     align-self: baseline;
@@ -370,7 +361,7 @@ footer {
     position: absolute;
     position: absolute;
     font-weight: 200;
-    color: #fff;
+    color: var(--podium-txt-color);
     left: 25%;
     margin-left: -5px;
     margin-right: -5px;
@@ -378,15 +369,15 @@ footer {
 
 .second-place {
     height: 10rem;
-    background: silver;
+    background: var(--podium-second-color);
 }
 .first-place {
     height: 15rem;
-    background: gold;
+    background: var(--podium-first-color);
 }
 .third-place {
     height: 6rem;
-    background: #bb7760;
+    background: var(--podium-third-color);
 }
 
 .align-row {
@@ -461,7 +452,7 @@ footer {
         height: max-content;
         background: none;
         margin-left: 0;
-        background: #d3a86c;
+        background: var(--sidebar-bg-color);
         padding: 0.8rem;
 
         /* gap: 0; */
@@ -476,7 +467,7 @@ footer {
     .sidebar-txt {
         height: max-content;
     }
-    .sidebar-title{
+    .sidebar-title {
         margin-top: 0;
     }
 
