@@ -22,8 +22,9 @@
     --podium-first-color: gold;
     --podium-third-color: #bb7760;
     --popup-txt-color: var(--card-back-bg-color);
-    --btn-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
-        rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    --btn-shadow: none;
+    /* --btn-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+        rgba(0, 0, 0, 0.22) 0px 15px 12px; */
 
     /* width and height */
     --difficulty-score-width: 10rem;

@@ -5,8 +5,11 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="./css/normalize.css" />
-        <!-- <link rel="stylesheet" href="./css/animalsThemeVars.css" /> -->
-        <link rel="stylesheet" href="./css/pokemonThemeVars.css" />
+        <link
+            rel="stylesheet"
+            href="./css/animalsThemeVars.css"
+            id="selected-theme"
+        />
         <link rel="stylesheet" href="./css/style.css" />
         <script src="./script/script.js" defer type="module"></script>
 
@@ -81,9 +84,17 @@
                 <div class="new-game-btn btn">New Game</div>
                 <div class="change-mode-btn btn">Change Mode</div>
             </footer>
-            <div
-                class="player-mode-container btn-container popup-container"
-            ></div>
+            <div class="player-mode-container btn-container popup-container">
+                <div data-theme="pokemon">
+                    <img
+                        src="./assets/img/pokemon/difficulty/easy.png"
+                        alt=""
+                    />
+                </div>
+                <div data-theme="animals">
+                    <img src="./assets/img/front/paw1.png" alt="" />
+                </div>
+            </div>
             <div
                 class="difficulty-container btn-container popup-container"
             ></div>
