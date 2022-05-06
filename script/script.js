@@ -6,7 +6,7 @@ import {
 } from "./Cards.js";
 import { observeTime, Timer } from "./Timer.js";
 import { GameState } from "./GameState.js";
-import { observeChangesInCardsResults } from "./Sidebar.js";
+import { observeChangesInCardsResults, Sidebar } from "./Sidebar.js";
 import { Difficulty } from "./Difficulty.js";
 import { Scoreboard } from "./Scoreboard.js";
 import { ScoreboardView } from "./ScoreboardView.js";
@@ -24,7 +24,6 @@ function startGame() {
     addDifficultyToContainer(gameState.difficult.difficultyContainer);
 
     addGameModeToContainer(gameState);
-    observeChangesInCardsResults(gameState);
     gameModeListener(gameState);
     difficultyListener(gameState);
     addGameOverListener(gameState);
@@ -38,17 +37,31 @@ function gameModeListener({playerMode}){
         switch (ev.target.getAttribute("data-mode")) {
             case "Solo":
                 playerMode.pickedMode = "onePlayer";
+                document.querySelector(".player2").style.display = "none";
+                document.querySelector(".player1-title").style.display = "none";
                 break;
             case "One Vs One":
                 playerMode.pickedMode = "twoPlayer";
+                document.querySelector(".player2").style.display = "flex";
+                document.querySelector(".player1-title").style.display = "block";
                 break;
             default:
                 return;
         }
+        updatePlayersArr(playerMode);
+        observeChangesInCardsResults(gameState);
         playerMode.modeContainer.style.display = "none";
         modeBtn.style.pointerEvents = "none";
         gameState.difficult.difficultyContainer.style.display = "grid";
     });
+}
+
+function updatePlayersArr(playerMode){
+    if(playerMode.pickedMode === "onePlayer" && playerMode.players.length === 2){
+        playerMode.players.pop();
+    } else if(playerMode.pickedMode === "twoPlayer" && playerMode.players.length === 1){
+        playerMode.players.push(new Sidebar(".p2-correct-count", ".p2-incorrect-count", ".p2-score-count", ".p2-timer .p2-count"));
+    }
 }
 
 /**
@@ -153,13 +166,11 @@ function difficultyListener({difficult}) {
  * @param {number} idx
  */
 function resetPickedDifficulty(
-    { cards, playerMode, playerMode: { players }, difficult, animals },
+    { cards, playerMode: { players }, difficult, animals },
     idx
 ) {
-    document.querySelector(".cards-container").innerHTML = ""; //!Why not use textContent?
-    players[playerMode.turn].numOfCorrect.value = 0;
-    players[playerMode.turn].numOfFail.value = 0;
-    clearInterval(players[playerMode.turn].intervalID);
+    resetCardsContainer();
+    resetPlayers(players);
     timer(gameState);
     document.querySelector(".difficulty-container").style.display = "none";
     setGridSize(difficult.diffCardsNum[idx] / (idx + 2));
@@ -172,6 +183,22 @@ function resetPickedDifficulty(
         observeNumOfFlippedCards(gameState);
         addFlipCardEvent(gameState);
     }, 1000);
+}
+
+function resetCardsContainer(){
+    const gameCon = document.querySelector(".game-container");
+    const newCardContainer = document.createElement("div");
+    document.querySelector(".cards-container").remove();
+    newCardContainer.classList.add("cards-container");
+    gameCon.appendChild(newCardContainer);
+}
+
+function resetPlayers(players){
+    players.forEach((player) => {
+        player.numOfCorrect.value = 0;
+        player.numOfFail.value = 0;
+        clearInterval(player.intervalID);
+    })
 }
 
 /**
@@ -189,9 +216,14 @@ function setGridSize(size) {
  * @param {{playerMode : PlayerMode}} Obj
  */
 function timer({ playerMode, playerMode: { players } }) {
-    players[playerMode.turn].timer.time.value = 0;
-    players[playerMode.turn].timer.time.nukeListeners();
-    observeTime(players[playerMode.turn].timer);
+    players.forEach((player) =>{
+        player.timer.time.value = 0;
+        player.timer.time.nukeListeners();
+        observeTime(player.timer);
+    });
+    // players[playerMode.turn].timer.time.value = 0;
+    // players[playerMode.turn].timer.time.nukeListeners();
+    // observeTime(players[playerMode.turn].timer);
 
     players[playerMode.turn].intervalID = setInterval(() => {
         if (true) {
