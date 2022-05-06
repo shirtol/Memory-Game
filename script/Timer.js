@@ -1,6 +1,8 @@
 import { Observable } from "./Observable.js";
 
 /**
+ * @description a Timer that has a value of total seconds counted, and the DOM element showing the timer
+ * @type {Timer}
  * @class
  */
 export const Timer = function () {

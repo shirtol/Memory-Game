@@ -1,5 +1,6 @@
 /**
- * @description
+ * @description observe changes, run all given callbacks for a given element when changed
+ * @type {Observable}
  * @class
  * @param {any} init
  */
