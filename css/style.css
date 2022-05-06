@@ -10,6 +10,7 @@ html {
     --rows: 3;
     font-family: var(--font-name);
     letter-spacing: 3px;
+    user-select: none;
 }
 
 .background-container {
@@ -534,8 +535,9 @@ footer {
         font-size: 2rem;
     }
 
-    .difficulty-container {
-        display: grid;
+    .difficulty-container,
+    .player-mode-container {
+
         grid-template-columns: repeat(2, 1fr);
         width: max-content;
         height: max-content;
