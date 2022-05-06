@@ -2,7 +2,6 @@ import { Sidebar } from "./Sidebar.js";
 
 /**
  * @description This constructor holds the player mode list/picked, whos player turn it is and players ELs which are sidebars
- * @type {PlayerMode}
  * @class
  */
 export const PlayerMode = function () {
@@ -10,9 +9,11 @@ export const PlayerMode = function () {
     this.pickedMode = "onePlayer";
     this.turn = 0;
     this.modeContainer = document.querySelector(".player-mode-container");
-        /**
+    /**
      * @type {[Sidebar]}
      */
-    this.players= [new Sidebar(".correct-count", ".incorrect-count", ".score-count")];
+    this.players = [
+        new Sidebar(".correct-count", ".incorrect-count", ".score-count"),
+    ];
     // this.getMode = () => document.querySelectorAll("[data-Mode]");
 };

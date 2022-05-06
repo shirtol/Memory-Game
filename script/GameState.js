@@ -7,11 +7,13 @@
 import { Cards } from "./Cards.js";
 import { PlayerMode } from "./PlayerMode.js";
 import { Difficulty } from "./Difficulty.js";
-import { EndGame } from "./EndGame.js";
+import { ScoreboardView } from "./ScoreboardView.js";
+import { Scoreboard } from "./Scoreboard.js";
 
 export const GameState = function () {
     this.cards = new Cards();
-    this.endGame = new EndGame();
+    this.scoreboard = new Scoreboard();
+    this.scoreboardView = new ScoreboardView(this.scoreboard);
     this.playerMode = new PlayerMode();
     this.animals = [
         "dog",
@@ -65,7 +67,6 @@ export const GameState = function () {
         "hedgehog",
         "whale",
     ];
-
     this.difficult = new Difficulty();
     this.endGameEl = document.querySelector(".end-game");
     this.endGameBtn = document.querySelector("#end-game-btn");
