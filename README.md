@@ -35,5 +35,3 @@ Change listener -->
 ## Game Link
 
 [Memory Game](https://memory-game-kts.netlify.app/)
-
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=shirtol&repo=Memory-Game)](https://github.com/shirtol/Memory-Game)

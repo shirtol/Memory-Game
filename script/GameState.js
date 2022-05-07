@@ -47,7 +47,6 @@ export const GameState = function () {
      */
     this.difficult = new Difficulty();
 
-    //TODO: Delete this 2 elements from here and move them to a better place
     /**
      * @type {HTMLElement}
      */
