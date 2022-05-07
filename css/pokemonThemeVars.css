@@ -27,6 +27,7 @@
     --podium-third-color: #bb7760;
     --popup-txt-color: var(--sidebar-txt-color);
     --btn-shadow: none;
+    --change-mode-txt-color: var(--sidebar-txt-color);
 
     /* width and height */
     --difficulty-score-width: 5rem;

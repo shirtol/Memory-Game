@@ -432,17 +432,23 @@ footer {
 }
 
 /* Theme */
+
 [data-theme="pokemon"] img,
 [data-theme="animals"] img {
     width: 8rem;
     height: 8rem;
     border-radius: 20px;
+    filter: saturate(20%);
 }
 
 [data-theme="pokemon"],
 [data-theme="animals"] {
     background: transparent;
     cursor: pointer;
+}
+
+[data-theme].selected-theme img {
+    filter: saturate(100%);
 }
 
 [data-theme="pokemon"]::before {
@@ -453,6 +459,7 @@ footer {
     top: 1rem;
     z-index: 50;
     display: block;
+    color: var(--change-mode-txt-color);
 }
 
 [data-mode="Solo"]::before {
@@ -462,6 +469,7 @@ footer {
     padding-left: 1rem;
     bottom: 1rem;
     z-index: 50;
+    color: var(--change-mode-txt-color);
 }
 
 /* score show */

@@ -22,12 +22,21 @@ export class Theme {
         this.itemsTheme = Deck[this.pickedTheme];
     };
 
+    toggleThemeClass = () => {
+        document
+            .querySelector(`[data-theme=${this.pickedTheme}]`)
+            .classList.toggle("selected-theme");
+    };
+
     addClickEventToAllThemes = () => {
-        console.log(this.pickedTheme);
         this.themesElArr.forEach((theme) => {
             theme.addEventListener("click", () => {
+                this.toggleThemeClass();
                 this.pickedTheme = theme.getAttribute("data-theme");
+                this.toggleThemeClass();
                 this.changeTheme();
+                document.querySelector(".change-mode-btn").style.pointerEvents =
+                    "none";
             });
         });
     };
