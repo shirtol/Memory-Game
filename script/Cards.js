@@ -7,6 +7,9 @@ import { Observable } from "./Observable.js";
  * @class
  */
 export class Cards {
+    /**
+     * @type {number}
+     */
     static get FLIP_HOLD() {
         return 800;
     }
@@ -24,6 +27,9 @@ export class Cards {
          */
         this.flippedCardsArr = new Observable([]);
 
+        /**
+         * @type {() => Observable}
+         */
         this.resetFlipedCardsArr = () =>
             (this.flippedCardsArr = new Observable([]));
         /**
@@ -130,7 +136,7 @@ export const stayOpenCardsIfNeeded = (cards) => {
         updateCounters(cards, gameState);
         cards.flippedCardsArr.value.forEach(removeClickOnCard);
         cards.flippedCardsArr.value = [];
-        setTimeout(() => gameState.media.playSound("success"),500)
+        setTimeout(() => gameState.media.playSound("success"), 500);
     }
 };
 
@@ -152,7 +158,7 @@ export const closeCardsIfNeeded = (cards) => {
             cards.flippedCardsArr.value = [];
             gameState.media.playSound("flipBack");
         }, 1000);
-        if(gameState.playerMode.pickedMode === "twoPlayer"){
+        if (gameState.playerMode.pickedMode === "twoPlayer") {
             gameState.playerMode.turn = (gameState.playerMode.turn + 1) % 2;
         }
     }
@@ -162,7 +168,6 @@ export const closeCardsIfNeeded = (cards) => {
  * @description Check if the user flipped 2 identical cards
  * @param {Cards} cards
  */
-
 export const isIdenticalCards = (cards) =>
     cards.hasTwoFlipped() &&
     cards.flippedCardsArr.value[0].getAttribute("data-type") ===

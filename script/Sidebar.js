@@ -3,16 +3,32 @@ import { Observable } from "./Observable.js";
 
 /**
  * @description This constructor holds all the elements and methods related to the sidebar element
- * @type {Sidebar}
  * @class
  */
 
-export const Sidebar = function (correctContainer, incorrectContainer, scoreContainer, timeContainer) {
+export const Sidebar = function (
+    correctContainer,
+    incorrectContainer,
+    scoreContainer,
+    timeContainer
+) {
+    /**
+     * @type {HTMLElement}
+     */
     this.correctGuesses = document.querySelector(correctContainer);
+    /**
+     * @type {HTMLElement}
+     */
     this.incorrectGuesses = document.querySelector(incorrectContainer);
+    /**
+     * @type {HTMLElement}
+     */
     this.score = document.querySelector(scoreContainer);
+    /**
+     * @type {HTMLElement}
+     */
     this.timerView = document.querySelector(timeContainer);
-    
+
     /**
      * @type {Timer}
      */
@@ -36,26 +52,34 @@ export const Sidebar = function (correctContainer, incorrectContainer, scoreCont
     this.numOfFail = new Observable(0);
 };
 
+/**
+ * @param {GameState} gameState
+ */
 export const observeChangesInCardsResults = (gameState) => {
     gameState.playerMode.players.forEach((player) => {
         player.numOfCorrect.addChangeListener((correctCount) =>
-        updateSuccessCounts(gameState, correctCount)
-    );
+            updateSuccessCounts(gameState, correctCount)
+        );
         player.numOfFail.addChangeListener((failCount) =>
-        updateFailsCounts(gameState, failCount)
-    );
+            updateFailsCounts(gameState, failCount)
+        );
         player.scoreNum.addChangeListener((newScore) =>
-        updateScore(player.score, newScore)
-    );
-    }) 
+            updateScore(player.score, newScore)
+        );
+    });
 };
 
-const updateSuccessCounts = ({ playerMode, playerMode: {players} }, newSuccessCounts) =>
-    (players[playerMode.turn].correctGuesses.textContent = newSuccessCounts);
+const updateSuccessCounts = (
+    { playerMode, playerMode: { players } },
+    newSuccessCounts
+) => (players[playerMode.turn].correctGuesses.textContent = newSuccessCounts);
 
-const updateFailsCounts = ({ playerMode, playerMode: {players} }, newFailCounts) =>
-    (players[playerMode.turn].incorrectGuesses.textContent = newFailCounts);
+const updateFailsCounts = (
+    { playerMode, playerMode: { players } },
+    newFailCounts
+) => (players[playerMode.turn].incorrectGuesses.textContent = newFailCounts);
 
-const updateScore = (scoreContainer, newScore) =>  {
-    scoreContainer.textContent = parseInt(scoreContainer.textContent) + newScore;
-}
+const updateScore = (scoreContainer, newScore) => {
+    scoreContainer.textContent =
+        parseInt(scoreContainer.textContent) + newScore;
+};

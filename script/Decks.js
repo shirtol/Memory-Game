@@ -1,4 +1,11 @@
+/**
+ * @description Deck is a class that holds the items arrays.
+ * @class
+ */
 export class Deck {
+    /**
+     * @type {string[]}
+     */
     static get animals() {
         return [
             "dog",
@@ -53,6 +60,9 @@ export class Deck {
             "whale",
         ];
     }
+    /**
+     * @type {string[]}
+     */
     static get pokemon() {
         return [
             "vulpix",
