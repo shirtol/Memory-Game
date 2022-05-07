@@ -27,6 +27,7 @@
     --podium-third-color: #bb7760;
     --popup-txt-color: var(--sidebar-txt-color);
     --btn-shadow: none;
+    --change-mode-txt-color: var(--sidebar-txt-color);
 
     /* width and height */
     --difficulty-score-width: 5rem;
@@ -34,7 +35,7 @@
     --difficulty-score-width-mobile: 4.5rem;
 
     /* Font */
-    --font-name: diloWorld;
+    --font-name: pokemon;
 
     /* Images Links */
     --bg-image: url("../assets/img/pokemon-background.jpg");
@@ -45,8 +46,8 @@
 }
 
 @font-face {
-    font-family: diloWorld;
-    src: url(../assets/fonts/diloWorld.ttf);
+    font-family: pokemon;
+    src: url(../assets/fonts/pokemon.ttf);
 }
 
 .difficulty-container > * {
@@ -61,5 +62,5 @@
     position: absolute;
     content: attr(data-difficulty);
     font-size: 1.2rem;
-    bottom: -2.5rem;
+    bottom: -2rem;
 }
