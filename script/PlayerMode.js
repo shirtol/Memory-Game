@@ -5,18 +5,36 @@ import { Sidebar } from "./Sidebar.js";
  * @class
  */
 export const PlayerMode = function () {
+    /**
+     * @type {string[]}
+     */
     this.modes = ["Solo", "One Vs One"];
+    /**
+     * @type {string}
+     */
     this.pickedMode = "onePlayer";
+    /**
+     * @type {number}
+     */
     this.turn = 0;
+    /**
+     * @type {number}
+     */
     this.intervalID = 0;
+    /**
+     * @type {HTMLElement}
+     */
     this.modeContainer = document.querySelector(".player-mode-container");
     /**
      * @type {[Sidebar]}
      */
     this.players = [
-        new Sidebar(".correct-count", ".incorrect-count", ".score-count", ".timer .count"),
+        new Sidebar(
+            ".correct-count",
+            ".incorrect-count",
+            ".score-count",
+            ".timer .count"
+        ),
     ];
     // this.getMode = () => document.querySelectorAll("[data-Mode]");
 };
-
-

@@ -4,7 +4,6 @@ import { secondToTimeStr } from "./Timer.js";
 /**
  * @class
  */
-
 export class ScoreboardView {
     /**
      *
@@ -38,7 +37,6 @@ export class ScoreboardView {
     }
 
     /**
-     *
      * @param {Scoreboard} scoreboard
      */
     addClickEventToDiffScoreboard = (scoreboard) => {
