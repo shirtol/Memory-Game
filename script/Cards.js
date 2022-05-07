@@ -25,7 +25,7 @@ export class Cards {
         this.flippedCardsArr = new Observable([]);
 
         // /**
-        //  *
+        //  * 
         //  * @type {Observable}
         //  */
         // this.numOfCorrect = new Observable(0);
