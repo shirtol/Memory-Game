@@ -26,6 +26,8 @@ function startGame() {
 
     addGameModeToContainer(gameState);
     gameModeListener(gameState);
+    muteBtnListener(gameState);
+    addClickEventToScoreboard(gameState);
     difficultyListener(gameState);
 }
 
@@ -508,4 +510,20 @@ const toggleScoreboardDisplay = () => {
     }
 };
 
-addClickEventToScoreboard(gameState);
+function muteBtnListener({media}){
+    const btns = document.querySelectorAll("button");
+    btns[0].addEventListener('click', () => {
+        media.toggleMute()
+        media.pause("bgSound");
+        btns[0].style.display = "none";
+        btns[1].style.display = "inline-block";
+    });
+    btns[1].addEventListener('click', () => {
+        media.toggleMute()
+        media.playSoundLoop("bgSound");
+        btns[1].style.display = "none";
+        btns[0].style.display = "inline-block";
+    });
+}
+
+
