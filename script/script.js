@@ -14,22 +14,9 @@ import { ScoreboardView } from "./ScoreboardView.js";
 
 export const gameState = new GameState();
 
-startGame();
 
-/**
- * @description call for menu elements of difficulty and gameMode, starts card oberver and starts by picking difficulty function
- */
-function startGame() {
-    gameModeMenu(gameState);
-    difficultyMenu(gameState);
-    addDifficultyToContainer(gameState.difficult.difficultyContainer);
 
-    addGameModeToContainer(gameState);
-    gameModeListener(gameState);
-    muteBtnListener(gameState);
-    addClickEventToScoreboard(gameState);
-    difficultyListener(gameState);
-}
+
 
 function gameModeListener({ playerMode }) {
     document.querySelector(".new-game-btn").style =
@@ -526,4 +513,20 @@ function muteBtnListener({media}){
     });
 }
 
+/**
+ * @description call for menu elements of difficulty and gameMode, starts card oberver and starts by picking difficulty function
+ */
+ const startGame = () => {
+    gameModeMenu(gameState);
+    difficultyMenu(gameState);
+    addDifficultyToContainer(gameState.difficult.difficultyContainer);
+
+    addGameModeToContainer(gameState);
+    gameModeListener(gameState);
+    muteBtnListener(gameState);
+    addClickEventToScoreboard(gameState);
+    difficultyListener(gameState);
+}
+
+startGame();
 
