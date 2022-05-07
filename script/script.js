@@ -14,10 +14,18 @@ import { ScoreboardView } from "./ScoreboardView.js";
 
 export const gameState = new GameState();
 
+/**
+ *
+ * @param {HTMLElement} btn
+ */
+const disableBtn = (btn) => (btn.style = "Pointer-events: none; opacity: 0.5");
 
-
-
-
+/**
+ *
+ * @param {Event} ev
+ * @param {PlayerMode} playerMode
+ * @returns {void}
+ */
 const changeMode = (ev, playerMode) => {
     switch (ev.target.getAttribute("data-mode")) {
         case "Solo":
@@ -35,35 +43,34 @@ const changeMode = (ev, playerMode) => {
     }
 };
 
-function gameModeListener({ playerMode }) {
+/**
+ *
+ * @param {MediaPlayer} media
+ */
+const playSoundsBgAndClick = (media) => {
+    media.playSoundLoop("bgSound");
+    media.playSound("click");
+};
+
+/**
+ *
+ * @param {{playerMode: PlayerMode, media: MediaPlayer}}
+ */
+function gameModeListener({ playerMode, media }) {
     document.querySelector(".new-game-btn").style =
         "pointer-events: none; opacity: 0.5;";
     const modeBtn = document.querySelector(".change-mode-btn");
     modeBtn.style = "pointer-events: none; opacity: 0.5;";
-    playerMode.modeContainer.addEventListener("click", (ev) => {
-        gameState.media.playSoundLoop("bgSound");
-        gameState.media.playSound("click");
-        // changeMode(ev, playerMode);
-        switch (ev.target.getAttribute("data-mode")) {
-            case "Solo":
-                playerMode.pickedMode = "onePlayer";
-                document.querySelector(".player2").style.display = "none";
-                document.querySelector(".player1-title").style.display = "none";
-                break;
-            case "One Vs One":
-                playerMode.pickedMode = "twoPlayer";
-                document.querySelector(".player2").style.display = "flex";
-                document.querySelector(".player1-title").style.display =
-                    "block";
-                break;
-            default:
-                return;
-        }
-        resetPlayerTwoElements();
-        updatePlayersArr(playerMode);
-        playerMode.modeContainer.style.display = "none";
-        modeBtn.style = "pointer-events: none; opacity: 0.5;";
-        gameState.difficult.difficultyContainer.style.display = "grid";
+    playerMode.getModesEl().forEach((modeEl) => {
+        modeEl.addEventListener("click", (ev) => {
+            playSoundsBgAndClick(media);
+            changeMode(ev, playerMode);
+            resetPlayerTwoElements();
+            updatePlayersArr(playerMode);
+            playerMode.modeContainer.style.display = "none";
+            modeBtn.style = "pointer-events: none; opacity: 0.5;";
+            gameState.difficult.difficultyContainer.style.display = "grid";
+        });
     });
 }
 
@@ -117,7 +124,6 @@ function updatePlayersArr(playerMode) {
 
 /**
  *
- * @param {GameState} gameState
  * @param {HTMLElement} newGameBtn
  */
 const updateGameWhenModePopupClose = (newGameBtn) => {
@@ -129,19 +135,19 @@ const updateGameWhenModePopupClose = (newGameBtn) => {
 
 /**
  *
- * @param {GameState} gameState
  * @param {HTMLElement} newGameBtn
+ * @param {PlayerMode} playerMode
  */
 const updateGameWhenModePopupOpen = (newGameBtn, playerMode) => {
     removeFlipCardEvent(gameState);
-    newGameBtn.style = "Pointer-events: none; opacity: 0.5";
+    disableBtn(newGameBtn);
     clearInterval(playerMode.intervalID);
     gameState.media.playSound("popUp2");
 };
 
 /**
  * @description pops up the gameMode menu when clicking the game mode button
- * @param { {playerMode: PlayerMode} } Obj
+ * @param { {playerMode: PlayerMode} }
  */
 function gameModeMenu({ playerMode }) {
     document.querySelector(".change-mode-btn").addEventListener("click", () => {
@@ -160,9 +166,9 @@ function gameModeMenu({ playerMode }) {
  *
  * @param {HTMLElement} modBtn
  */
-const updateGameWhenDifficultyPopupClose = (modBtn) => {
+const updateGameWhenDifficultyPopupClose = (modeBtn) => {
     addFlipCardEvent(gameState);
-    modBtn.style = "Pointer-events: auto; opacity: 1";
+    modeBtn.style = "Pointer-events: auto; opacity: 1";
     timer(gameState);
     gameState.media.playSound("popDown");
 };
@@ -172,16 +178,16 @@ const updateGameWhenDifficultyPopupClose = (modBtn) => {
  * @param {HTMLElement} modBtn
  * @param {PlayerMode} playerMode
  */
-const updateGameWhenDifficultyPopupOpen = (modBtn, playerMode) => {
+const updateGameWhenDifficultyPopupOpen = (modeBtn, playerMode) => {
     removeFlipCardEvent(gameState);
-    modBtn.style = "Pointer-events: none; opacity: 0.5";
+    disableBtn(modeBtn);
     clearInterval(playerMode.intervalID);
     gameState.media.playSound("popUp");
 };
 
 /**
  * @description pops up the difficulty menu when clicking the new game button
- * @param {{ difficult: Difficulty }} Obj
+ * @param {{playerMode: PlayerMode, difficult: Difficulty }}
  */
 function difficultyMenu({ playerMode, difficult }) {
     document.querySelector(".new-game-btn").addEventListener("click", () => {
@@ -189,18 +195,18 @@ function difficultyMenu({ playerMode, difficult }) {
             difficult.difficultyContainer.style.display === "grid"
                 ? "none"
                 : "grid";
-        const modBtn = document.querySelector(".change-mode-btn");
+        const modeBtn = document.querySelector(".change-mode-btn");
         if (difficult.difficultyContainer.style.display === "none") {
             updateGameWhenDifficultyPopupClose(modeBtn);
         } else {
-            updateGameWhenDifficultyPopupOpen(modBtn, playerMode);
+            updateGameWhenDifficultyPopupOpen(modeBtn, playerMode);
         }
     });
 }
 
 /**
  * @description adds the gamemode pop up to the DOM
- * @param {{ playerMode: PlayerMode }} Obj
+ * @param {{ playerMode: PlayerMode }}
  */
 function addGameModeToContainer({ playerMode }) {
     for (const mode of playerMode.modes) {
@@ -214,7 +220,7 @@ function addGameModeToContainer({ playerMode }) {
 
 /**
  * @description adds the difficulty menu pop up to the DOM
- * @param {{ difficult: Difficulty }} Obj
+ * @param {HTMLElement} container
  */
 function addDifficultyToContainer(container) {
     for (const difficulty of Difficulty.difficulties) {
@@ -244,6 +250,7 @@ const handleDifficultyClass = (index) => {
 
 /**
  * @description listens to click on difficulty element to call resetPickedDifficulty with right params
+ * @param {{difficult :Difficulty}}
  */
 function difficultyListener({ difficult }) {
     let index = 0;
@@ -281,7 +288,7 @@ const timeoutAfterPickDifficulty = (cards, difficult, theme, idx) => {
 
 /**
  * @description resets all elements and starts again all initiations for a newgame or at start
- * @param {{cards: Cards, playerMode: PlayerMode, difficult: Difficulty, theme: Theme}} Obj
+ * @param {{cards: Cards, playerMode: PlayerMode, difficult: Difficulty, theme: Theme}}
  * @param {number} idx
  */
 function resetPickedDifficulty(
@@ -351,7 +358,9 @@ function timer({ playerMode, playerMode: { players } }) {
 
 /**
  *
- * @param {*} param0
+ * @param {{easy: number[], medium: number[], hard: number[], ninja: number[]}} bestTimeScore
+ * @param {string} chosenDifficulty
+ * @param {Sidebar} player
  */
 const updateScoreboard = (bestTimeScore, chosenDifficulty, player) => {
     bestTimeScore[chosenDifficulty].push(player.timer.time.value);
@@ -420,6 +429,8 @@ function popEndGame(difficult, endGameEl, endGameBtn) {
         endGameEl.style.display = "none";
         difficult.difficultyContainer.style.display = "grid";
     });
+    disableBtn(document.querySelector(".change-mode-btn"));
+    disableBtn(document.querySelector(".new-game-btn"));
 }
 
 /**
@@ -592,16 +603,16 @@ const toggleScoreboardDisplay = () => {
     }
 };
 
-function muteBtnListener({media}){
+function muteBtnListener({ media }) {
     const btns = document.querySelectorAll("button");
-    btns[0].addEventListener('click', () => {
-        media.toggleMute()
+    btns[0].addEventListener("click", () => {
+        media.toggleMute();
         media.pause("bgSound");
         btns[0].style.display = "none";
         btns[1].style.display = "inline-block";
     });
-    btns[1].addEventListener('click', () => {
-        media.toggleMute()
+    btns[1].addEventListener("click", () => {
+        media.toggleMute();
         media.playSoundLoop("bgSound");
         btns[1].style.display = "none";
         btns[0].style.display = "inline-block";
@@ -611,7 +622,7 @@ function muteBtnListener({media}){
 /**
  * @description call for menu elements of difficulty and gameMode, starts card oberver and starts by picking difficulty function
  */
- const startGame = () => {
+const startGame = () => {
     gameModeMenu(gameState);
     difficultyMenu(gameState);
     addDifficultyToContainer(gameState.difficult.difficultyContainer);
@@ -621,7 +632,6 @@ function muteBtnListener({media}){
     muteBtnListener(gameState);
     addClickEventToScoreboard(gameState);
     difficultyListener(gameState);
-}
+};
 
 startGame();
-

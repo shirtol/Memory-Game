@@ -8,7 +8,6 @@ import { MediaPlayer } from "./Sound.js";
 
 /**
  * @description The game state constructors that holds all the game elements and methods.
- * @type {GameState}
  * @class
  */
 export const GameState = function () {
