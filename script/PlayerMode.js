@@ -26,6 +26,11 @@ export const PlayerMode = function () {
      */
     this.modeContainer = document.querySelector(".player-mode-container");
     /**
+     * @type {() => NodeList}
+     */
+    this.getModesEl = () => document.querySelectorAll("[data-mode]");
+
+    /**
      * @type {[Sidebar]}
      */
     this.players = [
@@ -36,5 +41,4 @@ export const PlayerMode = function () {
             ".timer .count"
         ),
     ];
-    // this.getMode = () => document.querySelectorAll("[data-Mode]");
 };

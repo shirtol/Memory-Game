@@ -1,6 +1,5 @@
 /**
  * @description observe changes, run all given callbacks for a given element when changed
- * @type {Observable}
  * @class
  */
 export class Observable {
