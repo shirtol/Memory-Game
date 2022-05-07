@@ -214,12 +214,8 @@ function resetPickedDifficulty(
     document.querySelector(".difficulty-container").style.display = "none";
     setGridSize(difficult.diffCardsNum[idx] / (idx + 2));
     setTimeout(() => {
-        gameBoardloop(
-            shuffle(
-                createGameBoard(theme.itemsTheme, difficult.diffCardsNum[idx])
-            )
-        );
-        addBackgroundImageToAllCards(gameState);
+        gameBoardloop(shuffle(createGameBoard(difficult.diffCardsNum[idx])));
+        addBackgroundImageToAllCards(gameState, theme.pickedTheme.value);
         cards.resetFlipedCardsArr();
         observeNumOfFlippedCards(gameState);
         addGameOverListener(gameState);
@@ -378,15 +374,15 @@ function addGameOverListener({ playerMode: { players } }) {
  * @param {Number} cardCouples
  * @returns array filled with couples of animal names
  */
-function createGameBoard(itemsTheme, cardCouples) {
-    if (itemsTheme.length < cardCouples) {
-        return "Error occured. Please check array's size";
-    }
+function createGameBoard(cardCouples) {
+    const numsPool = Array.from(Array(50).keys());
     const gameBoard = [];
-    for (let i = 0; i < cardCouples; i++) {
-        gameBoard.push(itemsTheme[i]);
-        gameBoard.push(itemsTheme[i]);
+    while (gameBoard.length < cardCouples * 2) {
+        let random = (Math.random() * numsPool.length) | 0;
+        let removeVal = numsPool.splice(random, 1);
+        gameBoard.push(`item${removeVal[0] + 1}`, `item${removeVal[0] + 1}`);
     }
+
     return gameBoard;
 }
 
@@ -427,29 +423,23 @@ function createGridElements(item) {
  * @returns shuffles array of animal names
  */
 function shuffle(array) {
-    let random;
-    const newShuffledArray = new Array();
+    let currentIndex = array.length,
+        randomIndex;
 
-    for (let i = 0; i < array.length; i++) {
-        random = getRandomIntInclusive(0, array.length - 1);
-        while (newShuffledArray[random] !== undefined) {
-            random = getRandomIntInclusive(0, array.length - 1);
-        }
-        newShuffledArray[random] = array[i];
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+        // Pick a remaining element.
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex],
+            array[currentIndex],
+        ];
     }
-    return newShuffledArray;
-}
 
-/**
- *
- * @param {Number} min
- * @param {Number} max
- * @returns random number between min and max
- */
-function getRandomIntInclusive(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1) + min);
+    return array;
 }
 
 /**
@@ -457,20 +447,25 @@ function getRandomIntInclusive(min, max) {
  * @param {{cards: Cards, theme: Theme}} Obj
  */
 
-const addBackgroundImageToAllCards = ({ cards, theme }) => {
+const addBackgroundImageToAllCards = ({ cards }, pickedTheme) => {
     cards.getAllCards().forEach((card) => {
         card.classList.add("box-shadow");
         const [cardType, backCard, frontCard] = getElementsForCard(card);
         applyStylesToCard(
             backCard,
-            `./assets/img/${theme.pickedTheme}/${cardType}.webp`
+            `./assets/img/${pickedTheme}/${cardType}.webp`
         );
-        applyStylesToCard(
-            frontCard,
-            `./assets/img/front/${theme.pickedTheme}.png`
-        );
+        applyStylesToCard(frontCard, `./assets/img/${pickedTheme}/front.png`);
     });
 };
+
+const addChangeListenerToTheme = ({ theme }) => {
+    theme.pickedTheme.addChangeListener((pickedTheme) =>
+        addBackgroundImageToAllCards(gameState, pickedTheme)
+    );
+};
+
+addChangeListenerToTheme(gameState);
 
 const getElementsForCard = (card) => [
     card.getAttribute("data-type"),
@@ -479,6 +474,9 @@ const getElementsForCard = (card) => [
 ];
 
 const applyStylesToCard = (cardEl, imgSrc) => {
+    if (cardEl.firstChild) {
+        cardEl.removeChild(cardEl.firstChild);
+    }
     const imgEl = document.createElement("img");
     imgEl.src = imgSrc;
     imgEl.classList.add("item-img");

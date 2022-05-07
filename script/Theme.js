@@ -1,4 +1,4 @@
-import { Deck } from "./Decks.js";
+import { Observable } from "./Observable.js";
 
 /**
  * @class
@@ -7,24 +7,22 @@ import { Deck } from "./Decks.js";
 export class Theme {
     constructor() {
         this.themesElArr = document.querySelectorAll("[data-theme]");
-        this.pickedTheme = "animals";
+        this.pickedTheme = new Observable("animals");
         this.themeStyle = document.querySelector("#selected-theme");
 
-        this.itemsTheme = Deck.animals;
         this.addClickEventToAllThemes();
     }
 
     changeTheme = () => {
         this.themeStyle.setAttribute(
             "href",
-            `./css/${this.pickedTheme}ThemeVars.css`
+            `./css/${this.pickedTheme.value}ThemeVars.css`
         );
-        this.itemsTheme = Deck[this.pickedTheme];
     };
 
     toggleThemeClass = () => {
         document
-            .querySelector(`[data-theme=${this.pickedTheme}]`)
+            .querySelector(`[data-theme=${this.pickedTheme.value}]`)
             .classList.toggle("selected-theme");
     };
 
@@ -32,11 +30,9 @@ export class Theme {
         this.themesElArr.forEach((theme) => {
             theme.addEventListener("click", () => {
                 this.toggleThemeClass();
-                this.pickedTheme = theme.getAttribute("data-theme");
+                this.pickedTheme.value = theme.getAttribute("data-theme");
                 this.toggleThemeClass();
                 this.changeTheme();
-                document.querySelector(".change-mode-btn").style.pointerEvents =
-                    "none";
             });
         });
     };
