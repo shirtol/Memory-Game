@@ -322,6 +322,8 @@ footer {
     flex-direction: column;
     justify-content: flex-end;
     flex-shrink: 0;
+    padding: 0;
+    padding-bottom: 2rem;
 }
 
 .scoreboard-container i {
@@ -579,6 +581,10 @@ footer {
         grid-template-columns: repeat(2, 1fr);
         width: 70%;
         height: max-content;
+    }
+
+    .difficulty-container {
+        width: 80%;
     }
 
     .difficulty-container > *,
