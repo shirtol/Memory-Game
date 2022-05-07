@@ -3,7 +3,6 @@ import { gameState } from "./script.js";
 
 /**
  * @description a Timer that has a value of total seconds counted, and the DOM element showing the timer
- * @type {Timer}
  * @class
  */
 export const Timer = function () {
@@ -18,7 +17,10 @@ export const Timer = function () {
 
 export const observeTime = (timer) => {
     timer.time.addChangeListener((newTime) =>
-        updateTime(newTime, gameState.playerMode.players[gameState.playerMode.turn].timerView)
+        updateTime(
+            newTime,
+            gameState.playerMode.players[gameState.playerMode.turn].timerView
+        )
     );
 };
 

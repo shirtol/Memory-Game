@@ -54,7 +54,7 @@ const playSoundsBgAndClick = (media) => {
  *
  * @param {{playerMode: PlayerMode, media: MediaPlayer}}
  */
-function gameModeListener({ playerMode, media }) {
+const gameModeListener = ({ playerMode, media }) => {
     document.querySelector(".new-game-btn").style =
         "pointer-events: none; opacity: 0.5;";
     const modeBtn = document.querySelector(".change-mode-btn");
@@ -70,9 +70,9 @@ function gameModeListener({ playerMode, media }) {
             gameState.difficult.difficultyContainer.style.display = "grid";
         });
     });
-}
+};
 
-function resetPlayerTwoElements() {
+const resetPlayerTwoElements = () => {
     const elements = [
         ".correct-count",
         ".incorrect-count",
@@ -86,7 +86,7 @@ function resetPlayerTwoElements() {
     }
     document.querySelector(".p2-timer .p2-count").textContent = "00:00";
     document.querySelector(".timer .count").textContent = "00:00";
-}
+};
 
 /**
  *
@@ -105,7 +105,7 @@ const hasToPushPlayer = (playerMode) =>
 /**
  * @param {PlayerMode} playerMode
  */
-function updatePlayersArr(playerMode) {
+const updatePlayersArr = (playerMode) => {
     if (hasToPopPlayer(playerMode)) {
         playerMode.players.pop();
     } else if (hasToPushPlayer(playerMode)) {
@@ -118,7 +118,7 @@ function updatePlayersArr(playerMode) {
             )
         );
     }
-}
+};
 
 /**
  *
@@ -147,7 +147,7 @@ const updateGameWhenModePopupOpen = (newGameBtn, playerMode) => {
  * @description pops up the gameMode menu when clicking the game mode button
  * @param { {playerMode: PlayerMode} }
  */
-function gameModeMenu({ playerMode }) {
+const gameModeMenu = ({ playerMode }) => {
     document.querySelector(".change-mode-btn").addEventListener("click", () => {
         playerMode.modeContainer.style.display =
             playerMode.modeContainer.style.display === "grid" ? "none" : "grid";
@@ -158,7 +158,7 @@ function gameModeMenu({ playerMode }) {
             updateGameWhenModePopupOpen(newGameBtn, playerMode);
         }
     });
-}
+};
 
 /**
  *
@@ -187,7 +187,7 @@ const updateGameWhenDifficultyPopupOpen = (modeBtn, playerMode) => {
  * @description pops up the difficulty menu when clicking the new game button
  * @param {{playerMode: PlayerMode, difficult: Difficulty }}
  */
-function difficultyMenu({ playerMode, difficult }) {
+const difficultyMenu = ({ playerMode, difficult }) => {
     document.querySelector(".new-game-btn").addEventListener("click", () => {
         difficult.difficultyContainer.style.display =
             difficult.difficultyContainer.style.display === "grid"
@@ -200,13 +200,13 @@ function difficultyMenu({ playerMode, difficult }) {
             updateGameWhenDifficultyPopupOpen(modeBtn, playerMode);
         }
     });
-}
+};
 
 /**
  * @description adds the gamemode pop up to the DOM
  * @param {{ playerMode: PlayerMode }}
  */
-function addGameModeToContainer({ playerMode }) {
+const addGameModeToContainer = ({ playerMode }) => {
     for (const mode of playerMode.modes) {
         const modeEl = document.createElement("div");
         modeEl.setAttribute("data-mode", mode);
@@ -214,13 +214,13 @@ function addGameModeToContainer({ playerMode }) {
         modeEl.classList.add("center-img");
         playerMode.modeContainer.appendChild(modeEl);
     }
-}
+};
 
 /**
  * @description adds the difficulty menu pop up to the DOM
  * @param {HTMLElement} container
  */
-function addDifficultyToContainer(container) {
+const addDifficultyToContainer = (container) => {
     for (const difficulty of Difficulty.difficulties) {
         const difficultyEl = document.createElement("div");
         difficultyEl.setAttribute("data-difficulty", difficulty);
@@ -228,7 +228,7 @@ function addDifficultyToContainer(container) {
         difficultyEl.classList.add("center-img");
         container.appendChild(difficultyEl);
     }
-}
+};
 
 const addStyleToModeBtns = () => {
     document.querySelector(".new-game-btn").style =
@@ -250,7 +250,7 @@ const handleDifficultyClass = (index) => {
  * @description listens to click on difficulty element to call resetPickedDifficulty with right params
  * @param {{difficult :Difficulty}}
  */
-function difficultyListener({ difficult }) {
+const difficultyListener = ({ difficult }) => {
     let index = 0;
     difficult.difficultyContainer.addEventListener("click", (ev) => {
         gameState.media.playSound("click");
@@ -264,7 +264,7 @@ function difficultyListener({ difficult }) {
         gameState.media.playSound("deal");
         handleDifficultyClass(index);
     });
-}
+};
 
 /**
  * @param {Cards} cards
@@ -289,10 +289,10 @@ const timeoutAfterPickDifficulty = (cards, difficult, theme, idx) => {
  * @param {{cards: Cards, playerMode: PlayerMode, difficult: Difficulty, theme: Theme}}
  * @param {number} idx
  */
-function resetPickedDifficulty(
+const resetPickedDifficulty = (
     { cards, playerMode, playerMode: { players }, difficult, theme },
     idx
-) {
+) => {
     playerMode.turn = 0;
     resetCardsContainer();
     clearInterval(playerMode.intervalID);
@@ -301,15 +301,15 @@ function resetPickedDifficulty(
     document.querySelector(".difficulty-container").style.display = "none";
     setGridSize(difficult.diffCardsNum[idx] / (idx + 2));
     timeoutAfterPickDifficulty(cards, difficult, theme, idx);
-}
+};
 
-function resetCardsContainer() {
+const resetCardsContainer = () => {
     const gameCon = document.querySelector(".game-container");
     const newCardContainer = document.createElement("div");
     document.querySelector(".cards-container").remove();
     newCardContainer.classList.add("cards-container");
     gameCon.appendChild(newCardContainer);
-}
+};
 
 /**
  * @param {Sidebar} player
@@ -324,7 +324,7 @@ const removeAllPlayerChangeListeners = (player) => {
 /**
  * @param {Sidebar[]} players
  */
-function resetPlayers(players) {
+const resetPlayers = (players) => {
     players.forEach((player) => {
         player.numOfCorrect.value = 0;
         player.numOfFail.value = 0;
@@ -332,17 +332,17 @@ function resetPlayers(players) {
         observeTime(player.timer);
         player.timer.time.value = 0;
     });
-}
+};
 
 /**
  * @description sets grid size when changing difficulty
  * @param {Number} size
  */
-function setGridSize(size) {
+const setGridSize = (size) => {
     const container = document.querySelector(".cards-container");
     container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
     container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
-}
+};
 
 /**
  * @description starts time interval and updates time counter
@@ -544,7 +544,7 @@ const createGridElementChildren = (grid, keywords, cardWrap) => {
  * @param {String} array
  * @returns shuffles array of animal names
  */
-function shuffle(array) {
+const shuffle = (array) => {
     let currentIndex = array.length,
         randomIndex;
     while (currentIndex != 0) {
@@ -557,7 +557,7 @@ function shuffle(array) {
         ];
     }
     return array;
-}
+};
 
 /**
  * @description Add the background image to all cards

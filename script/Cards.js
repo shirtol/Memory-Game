@@ -2,8 +2,7 @@ import { gameState } from "./script.js";
 import { Observable } from "./Observable.js";
 
 /**
- *  @description cards constructor holds all the cards methods and elements
- * @type {Cards}
+ * @description cards constructor holds all the cards methods and elements
  * @class
  */
 export class Cards {

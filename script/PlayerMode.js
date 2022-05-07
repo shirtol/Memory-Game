@@ -41,5 +41,4 @@ export const PlayerMode = function () {
             ".timer .count"
         ),
     ];
-    // this.getMode = () => document.querySelectorAll("[data-Mode]");
 };

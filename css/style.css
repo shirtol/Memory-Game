@@ -13,7 +13,7 @@ html {
     user-select: none;
 }
 
-button{
+button {
     position: absolute;
     top: 1rem;
     left: 1rem;
@@ -22,7 +22,7 @@ button{
     font-size: 2rem;
 }
 
-.mute-btn2{
+.mute-btn2 {
     display: none;
 }
 
@@ -65,9 +65,7 @@ button{
 
 .left-sidebar {
     display: flex;
-    /* flex-direction: column; */
     width: 25%;
-    /* align-items: center; */
     justify-content: center;
     gap: 1rem;
     background: var(--sidebar-bg-color);
@@ -92,7 +90,6 @@ button{
     display: none;
 }
 
-/* may not need this after 2 player change */
 .left-sidebar > * {
     align-items: center;
     display: flex;
@@ -148,7 +145,6 @@ footer {
     border: 1px black solid;
     padding: 1rem;
     margin-bottom: 1rem;
-    /* margin-top: 4rem; */
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
         rgba(0, 0, 0, 0.22) 0px 15px 12px;
@@ -508,16 +504,12 @@ footer {
     .left-sidebar {
         flex-direction: column;
         width: 80%;
-        /* align-items: center; */
-        /* justify-content: center; */
         margin-bottom: 2rem;
         height: max-content;
         background: none;
         margin-left: 0;
         background: var(--sidebar-bg-color);
         padding: 0.8rem;
-
-        /* gap: 0; */
     }
 
     .player1,
@@ -635,7 +627,6 @@ footer {
 
     .left-sidebar > * {
         font-size: 1.1rem;
-        /* margin-left: 10rem; */
     }
     /* Scoreboard */
     .scoreboard-container {
@@ -649,7 +640,6 @@ footer {
 
     .podium > *::after {
         transform: rotate(90deg);
-        /* top: 0; */
         right: auto;
         left: auto;
         top: 1rem;
