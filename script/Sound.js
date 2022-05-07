@@ -52,3 +52,6 @@ export const MediaPlayer = function () {
       }
   };
 };
+
+// gameState.media.mute();
+// gameState.media.stop("bgSound");
