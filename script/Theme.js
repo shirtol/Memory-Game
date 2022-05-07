@@ -1,3 +1,5 @@
+import { Deck } from "./Decks.js";
+
 /**
  * @class
  */
@@ -7,6 +9,8 @@ export class Theme {
         this.themesElArr = document.querySelectorAll("[data-theme]");
         this.pickedTheme = "animals";
         this.themeStyle = document.querySelector("#selected-theme");
+
+        this.itemsTheme = this.pokemon;
         this.addClickEventToAllThemes();
     }
 
@@ -15,6 +19,7 @@ export class Theme {
             "href",
             `./css/${this.pickedTheme}ThemeVars.css`
         );
+        this.itemsTheme = Deck[this.pickedTheme];
     };
 
     addClickEventToAllThemes = () => {

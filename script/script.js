@@ -8,6 +8,7 @@ import { observeTime } from "./Timer.js";
 import { GameState } from "./GameState.js";
 import { observeChangesInCardsResults, Sidebar } from "./Sidebar.js";
 import { Difficulty } from "./Difficulty.js";
+import { Theme } from "./Theme.js";
 import { Scoreboard } from "./Scoreboard.js";
 import { ScoreboardView } from "./ScoreboardView.js";
 
@@ -29,7 +30,8 @@ function startGame() {
 }
 
 function gameModeListener({ playerMode }) {
-    document.querySelector(".new-game-btn").style = "pointer-events: none; opacity: 0.5;";
+    document.querySelector(".new-game-btn").style =
+        "pointer-events: none; opacity: 0.5;";
     const modeBtn = document.querySelector(".change-mode-btn");
     modeBtn.style = "pointer-events: none; opacity: 0.5;";
     playerMode.modeContainer.addEventListener("click", (ev) => {
@@ -58,15 +60,16 @@ function gameModeListener({ playerMode }) {
     });
 }
 
-function resetPlayerTwoElements(){
+function resetPlayerTwoElements() {
     const elements = [
-    ".correct-count",
-    ".incorrect-count",
-    ".score-count",
-    ".p2-correct-count",
-    ".p2-incorrect-count",
-    ".p2-score-count"];
-    for(let el of elements){
+        ".correct-count",
+        ".incorrect-count",
+        ".score-count",
+        ".p2-correct-count",
+        ".p2-incorrect-count",
+        ".p2-score-count",
+    ];
+    for (let el of elements) {
         document.querySelector(el).textContent = "0";
     }
     document.querySelector(".p2-timer .p2-count").textContent = "00:00";
@@ -102,7 +105,7 @@ function gameModeMenu({ playerMode }) {
     document.querySelector(".change-mode-btn").addEventListener("click", () => {
         playerMode.modeContainer.style.display =
             playerMode.modeContainer.style.display === "grid" ? "none" : "grid";
-        const newGameBtn =  document.querySelector(".new-game-btn");
+        const newGameBtn = document.querySelector(".new-game-btn");
         if (playerMode.modeContainer.style.display === "none") {
             addFlipCardEvent(gameState);
             newGameBtn.style = "Pointer-events: auto; opacity: 1";
@@ -121,7 +124,7 @@ function gameModeMenu({ playerMode }) {
  * @description pops up the difficulty menu when clicking the new game button
  * @param {{ difficult: Difficulty }} Obj
  */
-function difficultyMenu({playerMode, difficult }) {
+function difficultyMenu({ playerMode, difficult }) {
     document.querySelector(".new-game-btn").addEventListener("click", () => {
         difficult.difficultyContainer.style.display =
             difficult.difficultyContainer.style.display === "grid"
@@ -180,12 +183,14 @@ function difficultyListener({ difficult }) {
         index = Difficulty.difficulties.indexOf(
             ev.target.getAttribute("data-difficulty")
         );
-        if(index === -1){
+        if (index === -1) {
             return;
         }
         gameState.difficult.coupleNum = gameState.difficult.diffCardsNum[index];
-        document.querySelector(".new-game-btn").style = "pointer-events: auto; opacity: 1;";
-        document.querySelector(".change-mode-btn").style = "pointer-events: auto; opacity: 1;";
+        document.querySelector(".new-game-btn").style =
+            "pointer-events: auto; opacity: 1;";
+        document.querySelector(".change-mode-btn").style =
+            "pointer-events: auto; opacity: 1;";
         gameState.difficult.chosenDifficulty = Difficulty.difficulties[index];
         gameState.media.playSound("deal");
         resetPickedDifficulty(gameState, index);
@@ -194,11 +199,11 @@ function difficultyListener({ difficult }) {
 
 /**
  * @description resets all elements and starts again all initiations for a newgame or at start
- * @param {{cards: Cards, playerMode: PlayerMode, difficult: Difficulty, animals: string[]}} Obj
+ * @param {{cards: Cards, playerMode: PlayerMode, difficult: Difficulty, theme: Theme}} Obj
  * @param {number} idx
  */
 function resetPickedDifficulty(
-    { cards, playerMode, playerMode: { players }, difficult, animals },
+    { cards, playerMode, playerMode: { players }, difficult, theme },
     idx
 ) {
     playerMode.turn = 0;
@@ -210,7 +215,9 @@ function resetPickedDifficulty(
     setGridSize(difficult.diffCardsNum[idx] / (idx + 2));
     setTimeout(() => {
         gameBoardloop(
-            shuffle(createGameBoard(animals, difficult.diffCardsNum[idx]))
+            shuffle(
+                createGameBoard(theme.itemsTheme, difficult.diffCardsNum[idx])
+            )
         );
         addBackgroundImageToAllCards(gameState);
         cards.resetFlipedCardsArr();
@@ -258,7 +265,7 @@ function setGridSize(size) {
  */
 function timer({ playerMode, playerMode: { players } }) {
     playerMode.intervalID = setInterval(() => {
-    players[playerMode.turn].timer.time.value += 1;
+        players[playerMode.turn].timer.time.value += 1;
     }, 1000);
 }
 
@@ -279,7 +286,7 @@ const updateScoreboard = (bestTimeScore, chosenDifficulty, player) => {
  * @description check if game is over update the score pop up the game end and listen to a new game click
  * @param {{playerMode: PlayerMode, difficult: Difficulty, scoreboard: Scoreboard, endGameEl: ScoreboardView, endGameBtn: ScoreboardView}}
  */
- export function checkGameOver({
+export function checkGameOver({
     playerMode,
     difficult,
     scoreboard,
@@ -295,7 +302,9 @@ const updateScoreboard = (bestTimeScore, chosenDifficulty, player) => {
         const scoreMsg = document.querySelector("#scoreMsg");
         const scoreNum = document.querySelector("#scoreShow");
         clearInterval(playerMode.intervalID);
-        playerMode.players.forEach((player) => updateFinalScore(gameState, player));
+        playerMode.players.forEach((player) =>
+            updateFinalScore(gameState, player)
+        );
         console.log(playerMode.players[0].score.textContent);
         if (playerMode.pickedMode === "twoPlayer") {
             let winnerName = "Player 1";
@@ -320,7 +329,7 @@ const updateScoreboard = (bestTimeScore, chosenDifficulty, player) => {
     }
 }
 
-function popEndGame(difficult, endGameEl, endGameBtn){
+function popEndGame(difficult, endGameEl, endGameBtn) {
     setTimeout(() => {
         endGameEl.style.display = "flex";
         gameState.media.playSound("winSound");
@@ -338,19 +347,19 @@ function popEndGame(difficult, endGameEl, endGameBtn){
  * @param {{playerMode: {players: Sidebar[]}, difficult: {coupleNum: Number}}} Obj
  */
 
-function updateFinalScore({playerMode,
-    difficult: { coupleNum },
-}, player) {
+function updateFinalScore({ playerMode, difficult: { coupleNum } }, player) {
     const timeFactor = 2000,
         failFactor = 150;
     let timeBonus = (coupleNum * timeFactor) / player.timer.time.value;
     let failPenalty = (player.numOfFail.value * failFactor) / coupleNum;
     let difficultyBonus = coupleNum / 8;
-    let correctBonus = playerMode.pickedMode === "twoPlayer" ? player.numOfCorrect.value * 50 : 0;
+    let correctBonus =
+        playerMode.pickedMode === "twoPlayer"
+            ? player.numOfCorrect.value * 50
+            : 0;
     let total = (timeBonus + correctBonus - failPenalty) * difficultyBonus;
 
-    player.scoreNum.value =
-        total > coupleNum * 20 ? total | 0 : coupleNum * 20;
+    player.scoreNum.value = total > coupleNum * 20 ? total | 0 : coupleNum * 20;
 }
 
 /**
@@ -365,18 +374,18 @@ function addGameOverListener({ playerMode: { players } }) {
 
 /**
  *
- * @param {String[]} animals
+ * @param {String[]} itemsTheme
  * @param {Number} cardCouples
  * @returns array filled with couples of animal names
  */
-function createGameBoard(animals, cardCouples) {
-    if (animals.length < cardCouples) {
+function createGameBoard(itemsTheme, cardCouples) {
+    if (itemsTheme.length < cardCouples) {
         return "Error occured. Please check array's size";
     }
     const gameBoard = [];
     for (let i = 0; i < cardCouples; i++) {
-        gameBoard.push(animals[i]);
-        gameBoard.push(animals[i]);
+        gameBoard.push(itemsTheme[i]);
+        gameBoard.push(itemsTheme[i]);
     }
     return gameBoard;
 }
@@ -445,15 +454,21 @@ function getRandomIntInclusive(min, max) {
 
 /**
  * @description Add the background image to all cards
- * @param {{cards: Cards}} Obj
+ * @param {{cards: Cards, theme: Theme}} Obj
  */
 
-const addBackgroundImageToAllCards = ({ cards }) => {
+const addBackgroundImageToAllCards = ({ cards, theme }) => {
     cards.getAllCards().forEach((card) => {
         card.classList.add("box-shadow");
         const [cardType, backCard, frontCard] = getElementsForCard(card);
-        applyStylesToCard(backCard, `./assets/img/animals/${cardType}.webp`);
-        applyStylesToCard(frontCard, `./assets/img/front/paw1.png`);
+        applyStylesToCard(
+            backCard,
+            `./assets/img/${theme.pickedTheme}/${cardType}.webp`
+        );
+        applyStylesToCard(
+            frontCard,
+            `./assets/img/front/${theme.pickedTheme}.png`
+        );
     });
 };
 
@@ -490,7 +505,7 @@ const toggleScoreboardDisplay = () => {
         gameState.scoreboardView.scoreboardContainer.style.display === "flex"
             ? "none"
             : "flex";
-    if(gameState.scoreboardView.scoreboardContainer.style.display === "flex"){
+    if (gameState.scoreboardView.scoreboardContainer.style.display === "flex") {
         gameState.media.playSound("scoreBoard");
     }
 };
