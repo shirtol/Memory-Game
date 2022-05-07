@@ -477,11 +477,6 @@ footer {
     margin-top: 1rem;
 }
 
-/* !TODO: Try to figure out how to scale the elements without affecting the pseudo elements  */
-/* .btn-container > *:hover {
-    -webkit-transform: scale(1.05);
-} */
-
 /* media query */
 
 @media (max-width: 1000px) {
@@ -608,7 +603,11 @@ footer {
     }
 
     .player-mode-container > * {
-        font-size: 1.3rem;
+        height: 7rem;
+    }
+
+    .player-mode-container > * {
+        font-size: 1.2rem;
     }
 
     .cards-container {
