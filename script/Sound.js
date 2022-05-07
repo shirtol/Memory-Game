@@ -27,6 +27,7 @@ export const MediaPlayer = function () {
   this.winSound = new Sounds("win.wav");
   this.winVoice = new Sounds("winVoice.wav");
   this.scoreBoard = new Sounds("scoreBoard.wav");
+  this.mute = false;
 
 
   /**
@@ -36,20 +37,32 @@ export const MediaPlayer = function () {
    this.playSound = (effect) => {
     if (this[effect] !== undefined) {
         this[effect].file.currentTime = 0;
+        this[effect].file.muted = this.mute;
         this[effect].file.play();
     } else {
         console.warn(`This tile doesn't exists`);
     }
   };
+
   this.playSoundLoop = (effect) => {
       if (this[effect] !== undefined) {
           this[effect].file.currentTime = 0;
+          this[effect].file.muted = this.mute;
           this[effect].file.volume = 0.4;
           this[effect].file.loop = true;
           this[effect].file.play();
       } else {
           console.warn(`This tile doesn't exists`);
       }
+  };
+
+  this.pause = (effect) => {
+    this[effect].file.pause();
+  };
+
+  this.toggleMute = () => {
+    this.mute = !this.mute;
+    return this.mute;
   };
 };
 

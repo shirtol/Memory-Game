@@ -14,20 +14,9 @@ import { ScoreboardView } from "./ScoreboardView.js";
 
 export const gameState = new GameState();
 
-startGame();
 
-/**
- * @description call for menu elements of difficulty and gameMode, starts card oberver and starts by picking difficulty function
- */
-function startGame() {
-    gameModeMenu(gameState);
-    difficultyMenu(gameState);
-    addDifficultyToContainer(gameState.difficult.difficultyContainer);
 
-    addGameModeToContainer(gameState);
-    gameModeListener(gameState);
-    difficultyListener(gameState);
-}
+
 
 const changeMode = (ev, playerMode) => {
     switch (ev.target.getAttribute("data-mode")) {
@@ -603,4 +592,36 @@ const toggleScoreboardDisplay = () => {
     }
 };
 
-addClickEventToScoreboard(gameState);
+function muteBtnListener({media}){
+    const btns = document.querySelectorAll("button");
+    btns[0].addEventListener('click', () => {
+        media.toggleMute()
+        media.pause("bgSound");
+        btns[0].style.display = "none";
+        btns[1].style.display = "inline-block";
+    });
+    btns[1].addEventListener('click', () => {
+        media.toggleMute()
+        media.playSoundLoop("bgSound");
+        btns[1].style.display = "none";
+        btns[0].style.display = "inline-block";
+    });
+}
+
+/**
+ * @description call for menu elements of difficulty and gameMode, starts card oberver and starts by picking difficulty function
+ */
+ const startGame = () => {
+    gameModeMenu(gameState);
+    difficultyMenu(gameState);
+    addDifficultyToContainer(gameState.difficult.difficultyContainer);
+
+    addGameModeToContainer(gameState);
+    gameModeListener(gameState);
+    muteBtnListener(gameState);
+    addClickEventToScoreboard(gameState);
+    difficultyListener(gameState);
+}
+
+startGame();
+
