@@ -10,7 +10,7 @@ export class Theme {
         this.pickedTheme = "animals";
         this.themeStyle = document.querySelector("#selected-theme");
 
-        this.itemsTheme = this.pokemon;
+        this.itemsTheme = Deck.animals;
         this.addClickEventToAllThemes();
     }
 
