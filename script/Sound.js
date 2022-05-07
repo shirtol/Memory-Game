@@ -65,6 +65,3 @@ export const MediaPlayer = function () {
     return this.mute;
   };
 };
-
-// gameState.media.mute();
-// gameState.media.stop("bgSound");

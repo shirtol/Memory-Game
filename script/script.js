@@ -12,11 +12,6 @@ import { Theme } from "./Theme.js";
 import { Scoreboard } from "./Scoreboard.js";
 import { ScoreboardView } from "./ScoreboardView.js";
 
-export const gameState = new GameState();
-
-
-
-
 
 function gameModeListener({ playerMode }) {
     document.querySelector(".new-game-btn").style =
@@ -248,15 +243,17 @@ function setGridSize(size) {
  * @description starts time interval and updates time counter
  * @param {{playerMode : PlayerMode}} Obj
  */
-function timer({ playerMode, playerMode: { players } }) {
+const timer = ({ playerMode, playerMode: { players } }) => {
     playerMode.intervalID = setInterval(() => {
         players[playerMode.turn].timer.time.value += 1;
     }, 1000);
 }
 
 /**
- *
- * @param {*} param0
+ * @description takes the bestime score obj that has all the 3 best scores for each difficulty, a new score, and updates the new difficulty with the 3 new best
+ * @param {obj} bestTimeScore
+ * @param {string} chosenDifficulty
+ * @param {Sidebar} player
  */
 const updateScoreboard = (bestTimeScore, chosenDifficulty, player) => {
     bestTimeScore[chosenDifficulty].push(player.timer.time.value);
@@ -271,40 +268,23 @@ const updateScoreboard = (bestTimeScore, chosenDifficulty, player) => {
  * @description check if game is over update the score pop up the game end and listen to a new game click
  * @param {{playerMode: PlayerMode, difficult: Difficulty, scoreboard: Scoreboard, endGameEl: ScoreboardView, endGameBtn: ScoreboardView}}
  */
-export function checkGameOver({
+export const checkGameOver = ({
     playerMode,
     difficult,
     scoreboard,
     endGameEl,
     endGameBtn,
-}) {
-    let winner = playerMode.players[0];
+}) => {
     const cardCouples = playerMode.players.reduce(
         (acc, player) => (acc += player.numOfCorrect.value),
         0
     );
     if (cardCouples === difficult.coupleNum) {
-        const scoreMsg = document.querySelector("#scoreMsg");
-        const scoreNum = document.querySelector("#scoreShow");
         clearInterval(playerMode.intervalID);
         playerMode.players.forEach((player) =>
             updateFinalScore(gameState, player)
         );
-        console.log(playerMode.players[0].score.textContent);
-        if (playerMode.pickedMode === "twoPlayer") {
-            let winnerName = "Player 1";
-            if (
-                playerMode.players[0].scoreNum.value <
-                playerMode.players[1].scoreNum.value
-            ) {
-                winner = playerMode.players[1];
-                winnerName = "Player 2";
-            }
-            scoreMsg.textContent = `${winnerName} Won!`;
-        } else {
-            scoreMsg.textContent = `You Won!`;
-        }
-        scoreNum.textContent = `Score: ${winner.scoreNum.value}`;
+        let winner = setWinnerAndSetMsg(playerMode);
         updateScoreboard(
             scoreboard.bestTimeScore,
             difficult.chosenDifficulty,
@@ -314,7 +294,39 @@ export function checkGameOver({
     }
 }
 
-function popEndGame(difficult, endGameEl, endGameBtn) {
+/**
+ * @description checks if its 2 players mode, and who is the winner if so.. also takes care of the popup message content
+ * @param {PlayerMode} playerMode 
+ * @returns a winner Sidebar obj to use for updating score
+ */
+const setWinnerAndSetMsg = (playerMode) => {
+    const scoreMsg = document.querySelector("#scoreMsg");
+    const scoreNum = document.querySelector("#scoreShow");
+    let winner = playerMode.players[0];
+    if (playerMode.pickedMode === "twoPlayer") {
+        let winnerName = "Player 1";
+        if (
+            playerMode.players[0].scoreNum.value <
+            playerMode.players[1].scoreNum.value
+        ) {
+            winner = playerMode.players[1];
+            winnerName = "Player 2";
+        }
+        scoreMsg.textContent = `${winnerName} Won!`;
+    } else {
+        scoreMsg.textContent = `You Won!`;
+    }
+    scoreNum.textContent = `Score: ${winner.scoreNum.value}`;
+    return winner;
+}
+
+/**
+ * @description pops up the end game window on a win result, with the msg and score and options to continue.
+ * @param {Difficulty} difficult 
+ * @param {ScoreboardView} endGameEl 
+ * @param {ScoreboardView} endGameBtn 
+ */
+const popEndGame = (difficult, endGameEl, endGameBtn) => {
     setTimeout(() => {
         endGameEl.style.display = "flex";
         gameState.media.playSound("winSound");
@@ -329,41 +341,40 @@ function popEndGame(difficult, endGameEl, endGameBtn) {
 
 /**
  * @description updates the score at a game end
- * @param {{playerMode: {players: Sidebar[]}, difficult: {coupleNum: Number}}} Obj
+ * @param {{playerMode: PlayerMode, difficult: {coupleNum: Number}}} Obj
+ * @param {Sidebar} player
  */
 
-function updateFinalScore({ playerMode, difficult: { coupleNum } }, player) {
-    const timeFactor = 2000,
-        failFactor = 150;
-    let timeBonus = (coupleNum * timeFactor) / player.timer.time.value;
-    let failPenalty = (player.numOfFail.value * failFactor) / coupleNum;
-    let difficultyBonus = coupleNum / 8;
+const updateFinalScore = ({ playerMode, difficult: { coupleNum } }, player) => {
+    const timeFactor = 2500, diffiFactor = 25, failFactor = 100;
+    let timeBonus = coupleNum * timeFactor / player.timer.time.value;
+    let failPenalty = player.numOfFail.value * failFactor / coupleNum;
+    let difficultyBonus = coupleNum * diffiFactor;
     let correctBonus =
         playerMode.pickedMode === "twoPlayer"
-            ? player.numOfCorrect.value * 50
+            ? (player.numOfCorrect.value * 10 * coupleNum)
             : 0;
-    let total = (timeBonus + correctBonus - failPenalty) * difficultyBonus;
+    let total = (timeBonus + difficultyBonus + correctBonus - failPenalty) * coupleNum / 8;
 
-    player.scoreNum.value = total > coupleNum * 20 ? total | 0 : coupleNum * 20;
+    player.scoreNum.value = total > coupleNum * diffiFactor ? total | 0 : coupleNum * diffiFactor;
 }
 
 /**
  * @description huh ? u dont need this here, its self explanatory dummy !! :P
  * @param { {playerMode: {players: Sidebar[]}} } Obj
  */
-function addGameOverListener({ playerMode: { players } }) {
+const addGameOverListener = ({ playerMode: { players } }) => {
     players.forEach((player) => {
         player.numOfCorrect.addChangeListener((_) => checkGameOver(gameState));
     });
 }
 
 /**
- *
- * @param {String[]} itemsTheme
+ * @description randomly chooses a cardCouples times a number from 1 to 50 of 50 different cards.
  * @param {Number} cardCouples
- * @returns array filled with couples of animal names
+ * @returns array filled with couples of numbered items
  */
-function createGameBoard(cardCouples) {
+const createGameBoard = (cardCouples) => {
     const numsPool = Array.from(Array(50).keys());
     const gameBoard = [];
     while (gameBoard.length < cardCouples * 2) {
@@ -371,30 +382,39 @@ function createGameBoard(cardCouples) {
         let removeVal = numsPool.splice(random, 1);
         gameBoard.push(`item${removeVal[0] + 1}`, `item${removeVal[0] + 1}`);
     }
-
     return gameBoard;
 }
 
 /**
- * @description loops over the animal names to create DOM element for each one
+ * @description loops over the cards items names to create DOM element for each one
  * @param {String[]} gameBoard
  */
-function gameBoardloop(gameBoard) {
+const gameBoardloop = (gameBoard) => {
     for (let i = 0; i < gameBoard.length; i++) {
         createGridElements(gameBoard[i]);
     }
 }
 
 /**
- * @description takes animal name and create its DOM elements
+ * @description takes a card number ID and create its DOM elements
  * @param {String} item
  */
-function createGridElements(item) {
+const createGridElements = (item) => {
     const grid = document.querySelector(".cards-container");
     const keywords = ["card-front", "card-back", "card-scene"];
     const cardWrap = document.createElement("div");
     cardWrap.classList.add("card");
     cardWrap.setAttribute("data-type", item);
+    createGridElementChildren(grid, keywords, cardWrap);
+}
+
+/**
+ * @description builds the children of the parent container div of a card
+ * @param {HTMLElement} grid 
+ * @param {string[]} keywords 
+ * @param {HTMLElement} cardWrap 
+ */
+const createGridElementChildren = (grid, keywords, cardWrap) =>{
     for (let i = 0; i < 3; i++) {
         const frontBackCardScene = document.createElement("div");
         frontBackCardScene.classList.add(keywords[i]);
@@ -412,28 +432,21 @@ function createGridElements(item) {
  * @returns shuffles array of animal names
  */
 function shuffle(array) {
-    let currentIndex = array.length,
-        randomIndex;
-
-    // While there remain elements to shuffle.
+    let currentIndex = array.length, randomIndex;
     while (currentIndex != 0) {
-        // Pick a remaining element.
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
 
-        // And swap it with the current element.
-        [array[currentIndex], array[randomIndex]] = [
-            array[randomIndex],
-            array[currentIndex],
-        ];
+        [array[currentIndex], array[randomIndex]] =
+            [array[randomIndex], array[currentIndex]];
     }
-
     return array;
 }
 
 /**
  * @description Add the background image to all cards
- * @param {{cards: Cards, theme: Theme}} Obj
+ * @param {{cards: Cards}} Obj
+ * @param {string} pickedTheme
  */
 
 const addBackgroundImageToAllCards = ({ cards }, pickedTheme) => {
@@ -448,20 +461,31 @@ const addBackgroundImageToAllCards = ({ cards }, pickedTheme) => {
     });
 };
 
+/**
+ * @description listener to themes change buttons
+ * @param {{theme: Theme}} obj
+ */
 const addChangeListenerToTheme = ({ theme }) => {
     theme.pickedTheme.addChangeListener((pickedTheme) =>
         addBackgroundImageToAllCards(gameState, pickedTheme)
     );
 };
 
-addChangeListenerToTheme(gameState);
-
+/**
+ * @param {HTMLElement} card 
+ * @returns card type, first and last childs
+ */
 const getElementsForCard = (card) => [
     card.getAttribute("data-type"),
     card.lastChild,
     card.firstChild,
 ];
 
+/**
+ * @description creates and configures item image on start or theme change
+ * @param {HTMLElement} cardEl 
+ * @param {string} imgSrc 
+ */
 const applyStylesToCard = (cardEl, imgSrc) => {
     if (cardEl.firstChild) {
         cardEl.removeChild(cardEl.firstChild);
@@ -474,6 +498,10 @@ const applyStylesToCard = (cardEl, imgSrc) => {
     cardEl.classList.add("center-img");
 };
 
+/**
+ * @description click event on score board button in the win popup screen
+ * @param {{scoreboardView: ScoreboardView, scoreboard: Scoreboard}} obj 
+ */
 const addClickEventToScoreboard = ({ scoreboardView, scoreboard }) => {
     scoreboardView.scoreboardBtn.addEventListener("click", () => {
         toggleScoreboardDisplay();
@@ -487,17 +515,22 @@ const addClickEventToScoreboard = ({ scoreboardView, scoreboard }) => {
     );
 };
 
+/**
+ * @description exactly what the name of the function says :)
+ */
+
 const toggleScoreboardDisplay = () => {
-    gameState.scoreboardView.scoreboardContainer.style.display =
-        gameState.scoreboardView.scoreboardContainer.style.display === "flex"
-            ? "none"
-            : "flex";
-    if (gameState.scoreboardView.scoreboardContainer.style.display === "flex") {
-        gameState.media.playSound("scoreBoard");
-    }
+    const style = gameState.scoreboardView.scoreboardContainer.
+    style;
+    style.display = style.display === "flex" ? "none" : "flex";
+    if (style.display === "flex") gameState.media.playSound("scoreBoard");
 };
 
-function muteBtnListener({media}){
+/**
+ * @description listeners to mute and unmute button
+ * @param {{media: MediaPlayer}} obj 
+ */
+const muteBtnListener = ({media}) => {
     const btns = document.querySelectorAll("button");
     btns[0].addEventListener('click', () => {
         media.toggleMute()
@@ -516,11 +549,13 @@ function muteBtnListener({media}){
 /**
  * @description call for menu elements of difficulty and gameMode, starts card oberver and starts by picking difficulty function
  */
+
  const startGame = () => {
     gameModeMenu(gameState);
     difficultyMenu(gameState);
     addDifficultyToContainer(gameState.difficult.difficultyContainer);
 
+    addChangeListenerToTheme(gameState);
     addGameModeToContainer(gameState);
     gameModeListener(gameState);
     muteBtnListener(gameState);
@@ -528,5 +563,5 @@ function muteBtnListener({media}){
     difficultyListener(gameState);
 }
 
+export const gameState = new GameState();
 startGame();
-
