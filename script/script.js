@@ -250,7 +250,7 @@ const handleDifficultyClass = (index) => {
  * @description listens to click on difficulty element to call resetPickedDifficulty with right params
  * @param {{difficult :Difficulty}}
  */
-const difficultyListener = ({ difficult }) => {
+const difficultyListener = ({ difficult, playerMode }) => {
     let index = 0;
     difficult.difficultyContainer.addEventListener("click", (ev) => {
         gameState.media.playSound("click");
@@ -261,6 +261,8 @@ const difficultyListener = ({ difficult }) => {
             return;
         }
         addStyleToModeBtns();
+        resetPlayers(playerMode.players);
+        resetPlayerTwoElements();
         gameState.media.playSound("deal");
         handleDifficultyClass(index);
     });
