@@ -158,7 +158,8 @@ export const closeCardsIfNeeded = (cards) => {
             gameState.media.playSound("flipBack");
         }, 1000);
         if (gameState.playerMode.pickedMode === "twoPlayer") {
-            gameState.playerMode.turn = (gameState.playerMode.turn + 1) % 2;
+            gameState.playerMode.turn.value =
+                (gameState.playerMode.turn.value + 1) % 2;
         }
     }
 };
@@ -191,7 +192,7 @@ export const isDifferentCards = (cards) => {
  */
 export const updateCounters = (cards, { playerMode }) => {
     if (isIdenticalCards(cards))
-        playerMode.players[playerMode.turn].numOfCorrect.value += 1;
+        playerMode.players[playerMode.turn.value].numOfCorrect.value += 1;
     else if (isDifferentCards(cards))
-        playerMode.players[playerMode.turn].numOfFail.value += 1;
+        playerMode.players[playerMode.turn.value].numOfFail.value += 1;
 };

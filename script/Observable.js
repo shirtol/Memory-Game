@@ -16,10 +16,12 @@ export class Observable {
      * @param {any} newValue
      */
     set value(newValue) {
-        this._value = newValue;
-        this.listeners.forEach((listener) => {
-            listener(this._value);
-        });
+        if (this._value !== newValue) {
+            this._value = newValue;
+            this.listeners.forEach((listener) => {
+                listener(this._value);
+            });
+        }
     }
 
     /**

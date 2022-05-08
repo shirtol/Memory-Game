@@ -3,6 +3,7 @@
     --header-color: #f8f056;
     --sidebar-bg-color: var(--header-color);
     --sidebar-txt-color: #111;
+    --not-selected-player-color: #aaa;
     --btn-bg-color: var(--header-color);
     --btn-txt-color: var(--sidebar-txt-color);
     --card-back-bg-color: #fff;

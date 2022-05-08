@@ -19,7 +19,8 @@ export const observeTime = (timer) => {
     timer.time.addChangeListener((newTime) =>
         updateTime(
             newTime,
-            gameState.playerMode.players[gameState.playerMode.turn].timerView
+            gameState.playerMode.players[gameState.playerMode.turn.value]
+                .timerView
         )
     );
 };
