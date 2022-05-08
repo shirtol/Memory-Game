@@ -6,7 +6,11 @@ import {
 } from "./Cards.js";
 import { observeTime } from "./Timer.js";
 import { GameState } from "./GameState.js";
-import { observeChangesInCardsResults, Sidebar } from "./Sidebar.js";
+import {
+    observeChangesInCardsResults,
+    Sidebar,
+    togglePlayerTxtColor,
+} from "./Sidebar.js";
 import { Difficulty } from "./Difficulty.js";
 import { Theme } from "./Theme.js";
 import { Scoreboard } from "./Scoreboard.js";
@@ -295,7 +299,7 @@ const resetPickedDifficulty = (
     { cards, playerMode, playerMode: { players }, difficult, theme },
     idx
 ) => {
-    playerMode.turn = 0;
+    playerMode.turn.value = 0;
     resetCardsContainer();
     clearInterval(playerMode.intervalID);
     resetPlayers(players);
@@ -311,6 +315,10 @@ const resetCardsContainer = () => {
     document.querySelector(".cards-container").remove();
     newCardContainer.classList.add("cards-container");
     gameCon.appendChild(newCardContainer);
+};
+
+const addChangeListenerToPlayerTurn = () => {
+    gameState.playerMode.turn.addChangeListener(togglePlayerTxtColor);
 };
 
 /**
@@ -352,7 +360,7 @@ const setGridSize = (size) => {
  */
 const timer = ({ playerMode, playerMode: { players } }) => {
     playerMode.intervalID = setInterval(() => {
-        players[playerMode.turn].timer.time.value += 1;
+        players[playerMode.turn.value].timer.time.value += 1;
     }, 1000);
 };
 
@@ -670,8 +678,8 @@ const startGame = () => {
     gameModeMenu(gameState);
     difficultyMenu(gameState);
     addDifficultyToContainer(gameState.difficult.difficultyContainer);
-
     addChangeListenerToTheme(gameState);
+    addChangeListenerToPlayerTurn();
     addGameModeToContainer(gameState);
     gameModeListener(gameState);
     muteBtnListener(gameState);

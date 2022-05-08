@@ -72,14 +72,27 @@ export const observeChangesInCardsResults = (gameState) => {
 const updateSuccessCounts = (
     { playerMode, playerMode: { players } },
     newSuccessCounts
-) => (players[playerMode.turn].correctGuesses.textContent = newSuccessCounts);
+) =>
+    (players[playerMode.turn.value].correctGuesses.textContent =
+        newSuccessCounts);
 
 const updateFailsCounts = (
     { playerMode, playerMode: { players } },
     newFailCounts
-) => (players[playerMode.turn].incorrectGuesses.textContent = newFailCounts);
+) =>
+    (players[playerMode.turn.value].incorrectGuesses.textContent =
+        newFailCounts);
 
 const updateScore = (scoreContainer, newScore) => {
     scoreContainer.textContent =
         parseInt(scoreContainer.textContent) + newScore;
+};
+
+/**
+ *
+ * @param {number} turn
+ */
+export const togglePlayerTxtColor = () => {
+    document.querySelector(".player1").classList.toggle("curr-player");
+    document.querySelector(".player2").classList.toggle("curr-player");
 };

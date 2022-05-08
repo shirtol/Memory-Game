@@ -1,3 +1,4 @@
+import { Observable } from "./Observable.js";
 import { Sidebar } from "./Sidebar.js";
 
 /**
@@ -14,9 +15,9 @@ export const PlayerMode = function () {
      */
     this.pickedMode = "onePlayer";
     /**
-     * @type {number}
+     * @type {Observable}
      */
-    this.turn = 0;
+    this.turn = new Observable(0);
     /**
      * @type {number}
      */

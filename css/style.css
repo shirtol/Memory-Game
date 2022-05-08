@@ -85,6 +85,7 @@ button {
     align-items: center;
     justify-content: center;
     gap: 3rem;
+    height: 100%;
 }
 
 .left-sidebar .player2 {
@@ -120,19 +121,23 @@ button {
     height: 10rem;
     text-align: center;
     font-size: 1.4vw;
-    color: var(--sidebar-txt-color);
+    color: var(--not-selected-player-color);
 }
 
 .sidebar-title {
     height: max-content;
     text-align: center;
     font-size: 1.7vw;
-    color: var(--sidebar-txt-color);
+    color: var(--not-selected-player-color);
     margin-top: 1rem;
 }
 
 .player1-title {
     display: none;
+}
+
+.curr-player > * {
+    color: var(--sidebar-txt-color);
 }
 
 footer {
